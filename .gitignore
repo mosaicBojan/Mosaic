@@ -45,3 +45,6 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+/Mosaic/nbproject/private/
+/Mosaic/build/
+/Mosaic/dist/
