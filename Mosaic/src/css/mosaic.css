@@ -1,0 +1,132 @@
+.button {
+    -fx-background-color: none;
+    -fx-border-width: 0;
+}
+
+/*
+*
+* EXPLORER TAB
+*
+*/
+
+/* explorer tab main menu anchor */
+#explorerMainMenuAnchorPane {
+    -fx-background-color: white;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #cccccc;
+}
+
+/*
+* explorer tab buttons
+*/
+
+/* newFolder button */
+#explorerBtn1 {
+    -fx-graphic: url('../icons/newFolder.png');
+}
+#explorerBtn1:hover {
+    -fx-graphic: url('../icons/newFolderHover.png');
+}
+#explorerBtn1:pressed {
+    -fx-background-color: #f0f0f0;
+}
+#explorerBtn1Tooltip {
+    -fx-background-color: #2b84c2;
+}
+
+/* delete button */
+#explorerBtn2 {
+    -fx-graphic: url('../icons/delete.png');
+}
+#explorerBtn2:hover {
+    -fx-graphic: url('../icons/deleteHover.png');
+}
+#explorerBtn2:pressed {
+    -fx-background-color: #f0f0f0;
+}
+#explorerBtn2Tooltip {
+    -fx-background-color: #2b84c2;
+}
+
+/* rename button */
+#explorerBtn3 {
+    -fx-graphic: url('../icons/rename.png');
+}
+#explorerBtn3:hover {
+    -fx-graphic: url('../icons/renameHover.png');
+}
+#explorerBtn3:pressed {
+    -fx-background-color: #f0f0f0;
+}
+#explorerBtn3Tooltip {
+    -fx-background-color: #2b84c2;
+}
+
+/* open button */
+#explorerBtn4 {
+    -fx-graphic: url('../icons/open.png');
+}
+#explorerBtn4:hover {
+    -fx-graphic: url('../icons/openHover.png');
+}
+#explorerBtn4:pressed {
+    -fx-background-color: #f0f0f0;
+}
+#explorerBtn4Tooltip {
+    -fx-background-color: #2b84c2;
+}
+
+/* copy button */
+#explorerBtn5 {
+    -fx-graphic: url('../icons/copy.png');
+}
+#explorerBtn5:hover {
+    -fx-graphic: url('../icons/copyHover.png');
+}
+#explorerBtn5:pressed {
+    -fx-background-color: #f0f0f0;
+}
+#explorerBtn5Tooltip {
+    -fx-background-color: #2b84c2;
+}
+/* move button */
+#explorerBtn6 {
+    -fx-graphic: url('../icons/move.png');
+}
+#explorerBtn6:hover {
+    -fx-graphic: url('../icons/moveHover.png');
+}
+#explorerBtn6:pressed {
+    -fx-background-color: #f0f0f0;
+}
+#explorerBtn6Tooltip {
+    -fx-background-color: #2b84c2;
+}
+
+/* addToAlbum button */
+#explorerBtn7 {
+    -fx-graphic: url('../icons/addToAlbum.png');
+}
+#explorerBtn7:hover {
+    -fx-graphic: url('../icons/addToAlbumHover.png');
+}
+#explorerBtn7:pressed {
+    -fx-background-color: #f0f0f0;
+}
+#explorerBtn7Tooltip {
+    -fx-background-color: #2b84c2;
+}
+
+/* fullscreen button */
+#explorerBtn8 {
+    -fx-graphic: url('../icons/fullscreen.png');
+}
+#explorerBtn8:hover {
+    -fx-graphic: url('../icons/fullscreenHover.png');
+}
+#explorerBtn8:pressed {
+    -fx-background-color: #f0f0f0;
+}
+#explorerBtn8Tooltip {
+    -fx-background-color: #2b84c2;
+}

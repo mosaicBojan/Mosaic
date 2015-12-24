@@ -7,9 +7,124 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import java.net.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="723.0" prefWidth="1137.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="mosaic.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="723.0" prefWidth="1137.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mosaic.FXMLDocumentController">
    <children>
+      <TabPane layoutX="6.0" layoutY="25.0" prefHeight="482.0" prefWidth="950.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="25.0">
+        <tabs>
+          <Tab fx:id="explorerTab" text="Explorer">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <SplitPane dividerPositions="0.6666666666666666" layoutX="593.0" layoutY="404.0" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="53.0">
+                          <items>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                 <children>
+                                    <TextField layoutX="47.0" layoutY="5.0" prefHeight="32.0" AnchorPane.leftAnchor="47.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                    <Button layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+                                       <HBox.margin>
+                                          <Insets right="10.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <TreeView layoutX="5.0" layoutY="52.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="42.0" />
+                                 </children>
+                              </AnchorPane>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                 <children>
+                                    <ImageView fitHeight="592.0" fitWidth="552.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                 </children>
+                              </AnchorPane>
+                          </items>
+                        </SplitPane>
+                        <AnchorPane fx:id="explorerMainMenuAnchorPane" prefHeight="42.0" prefWidth="1141.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <HBox fx:id="explorerMainMenuHBoxLeft" alignment="CENTER_LEFT" layoutX="-7.0" layoutY="-29.0" prefHeight="42.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Button fx:id="explorerBtn1" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="explorerBtn2" layoutX="17.0" layoutY="15.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="explorerBtn3" layoutX="54.0" layoutY="15.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Separator maxHeight="32.0" orientation="VERTICAL" prefHeight="32.0">
+                                       <HBox.margin>
+                                          <Insets top="2.0" />
+                                       </HBox.margin>
+                                    </Separator>
+                                    <Button fx:id="explorerBtn4" layoutX="91.0" layoutY="16.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+                                       <HBox.margin>
+                                          <Insets left="2.0" right="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="explorerBtn5" layoutX="134.0" layoutY="16.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="explorerBtn6" layoutX="171.0" layoutY="16.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="explorerBtn7" layoutX="208.0" layoutY="16.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Separator layoutX="128.0" layoutY="18.0" maxHeight="32.0" orientation="VERTICAL" prefHeight="32.0">
+                                       <HBox.margin>
+                                          <Insets top="2.0" />
+                                       </HBox.margin>
+                                    </Separator>
+                                    <Button fx:id="explorerBtn8" layoutX="247.0" layoutY="16.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+                                       <HBox.margin>
+                                          <Insets left="2.0" right="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                                 <padding>
+                                    <Insets left="7.0" top="1.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="CENTER_RIGHT" layoutX="961.0" layoutY="-29.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <ToggleButton mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" />
+                                 </children>
+                                 <padding>
+                                    <Insets right="7.0" top="1.0" />
+                                 </padding>
+                              </HBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="5.0" top="5.0" />
+                           </padding>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Albums">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+            <Tab text="Messages">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+        </tabs>
+      </TabPane>
       <MenuBar layoutY="2.0" prefHeight="0.0" prefWidth="170.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
           <Menu mnemonicParsing="false" text="File">
@@ -29,48 +144,8 @@
           </Menu>
         </menus>
       </MenuBar>
-      <TabPane layoutX="6.0" layoutY="25.0" prefHeight="482.0" prefWidth="950.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
-        <tabs>
-          <Tab text="Explorer">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <SplitPane dividerPositions="0.5" layoutX="593.0" layoutY="404.0" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="44.0">
-                          <items>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                                 <children>
-                                    <TextField layoutX="47.0" layoutY="5.0" prefHeight="32.0" AnchorPane.leftAnchor="47.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
-                                    <Button layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
-                                       <HBox.margin>
-                                          <Insets right="10.0" />
-                                       </HBox.margin>
-                                    </Button>
-                                    <TreeView layoutX="5.0" layoutY="52.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="42.0" />
-                                 </children>
-                              </AnchorPane>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                                 <children>
-                                    <ImageView fitHeight="592.0" fitWidth="552.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
-                                 </children>
-                              </AnchorPane>
-                          </items>
-                        </SplitPane>
-                        <AnchorPane prefHeight="42.0" prefWidth="821.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                     </children>
-                  </AnchorPane>
-            </content>
-          </Tab>
-          <Tab text="Albums">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-            </content>
-          </Tab>
-            <Tab text="Messages">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-              </content>
-            </Tab>
-        </tabs>
-      </TabPane>
    </children>
+   <stylesheets>
+    <URL value="@../css/mosaic.css" />
+    </stylesheets>
 </AnchorPane>
