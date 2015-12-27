@@ -11,6 +11,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.TreeView;
+import javafx.scene.image.ImageView;
+import treeviewclasses.FileSystemTree;
 
 /**
  *
@@ -19,17 +22,15 @@ import javafx.scene.control.Label;
 public class FXMLDocumentController implements Initializable {
     
     @FXML
-    private Label label;
+    private TreeView explorerTreeView;
     
     @FXML
-    private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
-        label.setText("Hello World!");
-    }
+    private ImageView explorerImgView;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        FileSystemTree fst = new FileSystemTree(explorerTreeView, explorerImgView);
+        fst.start();
     }    
     
 }
