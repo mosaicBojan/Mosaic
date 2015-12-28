@@ -16,6 +16,83 @@
     -fx-border-color: #cccccc;
 }
 
+/* explorer treeView */
+
+#explorerTreeView, .tree-cell {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+}
+#explorerTreeView  .tree-cell:selected {
+    -fx-background-color: #99ccff;
+    -fx-font-weight: bold ;
+}
+
+/* Tree expand arrow CSS */
+#explorerTreeView > .virtual-flow> .clipped-container > .sheet > .tree-cell .tree-disclosure-node .arrow {
+    -fx-background-color: #7d7d7d;
+    -fx-border-width: 1;
+    -fx-border-color: #7d7d7d;
+}
+#explorerTreeView > .virtual-flow> .clipped-container > .sheet > .tree-cell:expanded .tree-disclosure-node .arrow {
+    -fx-background-color: #7d7d7d;
+    -fx-border-width: 1;
+    -fx-border-color: #7d7d7d;
+}
+#explorerTreeView > .virtual-flow> .clipped-container > .sheet > .tree-cell:selected .tree-disclosure-node .arrow {
+    -fx-background-color: white;
+    -fx-border-width: 1;
+    -fx-border-color: white;
+}
+
+
+/* The main scrollbar CSS class of ListView */
+#explorerTreeView .scroll-bar:horizontal ,
+#explorerTreeView  .scroll-bar:vertical{
+    -fx-background-color:transparent;
+}
+ 
+/* The increment and decrement button CSS class of scrollbar */
+#explorerTreeView .increment-button ,#explorerTreeView .decrement-button {
+    -fx-background-color:transparent;
+    -fx-border-color:derive(gray,80%);
+    -fx-border-width: 1;
+    -fx-background-insets: 0, 0, 0;
+}
+ 
+/* The main scrollbar **track** CSS class  */
+#explorerTreeView .scroll-bar:horizontal .track ,
+#explorerTreeView .scroll-bar:vertical .track{
+    -fx-background-color: #f5f5f0;
+    /*-fx-border-color:derive(gray,80%);*/
+    -fx-background-radius: 0em;
+}
+ 
+/* The main scrollbar **thumb** CSS class which we drag every time (movable) */
+#explorerTreeView .scroll-bar:horizontal .thumb,
+#explorerTreeView .scroll-bar:vertical .thumb {
+    -fx-background-color: #f9f9f9;
+    -fx-border-color:derive(gray,80%);
+    -fx-border-width: 1;
+    -fx-background-insets: 0, 0, 0;
+    -fx-background-radius: 0em;
+ 
+}
+ 
+/* ------------------------------------------------------------------------------------- */
+/** EVENT CSS **/
+/* ------------------------------------------------------------------------------------- */
+ 
+/* The main scrollbar **thumb** CSS class on event of "hover" and "pressed" */
+#explorerTreeView.scroll-bar .thumb:hover,
+#explorerTreeView .scroll-bar .thumb:pressed{
+    -fx-background-color: #99ccff;
+}
+ 
+#explorerTreeView .increment-button:hover ,#explorerTreeView .decrement-button:hover {
+    -fx-background-color: #99ccff;
+}
+
+
 /*
 * explorer tab buttons
 */
@@ -130,3 +207,9 @@
 #explorerBtn8Tooltip {
     -fx-background-color: #2b84c2;
 }
+
+/*
+*
+* END EXPLORER TAB
+*
+*/
