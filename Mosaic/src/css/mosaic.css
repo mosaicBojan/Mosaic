@@ -3,11 +3,167 @@
     -fx-border-width: 0;
 }
 
+#menuBarAnchorPane {
+    -fx-background-color: #f5f5f0;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #cccccc;
+}
+
+/*********************************************************************************
+*
+* TAB PANE
+*
+**********************************************************************************/
+
+.tab-pane > .tab-header-area > .headers-region > .tab:top {  
+    -fx-padding: 14 30 0 10;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 5 5 0 0;
+    -fx-background-color: #f5f5f0;  
+    -fx-pref-height: 70px;    
+    -fx-background-insets: 0;  
+}  
+
+.tab-pane > .tab-header-area > .headers-region {  
+    -fx-padding: 10 0 0 0;
+}
+  
+.tab-pane > .tab-header-area > .headers-region > .tab:selected:top {
+    -fx-border-color: #cccccc #cccccc #ffffff #cccccc;
+    -fx-border-width: 0 1 0 1;     
+    -fx-background-color: white;  
+    -fx-background-insets:  0;  
+}  
+
+.tab-pane > .tab-header-area > .headers-region > .tab:top:hover {  
+    -fx-background-color: #e6e6e6;    
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab:selected:top:hover {  
+    -fx-background-color: #ffffff;    
+}  
+  
+.tab-pane > .tab-header-area > .headers-region > .tab:selected > .tab-container > .tab-label {
+    -fx-border-width: 0 0 0 0;
+    -fx-border-color: #cccccc;
+    /*-fx-padding: 0 0 10 0; */
+    -fx-alignment: CENTER;  
+    -fx-text-fill: #a6a6a6;  
+    -fx-font-weight: bold;  
+}  
+  
+.tab-pane > .tab-header-area > .headers-region > .tab > .tab-container > .tab-label { 
+    -fx-alignment: CENTER;  
+    -fx-text-fill: #a6a6a6;
+    -fx-padding: 0 0 0 20;
+    /*-fx-font-weight: bold;  */
+}  
+  
+.tab-pane > .tab-header-area > .tab-header-background {  
+    -fx-background-color: #f5f5f0;  
+    -fx-border-color: #cccccc;  
+    -fx-border-width: 0 0 1 0;  
+    -fx-background-insets: 0;  
+    -fx-pref-height: 45px;    
+}  
+
+.tab-pane > .tab-header-area > .headers-region > .tab:selected:top > .tab-container > .focus-indicator {
+    -fx-border-width: 0;
+}
+
+.tab-pane:top {
+    -fx-background-color: #ffffff;
+    /*-fx-font-family: Arial;*/
+}
+
+.tab-pane .tab-header-area {
+    -fx-padding: 0 0 0 -1;  /* removing default indentation before the first tab. -1 so that first tabs left border wouldnt be 2px wide while selected */
+}
+
+.menu-bar {
+    -fx-background-color: #f5f5f0;
+    -fx-border-width: 0 0 0 0;
+    -fx-border-color: #d9d9d9;
+}
+
+.menu-bar {
+    -fx-pref-height: 30px;
+}
+
+.menu-bar > .container {
+    -fx-padding: 0 0 0 0;
+}
+
+.menu-bar { /* The menu bar itself */ 
+}
+
+.menu { /* The File menu item */
+    -fx-margin: 0;
+    -fx-padding: 5 10 5 10;
+}
+.menu:hover { /* The File menu item mousever */
+    /*-fx-text-fill: white;*/
+    -fx-background-color: #e6e6e6;
+}
+
+.menu:showing { /* menu when it's being shown (activated)*/
+    -fx-background-color: #e6e6e6;
+}
+.menu .label { /* Styles the text on a menu item */ 
+    -fx-text-fill: #666666;
+}
+
+.menu:showing .label { /* Styles the text on a menu item when activated */
+   
+}
+
+.menu .label:hover { /* Styles the text on a menu item */ 
+    
+}
+
+.menu-button,
+.menu-item {
+    -fx-text-fill: #666666;
+}
+
+.menu-button:hover,
+.menu-item:hover {
+    -fx-background-color: #e6e6e6;
+}
+
+.menu-button:showing, 
+.menu-item:showing {
+    -fx-background-color: #e6e6e6;
+}
+
+/*Menu Items*/
+.menu-item:focused {
+    -fx-background-color: #e6e6e6;
+}
+
+.menu-item .label {
+    -fx-text-fill: #666666;
+}
+
+.tool-bar:horizontal {
+    -fx-background-color: none;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #cccccc;
+}
+
 /*
+*
+* END TAB PANE
+*
+*/
+
+
+/*********************************************************************************
 *
 * EXPLORER TAB
 *
-*/
+**********************************************************************************/
 
 /* explorer tab main menu anchor */
 #explorerMainMenuAnchorPane {
@@ -207,9 +363,145 @@
 #explorerBtn8Tooltip {
     -fx-background-color: #2b84c2;
 }
+/* home button */
+#explorerHomeButton {
+    -fx-graphic: url('../icons/home.png');
+}
+#explorerHomeButton:hover {
+    -fx-graphic: url('../icons/homeHover.png');
+}
+#explorerHomeButton:pressed {
+    -fx-background-color: #f0f0f0;
+}
+#explorerHomeButtonTooltip {
+    -fx-background-color: #2b84c2;
+}
 
 /*
 *
 * END EXPLORER TAB
+*
+*/
+
+
+
+/*********************************************************************************
+*
+* ALBUMS TAB
+*
+**********************************************************************************/
+
+/* explorer tab main menu anchor */
+#albumsMainMenuAnchorPane {
+    -fx-background-color: white;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #cccccc;
+}
+
+
+/*
+* albums tab buttons
+*/
+
+/* newFolder button */
+#albumsNewAlbum {
+    -fx-graphic: url('../icons/newAlbum.png');
+}
+#albumsNewAlbum:hover {
+    -fx-graphic: url('../icons/newAlbumHover.png');
+}
+#albumsNewAlbum:pressed {
+    -fx-background-color: #f0f0f0;
+}
+#albumsNewAlbumTooltip {
+    -fx-background-color: #2b84c2;
+}
+
+/* delete button */
+#albumsDelete {
+    -fx-graphic: url('../icons/delete.png');
+}
+#albumsDelete:hover {
+    -fx-graphic: url('../icons/deleteHover.png');
+}
+#albumsDelete:pressed {
+    -fx-background-color: #f0f0f0;
+}
+#albumsDeleteTooltip {
+    -fx-background-color: #2b84c2;
+}
+
+/* rename button */
+#albumsRename {
+    -fx-graphic: url('../icons/rename.png');
+}
+#albumsRename:hover {
+    -fx-graphic: url('../icons/renameHover.png');
+}
+#albumsRename:pressed {
+    -fx-background-color: #f0f0f0;
+}
+#albumsRenameTooltip {
+    -fx-background-color: #2b84c2;
+}
+
+/* open button */
+#albumsOpen {
+    -fx-graphic: url('../icons/open.png');
+}
+#albumsOpen:hover {
+    -fx-graphic: url('../icons/openHover.png');
+}
+#albumsOpen:pressed {
+    -fx-background-color: #f0f0f0;
+}
+#albumsOpenTooltip {
+    -fx-background-color: #2b84c2;
+}
+
+/* copy button */
+#albumsCopy {
+    -fx-graphic: url('../icons/copy.png');
+}
+#albumsCopy:hover {
+    -fx-graphic: url('../icons/copyHover.png');
+}
+#albumsCopy:pressed {
+    -fx-background-color: #f0f0f0;
+}
+#albumsCopyTooltip {
+    -fx-background-color: #2b84c2;
+}
+/* move button */
+#albumsMove {
+    -fx-graphic: url('../icons/move.png');
+}
+#albumsMove:hover {
+    -fx-graphic: url('../icons/moveHover.png');
+}
+#albumsMove:pressed {
+    -fx-background-color: #f0f0f0;
+}
+#albumsMoveTooltip {
+    -fx-background-color: #2b84c2;
+}
+
+/* fullscreen button */
+#albumsFullscreen {
+    -fx-graphic: url('../icons/fullscreen.png');
+}
+#albumsFullscreen:hover {
+    -fx-graphic: url('../icons/fullscreenHover.png');
+}
+#albumsFullscreen:pressed {
+    -fx-background-color: #f0f0f0;
+}
+#albumsFullscreenTooltip {
+    -fx-background-color: #2b84c2;
+}
+
+/*
+*
+* END ALBUMS TAB
 *
 */

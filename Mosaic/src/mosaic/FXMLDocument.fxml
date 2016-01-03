@@ -11,7 +11,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="723.0" prefWidth="1158.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mosaic.FXMLDocumentController">
    <children>
-      <TabPane layoutX="6.0" layoutY="25.0" prefHeight="482.0" prefWidth="950.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="25.0">
+      <TabPane layoutX="6.0" layoutY="25.0" prefHeight="482.0" prefWidth="950.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="10.0">
         <tabs>
           <Tab fx:id="explorerTab" text="Explorer">
             <content>
@@ -21,8 +21,8 @@
                           <items>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                  <children>
-                                    <TextField fx:id="explorerPathTextField" layoutX="47.0" layoutY="5.0" prefHeight="32.0" AnchorPane.leftAnchor="47.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
-                                    <Button layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+                                    <TextField fx:id="explorerPathTextField" layoutX="52.0" layoutY="5.0" prefHeight="32.0" AnchorPane.leftAnchor="57.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                                    <Button fx:id="explorerHomeButton" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
                                        <HBox.margin>
                                           <Insets right="10.0" />
                                        </HBox.margin>
@@ -40,7 +40,7 @@
                         </SplitPane>
                         <AnchorPane fx:id="explorerMainMenuAnchorPane" prefHeight="42.0" prefWidth="1141.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <HBox fx:id="explorerMainMenuHBoxLeft" alignment="CENTER_LEFT" layoutX="-7.0" layoutY="-29.0" prefHeight="42.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <HBox fx:id="explorerMainMenuHBoxLeft" alignment="CENTER_LEFT" layoutY="-29.0" prefHeight="42.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                     <Button fx:id="explorerBtn1" mnemonicParsing="false" onAction="#explorerBtn1Action" prefHeight="32.0" prefWidth="32.0">
                                        <HBox.margin>
@@ -113,38 +113,136 @@
                      </children>
                   </AnchorPane>
             </content>
+               <graphic>
+                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/explorerTab.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
           </Tab>
           <Tab text="Albums">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <SplitPane dividerPositions="0.7409326424870466" layoutX="58.0" layoutY="25.0" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="53.0">
+                          <items>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+                          </items>
+                        </SplitPane>
+                        <AnchorPane fx:id="albumsMainMenuAnchorPane" prefHeight="42.0" prefWidth="1141.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
+                           <padding>
+                              <Insets bottom="5.0" top="5.0" />
+                           </padding>
+                           <children>
+                              <HBox alignment="CENTER_LEFT" layoutY="-22.0" prefHeight="42.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <padding>
+                                    <Insets left="7.0" top="1.0" />
+                                 </padding>
+                                 <children>
+                                    <Button fx:id="albumsNewAlbum" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="albumsDelete" layoutX="17.0" layoutY="11.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin></Button>
+                                    <Button fx:id="albumsRename" layoutX="54.0" layoutY="11.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin></Button>
+                                    <Separator maxHeight="32.0" orientation="VERTICAL" prefHeight="32.0">
+                                       <HBox.margin>
+                                          <Insets top="2.0" />
+                                       </HBox.margin>
+                                    </Separator>
+                                    <Button fx:id="albumsOpen" layoutX="86.0" layoutY="11.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+                                       <HBox.margin>
+                                          <Insets left="2.0" right="5.0" />
+                                       </HBox.margin></Button>
+                                    <Button fx:id="albumsCopy" layoutX="124.0" layoutY="11.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin></Button>
+                                    <Button fx:id="albumsMove" layoutX="156.0" layoutY="11.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+                                       <HBox.margin>
+                                          <Insets right="5.0" />
+                                       </HBox.margin></Button>
+                                    <Separator layoutX="112.0" layoutY="13.0" maxHeight="32.0" orientation="VERTICAL" prefHeight="32.0">
+                                       <HBox.margin>
+                                          <Insets top="2.0" />
+                                       </HBox.margin>
+                                    </Separator>
+                                    <Button fx:id="albumsFullscreen" layoutX="178.0" layoutY="11.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+                                       <HBox.margin>
+                                          <Insets left="2.0" right="5.0" />
+                                       </HBox.margin></Button>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_RIGHT" layoutX="729.0" layoutY="-29.0" prefHeight="42.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <padding>
+                                    <Insets right="7.0" top="1.0" />
+                                 </padding>
+                                 <children>
+                                    <ToggleButton mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </AnchorPane>
+                     </children></AnchorPane>
             </content>
+               <graphic>
+                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/albumsTab.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
           </Tab>
             <Tab text="Messages">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
               </content>
+               <graphic>
+                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/messagesTab.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </Tab>
         </tabs>
       </TabPane>
-      <MenuBar layoutY="2.0" prefHeight="0.0" prefWidth="170.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
+      <AnchorPane fx:id="menuBarAnchorPane" prefHeight="32.0" prefWidth="1158.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <MenuBar prefHeight="0.0" prefWidth="170.0">
+                    <menus>
+                      <Menu mnemonicParsing="false" text="File">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="Close" />
+                        </items>
+                      </Menu>
+                      <Menu mnemonicParsing="false" text="Edit">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="Delete" />
+                        </items>
+                      </Menu>
+                      <Menu mnemonicParsing="false" text="Help">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="About" />
+                        </items>
+                      </Menu>
+                    </menus>
+                  </MenuBar>
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
    </children>
    <stylesheets>
     <URL value="@../css/mosaic.css" />
