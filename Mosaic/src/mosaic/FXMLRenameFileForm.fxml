@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="150.0" prefWidth="440.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="mosaic.FXMLDocumentController">
+   <children>
+      <Button fx:id="explorerRenameBtn" layoutX="257.0" layoutY="83.0" mnemonicParsing="false" onAction="#explorerRenameBtnAction" prefHeight="25.0" prefWidth="142.0" text="Rename" />
+      <Label layoutX="31.0" layoutY="47.0" text="Type new file name:" />
+      <TextField fx:id="explorerRenameTextField" layoutX="147.0" layoutY="43.0" prefHeight="25.0" prefWidth="252.0" />
+   </children>
+</AnchorPane>

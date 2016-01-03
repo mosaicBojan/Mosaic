@@ -14,11 +14,11 @@ import javafx.scene.control.TreeItem;
  *
  * @author Asus
  */
-public class Node extends TreeItem<String> {
+public class NodeOfTree extends TreeItem<String> {
 
     private File nodeFile;
 
-    public Node(File file) {
+    public NodeOfTree(File file) {
         super(file.getName());
         nodeFile = file;
     }
@@ -54,7 +54,7 @@ public class Node extends TreeItem<String> {
         nodeFile = new File(temp);
     }
     
-    public boolean equals(Node n){
+    public boolean equals(NodeOfTree n){
         if(this.getNodeFile().toString().equals(n.getNodeFile().toString())){
             return true;
         }

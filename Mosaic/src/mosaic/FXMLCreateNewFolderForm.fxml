@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="150.0" prefWidth="440.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mosaic.FXMLDocumentController">
+   <children>
+      <TextField fx:id="folderNameTextField" layoutX="162.0" layoutY="43.0" prefHeight="25.0" prefWidth="223.0" />
+      <Label layoutX="36.0" layoutY="47.0" text="Type folder name:" />
+      <Button fx:id="createButton" layoutX="253.0" layoutY="83.0" mnemonicParsing="false" onAction="#createButtonAction" prefHeight="25.0" prefWidth="132.0" text="Create" />
+   </children>
+</AnchorPane>

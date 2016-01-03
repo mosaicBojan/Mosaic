@@ -6,53 +6,70 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.HashMap;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TreeCell;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
 
 public class FileSystemTree extends Thread {
 
     private TreeView treeView;
     private ImageView imageView;
-    private ObservableList<Node> allNodes = FXCollections.observableArrayList();
-    private ObservableList<Node> rootNodes = FXCollections.observableArrayList();
-    private ObservableList<Node> alltempNodes = FXCollections.observableArrayList();
-    private Node rootNode;
+    private ObservableList<NodeOfTree> allNodes = FXCollections.observableArrayList();
+    private ObservableList<NodeOfTree> rootNodes = FXCollections.observableArrayList();
+    private ObservableList<NodeOfTree> alltempNodes = FXCollections.observableArrayList();
+    private NodeOfTree rootNode;
     private String hostName;
-    private Node tempRootNode;
-    private HashMap<Node, ListOfFiles> hashNodeListOfFiles = new HashMap<>();
+    private NodeOfTree tempRootNode;
+    private HashMap<NodeOfTree, ListOfFiles> hashNodeListOfFiles = new HashMap<>();
+    private TextField explorerPathTextField;
+    private boolean isFirstPicture = true;
+    private double originalWidth;
+    private double originalHeight;
+    private NodeOfTree selectedItem;
+    private Label explorerImageLabel;
+    private boolean rootAlreadySet = false;
+    
 
     public FileSystemTree() {
     }
 
-    public FileSystemTree(TreeView treeView, ImageView imageView) {
+    public FileSystemTree(TreeView treeView, ImageView imageView, TextField explorerPathTextField, Label explorerImageLabel) {
         this.treeView = treeView;
         this.imageView = imageView;
+        this.explorerPathTextField = explorerPathTextField;
+        this.explorerImageLabel = explorerImageLabel;
     }
 
     public void run() {
         /* set host Node to Tree */
-        hostName = "computer";
-        try {
-            hostName = InetAddress.getLocalHost().getHostName();    //Pronadji naziv racunara
-        } catch (UnknownHostException x) {
+        if (!rootAlreadySet) {
+            rootAlreadySet = true;
+            hostName = "computer";
+            try {
+                hostName = InetAddress.getLocalHost().getHostName();    //Pronadji naziv racunara
+            } catch (UnknownHostException x) {
+            }
+            rootNode = new NodeOfTree(new File(hostName));    //Kreiranje root node-a
+            System.out.println("Root: " + rootNode);
+            
+                treeView.setRoot(rootNode);                 //Dodavanje root node-a u treeView
+            
+            rootNodes.add(rootNode);                     //Dodavanje root node-a u allNodes listu
+            rootNode.setExpanded(true);
         }
-        rootNode = new Node(new File(hostName));    //Kreiranje root node-a
-        treeView.setRoot(rootNode);                 //Dodavanje root node-a u treeView
-        rootNodes.add(rootNode);                     //Dodavanje root node-a u allNodes listu
-        rootNode.setExpanded(true);
-
-        ObservableList<Node> rootDirs = this.getRootDirectories();
-        for (Node n : rootDirs) {
+        ObservableList<NodeOfTree> rootDirs = this.getRootDirectories();
+        for (NodeOfTree n : rootDirs) {
             rootNode.getChildren().add(n);
             int br = 0;
-            for (Node part : rootNodes) {
+            for (NodeOfTree part : rootNodes) {
                 if (n.getPathWithoutHost().equals(part.getPathWithoutHost())) {
                     br++;
                 }
@@ -66,123 +83,187 @@ public class FileSystemTree extends Thread {
             tempRootNode = n;
             this.checkIsDirAndAddTempNode();
         }
-        treeView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-
-            @Override
-            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                //System.out.println("CLIKED ON TREE ITEM");
-                
-                Node selectedItem = (Node) newValue;
-                hashNodeListOfFiles.put(rootNode, new ListOfFiles());
-                /*****************************************************/
-                //      U slucaju da se klikne na root node          //
-                if (selectedItem.getPathWithoutHost().equals("")) {
-                    ObservableList<Node> nodes = getRootDirectories();
-                    rootNode.getChildren().removeAll(rootNodes);
-                    rootNode.getChildren().addAll(nodes);
-                    for(Node n: nodes){
-                        tempRootNode = n;
-                        checkIsDirAndAddTempNode();
-                    }
-                    rootNodes = nodes;
-                }else{
-                /******************************************************/
-                
-                /******************************************************/
-                //  U slucaju da se kllikne na bilo koji drugi fajl   //
-                    if (selectedItem.getPathWithoutHost().toLowerCase().endsWith(".jpg") || selectedItem.getPathWithoutHost().toLowerCase().endsWith(".png")) {
-                        //Ovdje se definise koje akcije ce se izvrsiti ako je selektovani fajl slika
-                        //System.out.println("IMAGE PREVIEW");
-                        Image image = new Image(new File(selectedItem.getPathWithoutHost()).toURI().toString());
-                        imageView.setImage(image);
-                    }
-                    else{
-                        //Ovdje se definise koje akcije ce se izvrsiti ako je selektovan folder
-                        ListOfFiles lof = new ListOfFiles();
-                        File[] selectedItemFiles = null;
-                        selectedItemFiles = new File(selectedItem.getPathWithoutHost() + File.separator).listFiles(new FilenameFilter() {
-                            public boolean accept(File dir, String name) {
-                                return (name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".png")
-                                        || new File(dir.toString() + File.separator + name).isDirectory())
-                                        & !(new File(dir.toString() + File.separator + name).isHidden());
-                            }
-                        });
-                        
-                        Node currentlyTempNode = null;
-                        try {
-                            for (Node n : alltempNodes) {
-                                if (n.getPathWithoutHost().equals(selectedItem.getPathWithoutHost() + File.separator + "temp_node_speed_up_tree_view")) {
-                                    currentlyTempNode = n;
-                                    alltempNodes.remove(currentlyTempNode);
-                                    break;
-                                }
-                            }
-                        } catch (NullPointerException ex) {
-                            System.out.println("Nema temp_node_speed_up_tree_view nodova!");
-                        }
-                        
-                        
-                        if(currentlyTempNode != null){
-                            selectedItem.getChildren().remove(currentlyTempNode);
-                        }
-                        
-                        if (selectedItemFiles != null) {
-                            for (File file : selectedItemFiles) {
-                                //Ovdje se definise koje akcije ce se izvrsiti ako je selektovan folder koji nije prazan
-                                lof.getListOfFiles().add(new Node(new File(hostName + File.separator + file.getPath() + File.separator)));
-                            }
-                            ListOfFiles listFromHash = null;
-                            listFromHash = hashNodeListOfFiles.get(selectedItem);
-                            if(listFromHash != null){
-                                //Ovdje se definisu akcije ako je selektovana putanja vec u hash mapi
-                                selectedItem.getChildren().removeAll(listFromHash.getListOfFiles());
-                                selectedItem.getChildren().addAll(lof.getListOfFiles());
-                                hashNodeListOfFiles.remove(selectedItem);
-                                hashNodeListOfFiles.put(selectedItem, lof);
-                                for(Node node: lof.getListOfFiles()){
-                                    tempRootNode = node;
-                                    checkIsDirAndAddTempNode();
-                                }
-                            }
-                            else{
-                                //Ovdje se definisu akcije ako selektovana putanja nije u hash mapi
-                                selectedItem.getChildren().addAll(lof.getListOfFiles());
-                                hashNodeListOfFiles.put(selectedItem, lof);
-                                for(Node node: lof.getListOfFiles()){
-                                    tempRootNode = node;
-                                    checkIsDirAndAddTempNode();
-                                }
-                            }
-                        } else {
-                            //Napisati sta ako je fajl prazan
-                            System.out.println("Folder je prazan");
-                        }
+        
+        treeView.setCellFactory( drvo -> {
+            TreeCell<String> cell = new TreeCell<String>() {
+                @Override
+                public void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setText(null);
+                        setGraphic(null);
+                    } else {
+                        //setText(item);
+                        String value = this.getTreeItem().getValue();
+                        this.setText(value);
                     }
                     
-                /******************************************************/
                 }
-            }
-            
+            };
+        
+            cell.setOnMousePressed(event -> {
+                if (!cell.isEmpty()) {
+                    //System.out.println("CELL: " + cell);
+                    TreeItem<String> si = cell.getTreeItem();
+                    selectedItem = (NodeOfTree) si;      //Selektovani Node
+                    explorerPathTextField.setText(selectedItem.getPathWithoutHost());   //Ispisi putanju u textField
+                    //hashNodeListOfFiles.put(rootNode, new ListOfFiles());
+                    /**
+                     * **************************************************
+                     */
+                    //      U slucaju da se klikne na root node          //
+                    if (selectedItem.getPathWithoutHost().equals("")) {     
+                        ObservableList<NodeOfTree> nodes = getRootDirectories();  //Ubacivanje root node-ova u listu
+                        rootNode.getChildren().removeAll(rootNodes);        //Brisanje trenutnih node-ova
+                        rootNode.getChildren().addAll(nodes);               //Dodavanje refresh-ovane liste kao nodove
+                        for (NodeOfTree n : nodes) {                              //U slucaju da je folder potrebno mu je dodati neki node,
+                            tempRootNode = n;                               //da bi se treeitem prikazao kao folder
+                            checkIsDirAndAddTempNode();                     //pozivanje metode koja dodaje temp root
+                        }
+                        rootNodes = nodes;                                  //Zamjena nodova u rootNodes listi
+                    } else {                                                //else predstavlja da nije selektovan rootNode
+                        //  U slucaju da se kllikne na bilo koji drugi fajl   //
+                        if (selectedItem.getPathWithoutHost().toLowerCase().endsWith(".jpg") || selectedItem.getPathWithoutHost().toLowerCase().endsWith(".png")) {
+                        //Ovdje se definise koje akcije ce se izvrsiti ako je selektovani fajl slika
+                            //System.out.println("IMAGE PREVIEW");
+                            imageView.setVisible(true);
+                            explorerImageLabel.setVisible(false);
+                            Image image = new Image(new File(selectedItem.getPathWithoutHost()).toURI().toString());
+                            double imageHeight = image.getHeight();
+                            double imageWidth = image.getWidth();
+                            double imageViewHeight = imageView.getFitHeight();
+                            double imageViewWidth = imageView.getFitWidth();
+                            if(isFirstPicture){
+                                originalHeight = imageViewHeight;
+                                originalWidth = imageViewWidth;
+                                isFirstPicture = false;
+                            }
+                            System.out.println("Original height = " + originalHeight);
+                            System.out.println("Original width = " + originalWidth);
+                            System.out.println("imageView height = " + imageViewHeight);
+                            System.out.println("imageView width = " + imageViewWidth);
+                            if(imageViewWidth<originalWidth){
+                                System.out.println("Poredjenje: " + imageViewWidth + " i " + originalWidth);
+                                imageViewHeight = originalHeight;
+                                imageViewWidth = originalWidth;
+                            }
+                            System.out.println("imageView height after = " + imageViewHeight);
+                            System.out.println("imageView width after = " + imageViewWidth);
+                            System.out.println(imageHeight + " " + imageWidth);
+                            imageView.setImage(image);
+                            if (imageWidth < imageViewWidth && imageHeight < imageViewHeight) {
+                                //System.out.println("in if");
+                                imageView.setFitWidth(imageWidth);
+                                imageView.setPreserveRatio(true);
+                                imageView.setSmooth(true);
+                                imageView.setCache(true);
+                            } else{
+                                imageView.setFitWidth(imageViewWidth);
+                                imageView.setPreserveRatio(true);
+                                imageView.setSmooth(true);
+                                imageView.setCache(true);
+                            }
+                        } else {
+                            // Ovdje se definise koje akcije ce se izvrsiti ako je selektovan folder //
+                            Image img = imageView.getImage();
+                            if(img != null){
+                                //ovdje se definisu akcije koje ce skloniti sliku kada se klikne na folder
+                                System.out.println("clear image");
+                                imageView.setVisible(false);
+                                explorerImageLabel.setVisible(true);
+                            }
+                            ListOfFiles lof = new ListOfFiles();
+                            File[] selectedItemFiles = null;    // U ovaj niz ce se upisati svi fajlovi koji budu pronadjeni u sljedecim instrukcijama
+                            selectedItemFiles = new File(selectedItem.getPathWithoutHost() + File.separator).listFiles(new FilenameFilter() {
+                                public boolean accept(File dir, String name) {
+                                    return (name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".png")
+                                            || new File(dir.toString() + File.separator + name).isDirectory())
+                                            & !(new File(dir.toString() + File.separator + name).isHidden());
+                                }
+                            });
+                            NodeOfTree currentlyTempNode = null;      //U ovaj Node se upisuje tempNode koji se nalazi na selektovanoj putanji
+                            try {
+                                for (NodeOfTree n : alltempNodes) {
+                                    if (n.getPathWithoutHost().equals(selectedItem.getPathWithoutHost() + File.separator + "temp_node_speed_up_tree_view")) {
+                                        currentlyTempNode = n;                      //Trenutni temp node se prebacuje u currentlyTempNode
+                                        alltempNodes.remove(currentlyTempNode);     //Uklanjanje tog noda iz allTempNode liste
+                                        break;
+                                    }
+                                }
+                            } catch (NullPointerException ex) {
+                                System.out.println("Nema temp_node_speed_up_tree_view nodova!");
+                            }
+
+                            if (currentlyTempNode != null) {
+                                selectedItem.getChildren().remove(currentlyTempNode);   //Uklanjanje temp noda iz treeView-a
+                            }
+
+                            if (selectedItemFiles != null) {    //U ovom bloku koda se obradjuju akcije ako folder ima podfajlova
+                                for (File file : selectedItemFiles) {
+                                    //Ovdje se definise koje akcije ce se izvrsiti ako je selektovan folder koji nije prazan
+                                    lof.getListOfFiles().add(new NodeOfTree(new File(hostName + File.separator + file.getPath() + File.separator)));   //Kreiraj djecu selektovanog node-a
+                                }
+                                ListOfFiles listFromHash = null;    //Potrebno je pronaci odgovarajucu listu iz hash mape
+                                listFromHash = hashNodeListOfFiles.get(selectedItem);   //Lista se upisuje u listFromHash
+                                if (listFromHash != null) {
+                                    //Ovdje se definisu akcije ako je selektovana putanja vec u hash mapi
+                                    selectedItem.getChildren().removeAll(listFromHash.getListOfFiles());    //Obrisi sve nodove iz treeView-a
+                                    selectedItem.getChildren().addAll(lof.getListOfFiles());                //Dodaj nove nodove, koji su gore upisani u lof
+                                    hashNodeListOfFiles.remove(selectedItem);                               //Brisanje starog noda iz hash mape
+                                    hashNodeListOfFiles.put(selectedItem, lof);                             //Postavljanje novog noda u hash mapu
+                                    for (NodeOfTree node : lof.getListOfFiles()) {                                //Ponovo postavi temp nodove ako je folder
+                                        tempRootNode = node;
+                                        checkIsDirAndAddTempNode();
+                                    }
+                                } else {
+                                    //Ovdje se definisu akcije ako selektovana putanja nije u hash mapi
+                                    selectedItem.getChildren().addAll(lof.getListOfFiles());                //Dodavanje novih nodova u treeView
+                                    hashNodeListOfFiles.put(selectedItem, lof);                             //Dodavanje novih nodova u hash map
+                                    for (NodeOfTree node : lof.getListOfFiles()) {                                //Ponovo postavi temp nodove
+                                        tempRootNode = node;                                                //Jedina razlika od gore napisanog koda je sto se ne brise nista
+                                        //System.out.println("Temp: " + tempRootNode);
+                                        checkIsDirAndAddTempNode();
+                                    }
+                                }
+                            } else {
+                                //Napisati sta ako je fajl prazan
+                                System.out.println("Folder je prazan");
+                            }
+                        }
+                    }
+                    if(selectedItem.isExpanded()){          //Ovaj kod omogucava da se otvaraju tree item-i na klik
+                        selectedItem.setExpanded(false);
+                    } else{
+                        selectedItem.setExpanded(true);
+                    }
+                }
+            });
+            return cell;
         });
+        
     }
 
+    
+    
+    
+    
     /* Metoda koja vraca listu root node direktorijuma */
-    public ObservableList<Node> getRootDirectories() {
-        ObservableList<Node> retList = FXCollections.observableArrayList();
+    public ObservableList<NodeOfTree> getRootDirectories() {
+        ObservableList<NodeOfTree> retList = FXCollections.observableArrayList();
         Iterable<Path> rootDirectories = FileSystems.getDefault().getRootDirectories();
         for (Path name : rootDirectories) {
-            Node tempNode = new Node(new File(rootNode + File.separator + name.toString()));
+            NodeOfTree tempNode = new NodeOfTree(new File(rootNode + File.separator + name.toString()));
             retList.add(tempNode);
         }
         return retList;
     }
 
     public void checkIsDirAndAddTempNode() {
-        if (new File(tempRootNode.getPathWithoutHost()).isDirectory()) {
-            Node tmpNode = new Node(new File(tempRootNode + File.separator + "temp_node_speed_up_tree_view"));
+        if (new File(tempRootNode.getPathWithoutHost()).list() != null && new File(tempRootNode.getPathWithoutHost()).isDirectory() && new File(tempRootNode.getPathWithoutHost()).list().length > 0) {
+            NodeOfTree tmpNode = new NodeOfTree(new File(tempRootNode + File.separator + "temp_node_speed_up_tree_view"));
             tempRootNode.getChildren().add(tmpNode);
             try{
-                for (Node n : alltempNodes) {
+                for (NodeOfTree n : alltempNodes) {
                     if (n.getPathWithoutHost().equals(tmpNode.getPathWithoutHost())) {
                         alltempNodes.remove(n);
                     }
@@ -196,4 +277,122 @@ public class FileSystemTree extends Thread {
         }
     }
 
+    // For DELETE Action //
+    public void removeOneNode(File file){
+        ListOfFiles lof = null;
+        NodeOfTree tmpNd = null;
+        NodeOfTree nodeForRemove = null;
+        for (NodeOfTree name : hashNodeListOfFiles.keySet()) {
+
+            String key = name.getPathWithoutHost();
+            String fullPath = file.getPath();
+            int index = fullPath.lastIndexOf("\\");
+            String tempPath = fullPath.substring(0, index);
+            if (key.equals(tempPath)) {
+                lof = hashNodeListOfFiles.get(name);
+                tmpNd = name;
+            }
+        }
+        ListOfFiles lofTemp = new ListOfFiles();
+        lofTemp.getListOfFiles().addAll(lof.getListOfFiles());
+        for (NodeOfTree n : lofTemp.getListOfFiles()) {
+            if (n.getPathWithoutHost().equals(file.getPath())) {
+                lof.getListOfFiles().remove(n);
+                nodeForRemove = n;
+            }
+        }
+        tmpNd.getChildren().remove(nodeForRemove);
+        explorerPathTextField.setText(selectedItem.getPathWithoutHost());
+    }
+
+    // For CREATE action //
+    public void addNewFolderNodeToTree(File folder){
+        String newNodePath = hostName + File.separator + folder.getPath();
+        NodeOfTree nodeForAdd = new NodeOfTree(new File(newNodePath));
+        ListOfFiles lof = null;
+        NodeOfTree tmpNd = null;
+        
+        for(NodeOfTree n: hashNodeListOfFiles.keySet()){
+            String key = n.getPathWithoutHost();
+            String fullPath = folder.getPath();
+            int index = fullPath.lastIndexOf("\\");
+            String tempPath = fullPath.substring(0, index);
+            if (key.equals(tempPath)) {
+                lof = hashNodeListOfFiles.get(n);
+                tmpNd = n;
+                break;
+            }
+        }
+        
+        lof.getListOfFiles().add(nodeForAdd);
+        tmpNd.getChildren().add(nodeForAdd);
+    }
+    
+    // For RENAME action //
+    public void exchangeTwoNodes(File oldFile, File newFile){
+        String newNodePath = hostName + File.separator + newFile.getPath();
+        NodeOfTree nodeForAdd = new NodeOfTree(new File(newNodePath));
+        ListOfFiles lof = null;
+        NodeOfTree tmpNd = null;
+        
+        for(NodeOfTree n: hashNodeListOfFiles.keySet()){
+            String key = n.getPathWithoutHost();
+            String fullPath = oldFile.getPath();
+            int index = fullPath.lastIndexOf("\\");
+            String tempPath = fullPath.substring(0, index);
+            if (key.equals(tempPath)) {
+                lof = hashNodeListOfFiles.get(n);
+                tmpNd = n;
+                break;
+            }
+        }
+        
+        for(NodeOfTree n: lof.getListOfFiles()){
+            String oldStr = oldFile.getPath();
+            String cmpStr = n.getPathWithoutHost();
+            System.out.println("OldStr: " + oldStr);
+            System.out.println("CmpStr: " + cmpStr);
+            if(oldStr.equals(cmpStr)){
+                System.out.println("Remove old node!");
+                lof.getListOfFiles().remove(n);
+                tmpNd.getChildren().remove(n);
+                System.out.println("Add new node!");
+                lof.getListOfFiles().add(nodeForAdd);
+                tmpNd.getChildren().add(nodeForAdd);
+                tmpNd.setExpanded(true);
+                break;
+            }
+        }
+        
+        
+        ListOfFiles lofSelected = null;
+        for(NodeOfTree n: hashNodeListOfFiles.keySet()){
+            String key = n.getPathWithoutHost();
+            String fullPath = oldFile.getPath();
+            if (key.equals(fullPath)) {
+                lofSelected = hashNodeListOfFiles.get(n);
+                hashNodeListOfFiles.remove(n);
+                hashNodeListOfFiles.put(nodeForAdd, lofSelected);
+                nodeForAdd.getChildren().addAll(lofSelected.getListOfFiles());
+                nodeForAdd.setExpanded(false);
+                break;
+            }
+        }
+    }
+    
+    
+    
+    
+    public NodeOfTree getSelectedItem() {
+        return selectedItem;
+    }
+    
+    public String getSelectedPath(){
+        if(selectedItem != null){
+            return selectedItem.getPathWithoutHost();
+        } else{
+            return null;
+        }
+    }
+    
 }
