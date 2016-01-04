@@ -19,7 +19,9 @@ import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,17 +30,22 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import treeviewclasses.FileSystemTree;
 import treeviewclasses.NodeOfTree;
+import virtualalbums.*;
 
 
 /**
@@ -48,11 +55,12 @@ import treeviewclasses.NodeOfTree;
 public class FXMLDocumentController implements Initializable {
     
     private static FileSystemTree fst = null;
+    private static VirtualAlbumsController virtualAlbumsController = null;
     private static boolean isFirstTime = true;
     private Stage app_stage;
     private String folderName;
     private static String selectedPath;
-    
+    private boolean isMoveToAlbumButtonPressed = false;
     
     
     @FXML
@@ -90,6 +98,28 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private ImageView fullscreenImageView;
+    
+    @FXML
+    private GridPane albumsGridPane1;
+    
+    @FXML
+    private TextField albumNameTextField;
+
+    @FXML
+    private TextField albumDescriptionTextField;
+
+    @FXML
+    private Button createAlbum;
+    
+    @FXML
+    private Button createAlbumButton;
+
+    @FXML
+    private ChoiceBox moveImagePopUpChoiceBox;
+
+    @FXML
+    private Button explorerMoveImageButton;
+
     
     
     
@@ -443,6 +473,39 @@ public class FXMLDocumentController implements Initializable {
     }
     
     
+    @FXML
+    void explorerBtn7Action(ActionEvent event) throws IOException {
+        isMoveToAlbumButtonPressed = true;
+        selectedPath = fst.getSelectedPath();
+        System.out.println("Selected: " + selectedPath);
+
+        if (selectedPath != null && new File(selectedPath).isFile()) {
+            Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLExplorerMoveToAlbum.fxml"));
+            Scene create_folder_scene = new Scene(home_page_parent);
+            app_stage = new Stage();
+            app_stage.setScene(create_folder_scene);
+            app_stage.initModality(Modality.APPLICATION_MODAL);
+            app_stage.initOwner(explorerBtn1.getScene().getWindow());
+            app_stage.show();
+        }
+        
+    }
+    
+    @FXML
+    private void explorerMoveImageButtonAction(ActionEvent event) {
+        String nameOfAlbum = (String) moveImagePopUpChoiceBox.getValue();
+        System.out.println("Choosen value: " + nameOfAlbum);
+        ArrayList<VirtualAlbum> albums = virtualAlbumsController.getVirtualAlbumList();
+        AlbumImage image = new AlbumImage(new File(selectedPath).getName(), new File(selectedPath));
+        for(VirtualAlbum v: albums){
+            if(v.getName().equals(nameOfAlbum)){
+                v.addImage(image);
+            }
+        }
+        app_stage = (Stage) explorerMoveImageButton.getScene().getWindow();
+        app_stage.close();
+    }
+    
     
     // FULLSCREEN Action //
     @FXML
@@ -453,7 +516,6 @@ public class FXMLDocumentController implements Initializable {
         double width = screenSize.getWidth();
         double height = screenSize.getHeight();
 
-        //System.out.println(image);
         if (selectedPath != null && new File(selectedPath).isFile()) {
             Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLFullscreenForm.fxml"));
             Scene create_folder_scene = new Scene(home_page_parent, width, height);
@@ -465,11 +527,10 @@ public class FXMLDocumentController implements Initializable {
         }
         if (selectedPath != null) {
             File file = new File(selectedPath);
-            System.out.println(selectedPath);
             Image image = new Image(file.toURI().toString());
             fullscreenImageView.setImage(image);
-            System.out.println(fullscreenImageView);
         }
+        
     }
 
      @FXML
@@ -480,13 +541,72 @@ public class FXMLDocumentController implements Initializable {
     
     
     
+    /****************************** ALBUM TAB *******************************/
+    @FXML
+    void albumsNewAlbumButtonAction(ActionEvent event) throws IOException {
+        if(virtualAlbumsController.getNumberOfAlbums() != 30){
+        Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLNewAlbumForm.fxml"));
+        Scene create_folder_scene = new Scene(home_page_parent);
+        app_stage = new Stage();
+        app_stage.setScene(create_folder_scene);
+        app_stage.initModality(Modality.APPLICATION_MODAL);
+        app_stage.initOwner(explorerBtn1.getScene().getWindow());
+        app_stage.showAndWait();
+        }
+        else{
+            //Ako ne moze da stane vise albuma//
+        }
+    }
+    
+    @FXML
+    void createAlbumButtonAction(ActionEvent event) {
+        String albumName = albumNameTextField.getText();
+        String albumDescription = albumDescriptionTextField.getText();
+        
+        if(!albumName.equals("")){
+            if (virtualAlbumsController.getVirtualAlbumList().size() != 0) {
+                boolean isValidName = virtualAlbumsController.isAlbumNameValid(albumName);
+                    if (!isValidName) {
+                        //Ako ime vec postoji//
+                    } else {
+                        VirtualAlbum album = new VirtualAlbum(albumName, albumDescription);
+                        virtualAlbumsController.addVirtualAlbum(album);
+                        virtualAlbumsController.addAlbumToGridPane(album);
+                        app_stage = (Stage) createAlbumButton.getScene().getWindow();
+                        app_stage.close();
+                    }
+            }
+            else{
+                VirtualAlbum album = new VirtualAlbum(albumName, albumDescription);
+                virtualAlbumsController.addVirtualAlbum(album);
+                virtualAlbumsController.addAlbumToGridPane(album);
+                
+                app_stage = (Stage) createAlbumButton.getScene().getWindow();
+                app_stage.close();
+            }
+        }
+        else{
+            //Ako nije uneseno ime//
+        }
+    }
+    
+    
+    
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        if(isFirstTime){
+        System.out.println("Initialize");
+        if (isFirstTime) {
             isFirstTime = false;
             fst = new FileSystemTree(explorerTreeView, explorerImgView, explorerPathTextField, explorerImageLabel);
             fst.start();
-            System.out.println("Initialize: " + fst);
+            virtualAlbumsController = new VirtualAlbumsController(albumsGridPane1);
+        }
+        ObservableList<String> albumNames = virtualAlbumsController.getAllAlbumsName();
+        try {
+            moveImagePopUpChoiceBox.getItems().addAll(albumNames);
+        } catch (Exception ex) {
+
         }
     }    
     

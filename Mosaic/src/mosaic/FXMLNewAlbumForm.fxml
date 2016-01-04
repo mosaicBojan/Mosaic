@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="199.0" prefWidth="465.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="mosaic.FXMLDocumentController">
+   <children>
+      <Label layoutX="14.0" layoutY="38.0" text="Abum name: " />
+      <Label layoutX="14.0" layoutY="78.0" text="Desription:" />
+      <TextField fx:id="albumNameTextField" layoutX="109.0" layoutY="34.0" prefHeight="25.0" prefWidth="322.0" />
+      <TextField fx:id="albumDescriptionTextField" layoutX="109.0" layoutY="74.0" prefHeight="25.0" prefWidth="322.0" />
+      <Button fx:id="createAlbumButton" layoutX="278.0" layoutY="121.0" mnemonicParsing="false" onAction="#createAlbumButtonAction" prefHeight="25.0" prefWidth="153.0" text="Create Album" />
+   </children>
+</AnchorPane>

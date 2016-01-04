@@ -8,7 +8,10 @@ package treeviewclasses;
 import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /**
  *
@@ -17,12 +20,33 @@ import javafx.scene.control.TreeItem;
 public class NodeOfTree extends TreeItem<String> {
 
     private File nodeFile;
+   
 
     public NodeOfTree(File file) {
         super(file.getName());
         nodeFile = file;
+        //this.setIcon();
+    }
+    
+    public NodeOfTree(File file, Node image) {
+        super(file.getName(), image);
+        nodeFile = file;
+        //this.setIcon();
     }
 
+    /*public void setIcon(){
+        if("Asus-PC".equals(this.getNodeFile().toString())){
+            //System.out.println("URL: " + getClass().getResourceAsStream("myComputer.png"));
+            System.out.println("ROOT IMAGE");
+            Image myCompImage = new Image(getClass().getResourceAsStream("myComputer.png"));
+            this.setGraphic(new ImageView(myCompImage));
+        } else{
+            System.out.println("FOLDER IMAGE");
+            Image folderImage = new Image(getClass().getResourceAsStream("treeFolderClosed.png"));
+            this.setGraphic(new ImageView(folderImage));
+        }
+    }*/
+    
     public File getNodeFile() {
         return nodeFile;
     }

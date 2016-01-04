@@ -77,7 +77,7 @@
                                           <Insets right="5.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button fx:id="explorerBtn7" layoutX="208.0" layoutY="16.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+                                    <Button fx:id="explorerBtn7" layoutX="208.0" layoutY="16.0" mnemonicParsing="false" onAction="#explorerBtn7Action" prefHeight="32.0" prefWidth="32.0">
                                        <HBox.margin>
                                           <Insets right="5.0" />
                                        </HBox.margin>
@@ -127,7 +127,26 @@
                      <children>
                         <SplitPane dividerPositions="0.7409326424870466" layoutX="58.0" layoutY="25.0" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="53.0">
                           <items>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                 <children>
+                                    <GridPane fx:id="albumsGridPane1" layoutX="14.0" layoutY="14.0" prefHeight="551.0" prefWidth="834.0">
+                                      <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                    </GridPane>
+                                 </children></AnchorPane>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
                           </items>
                         </SplitPane>
@@ -141,7 +160,7 @@
                                     <Insets left="7.0" top="1.0" />
                                  </padding>
                                  <children>
-                                    <Button fx:id="albumsNewAlbum" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+                                    <Button fx:id="albumsNewAlbum" mnemonicParsing="false" onAction="#albumsNewAlbumButtonAction" prefHeight="32.0" prefWidth="32.0">
                                        <HBox.margin>
                                           <Insets right="5.0" />
                                        </HBox.margin>

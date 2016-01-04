@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="161.0" prefWidth="410.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mosaic.FXMLDocumentController">
+   <children>
+      <Label layoutX="22.0" layoutY="45.0" text="Choose album" />
+      <Button fx:id="explorerMoveImageButton" layoutX="247.0" layoutY="95.0" mnemonicParsing="false" onAction="#explorerMoveImageButtonAction" prefHeight="25.0" prefWidth="128.0" text="Move image" />
+      <ChoiceBox fx:id="moveImagePopUpChoiceBox" layoutX="117.0" layoutY="41.0" prefHeight="25.0" prefWidth="257.0" />
+   </children>
+</AnchorPane>
