@@ -96,26 +96,27 @@ public class FileSystemTree extends Thread {
                     } else {
                         //setText(item);
                         String value = this.getTreeItem().getValue();
+                        this.setDisclosureNode(null);
                         this.setText(value);
 
                         if (value.equals(hostName)) {
-                            Image myCompImage = new Image(getClass().getResourceAsStream("myComputer.png"));
+                            Image myCompImage = new Image("icons/explorerTreeViewIcons/myComputer.png");
                             ImageView iv = new ImageView();
                             iv.setImage(myCompImage);
                             this.setGraphic(iv);
                         } else if (value.endsWith(".jpg") || value.endsWith(".png")) {
-                            Image myCompImage = new Image(getClass().getResourceAsStream("treeImage.png"));
+                            Image myCompImage = new Image("icons/explorerTreeViewIcons/imagePlaceholder.png");
                             ImageView iv = new ImageView();
                             iv.setImage(myCompImage);
                             this.setGraphic(iv);
                         } else {
                             if (this.getTreeItem().isExpanded() == false) {
-                                Image myCompImage = new Image(getClass().getResourceAsStream("treeFolderClosed.png"));
+                                Image myCompImage = new Image("icons/explorerTreeViewIcons/treeFolderClosed.png");
                                 ImageView iv = new ImageView();
                                 iv.setImage(myCompImage);
                                 this.setGraphic(iv);
                             } else {
-                                Image myCompImage = new Image(getClass().getResourceAsStream("treeFolderOpen.png"));
+                                Image myCompImage = new Image("icons/explorerTreeViewIcons/treeFolderOpen.png");
                                 ImageView iv = new ImageView();
                                 iv.setImage(myCompImage);
                                 this.setGraphic(iv);
