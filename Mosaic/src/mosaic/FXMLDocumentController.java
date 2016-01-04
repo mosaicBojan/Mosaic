@@ -119,6 +119,9 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private Button explorerMoveImageButton;
+    
+    @FXML
+    private GridPane albumImagesGridPane1;
 
     
     
@@ -600,7 +603,7 @@ public class FXMLDocumentController implements Initializable {
             isFirstTime = false;
             fst = new FileSystemTree(explorerTreeView, explorerImgView, explorerPathTextField, explorerImageLabel);
             fst.start();
-            virtualAlbumsController = new VirtualAlbumsController(albumsGridPane1);
+            virtualAlbumsController = new VirtualAlbumsController(albumsGridPane1, albumImagesGridPane1);
         }
         ObservableList<String> albumNames = virtualAlbumsController.getAllAlbumsName();
         try {
