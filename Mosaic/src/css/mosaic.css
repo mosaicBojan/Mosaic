@@ -403,7 +403,21 @@
 * albums tab buttons
 */
 
-/* newFolder button */
+/* import button */
+#albumsImport {
+    -fx-graphic: url('../icons/importToAlbum.png');
+}
+#albumsImport:hover {
+    -fx-graphic: url('../icons/importToAlbumHover.png');
+}
+#albumsImport:pressed {
+    -fx-background-color: #f0f0f0;
+}
+#albumsImportTooltip {
+    -fx-background-color: #2b84c2;
+}
+
+/* newAlbum button */
 #albumsNewAlbum {
     -fx-graphic: url('../icons/newAlbum.png');
 }
@@ -498,6 +512,30 @@
 }
 #albumsFullscreenTooltip {
     -fx-background-color: #2b84c2;
+}
+
+/* back button */
+#albumsBackButton {
+    -fx-graphic: url('../icons/backArrow.png');
+}
+#albumsBackButton:hover {
+    -fx-graphic: url('../icons/backArrowHover.png');
+}
+#albumsBackButton:pressed {
+    -fx-background-color: #f0f0f0;
+}
+#albumsBackButtonTooltip {
+    -fx-background-color: #2b84c2;
+}
+
+/*
+* albums navigation label
+*/
+
+#albumsNavigationLabel {
+    -fx-text-fill: #7d7d7d;
+    -fx-font-weight: bold;
+    -fx-font-size: 20px;
 }
 
 /*
