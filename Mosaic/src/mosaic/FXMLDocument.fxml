@@ -165,7 +165,7 @@
                                     </GridPane>
                                     <HBox alignment="CENTER_LEFT" prefHeight="32.0" prefWidth="200.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                        <children>
-                                          <Button fx:id="albumsBackButton" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+                                          <Button fx:id="albumsBackButton" mnemonicParsing="false" onAction="#albumsBackButtonAction" prefHeight="32.0" prefWidth="32.0">
                                              <HBox.margin>
                                                 <Insets right="10.0" />
                                              </HBox.margin>
@@ -174,7 +174,15 @@
                                        </children>
                                     </HBox>
                                  </children></AnchorPane>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="543.0" prefWidth="297.0">
+                                 <children>
+                                    <ImageView fitHeight="477.0" fitWidth="286.0" layoutX="7.0" pickOnBounds="true" preserveRatio="true" />
+                                    <Label fx:id="albumOrImageNameLabel" layoutX="14.0" layoutY="506.0" text="Album name:" />
+                                    <Label fx:id="descriptionTempLabel" layoutX="14.0" layoutY="534.0" text="Description:" />
+                                    <Separator layoutY="488.0" prefHeight="2.0" prefWidth="294.0" />
+                                    <Label fx:id="albumNameLabel" layoutX="96.0" layoutY="506.0" prefHeight="17.0" prefWidth="191.0" />
+                                    <Label fx:id="albumDescriptionLabel" layoutX="96.0" layoutY="534.0" prefHeight="17.0" prefWidth="184.0" />
+                                 </children></AnchorPane>
                           </items>
                         </SplitPane>
                         <AnchorPane fx:id="albumsMainMenuAnchorPane" prefHeight="42.0" prefWidth="1141.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
@@ -197,7 +205,7 @@
                                           <Insets right="5.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button fx:id="albumsDelete" layoutX="17.0" layoutY="11.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+                                    <Button fx:id="albumsDelete" layoutX="17.0" layoutY="11.0" mnemonicParsing="false" onAction="#albumsDeleteAction" prefHeight="32.0" prefWidth="32.0">
                                        <HBox.margin>
                                           <Insets right="5.0" />
                                        </HBox.margin></Button>
