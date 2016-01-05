@@ -20,6 +20,8 @@ import javafx.scene.layout.GridPane;
 
 public class VirtualAlbumsController {
 
+    private Button lastClickedButton = null;    //remembers last album clicked
+    
     private ArrayList<VirtualAlbum> virtualAlbumList;
     private GridPane albumsGridPane;
     private GridPane albumImagesGridPane;
@@ -120,11 +122,23 @@ public class VirtualAlbumsController {
         for (VirtualAlbum va : virtualAlbumList) {
             Button button = new Button(va.getName());
             button.setStyle("-fx-border-width: 0; -fx-graphic: url('icons/album.png');");
+            //button.getStyleClass().add("albumSelected");
             button.wrapTextProperty().setValue(true);
             button.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 
                 @Override
                 public void handle(MouseEvent event) {
+                    
+                    // setting single click highlight
+                    if ( lastClickedButton != null ){
+                        lastClickedButton.getStyleClass().remove("albumSelected");
+                        lastClickedButton.getStyleClass().add("albumNotSelected");
+                    }
+                    button.getStyleClass().remove("albumNotSelected");
+                    button.getStyleClass().add("albumSelected");
+                    lastClickedButton = button;
+                    // end highlight
+                    
                     if (event.getButton().equals(MouseButton.PRIMARY)) {
                         if (event.getClickCount() == 2) {
                             System.out.println("Double clicked");
@@ -349,12 +363,25 @@ public class VirtualAlbumsController {
     public void addAlbumToGridPane(VirtualAlbum album) {
         Button button = new Button(album.getName());
         //button.setGraphic(new ImageView(new Image("icons/album.png")));
-        button.setStyle("-fx-border-width: 0; -fx-graphic: url('icons/album.png');");
+        //button.setStyle("-fx-border-width: 0; -fx-graphic: url('icons/album.png');");
+        button.getStyleClass().add("albumNotSelected");
         button.wrapTextProperty().setValue(true);
         button.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 
             @Override
             public void handle(MouseEvent event) {
+            
+                // setting single click highlight
+                if ( lastClickedButton != null ){
+                    lastClickedButton.getStyleClass().remove("albumSelected");
+                    lastClickedButton.getStyleClass().add("albumNotSelected");
+                }
+                button.getStyleClass().remove("albumNotSelected");
+                button.getStyleClass().add("albumSelected");
+                lastClickedButton = button;
+                // end highlight
+                
+                
                 if (event.getButton().equals(MouseButton.PRIMARY)) {
                     if (event.getClickCount() == 2) {
                         System.out.println("Double clicked");

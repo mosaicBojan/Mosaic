@@ -9,6 +9,13 @@
     -fx-border-color: #cccccc;
 }
 
+.split-pane {
+    -fx-background-color: #f9f9f9;
+}
+.split-pane *.split-pane-divider {
+    -fx-padding: 0 1 0 0;
+}
+
 /*********************************************************************************
 *
 * TAB PANE
@@ -173,6 +180,11 @@
 }
 
 /* explorer treeView */
+
+#explorerTreeView {
+    -fx-border-width: 1;
+    -fx-border-color: #cccccc;
+}
 
 #explorerTreeView, .tree-cell {
     -fx-background-color: white;
@@ -391,11 +403,44 @@
 *
 **********************************************************************************/
 
+/* albums grid panes */
+#albumsGridPane1 {
+    -fx-padding: 10 10 10 10;
+    -fx-background-color: white;
+    -fx-border-width: 1;
+    -fx-border-color: #cccccc;
+}
+#albumImagesGridPane1 {
+    -fx-padding: 10 10 10 10;
+    -fx-background-color: white;
+    -fx-border-width: 1;
+    -fx-border-color: #cccccc;
+}
+
 /* explorer tab main menu anchor */
 #albumsMainMenuAnchorPane {
     -fx-background-color: white;
     -fx-border-width: 0 0 1 0;
     -fx-border-color: #cccccc;
+}
+
+/* albums tab main content button styles */
+.albumNotSelected {
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-border-width: 1px;
+    -fx-border-color: none;
+    -fx-background-color: none;
+    -fx-graphic: url('../icons/album.png');
+}
+
+.albumSelected {
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-border-width: 1px;
+    -fx-border-color: #3399ff;
+    -fx-background-color: #e5f2ff;
+    -fx-graphic: url('../icons/albumHover.png');
 }
 
 
