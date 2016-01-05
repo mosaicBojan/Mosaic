@@ -23,6 +23,10 @@ public class Mosaic extends Application {
         
         Scene scene = new Scene(root);
         
+        // setting min stage dimensions
+        stage.setMinHeight(700);
+        stage.setMinWidth(1000);
+        
         stage.setScene(scene);
         stage.show();
     }

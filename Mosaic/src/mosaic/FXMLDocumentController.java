@@ -34,6 +34,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
@@ -151,7 +152,7 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private FlowPane imagesFlowPane;
-
+    
     // Kreiranje novog foldera //
     @FXML
     void explorerBtn1Action(ActionEvent event) throws IOException {
