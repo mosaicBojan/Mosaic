@@ -31,8 +31,6 @@ public class VirtualAlbumsController {
     private Button lastClickedButton = null;    //remembers last album clicked
 
     private ArrayList<VirtualAlbum> virtualAlbumList;
-    private GridPane albumsGridPane;
-    private GridPane albumImagesGridPane;
     private static int numberOfAlbums = 0;
     private int nextEmpty = 0;
     private Label albumsNavigationLabel;
@@ -49,8 +47,6 @@ public class VirtualAlbumsController {
             Label albumNameLabel, Label albumDescriptionLabel, Label albumOrImageNameLabel, Label descriptionTempLabel,
             FlowPane albumsFlowPane, FlowPane imagesFlowPane) {
         virtualAlbumList = new ArrayList<>();
-        this.albumsGridPane = albumsGridPane;
-        this.albumImagesGridPane = albumImagesGridPane;
         this.albumsNavigationLabel = albumsNavigationLabel;
         this.albumNameLabel = albumNameLabel;
         this.albumDescriptionLabel = albumDescriptionLabel;
@@ -59,8 +55,6 @@ public class VirtualAlbumsController {
         this.albumsFlowPane = albumsFlowPane;
         this.imagesFlowPane = imagesFlowPane;
         this.imagesFlowPane.setVisible(false);
-        //albumImagesGridPane.setDisable(true);
-        //albumImagesGridPane.setVisible(false);
     }
 
     ///////////////////   ADD VIRTUAL ALBUM    /////////////////////
@@ -112,7 +106,7 @@ public class VirtualAlbumsController {
                 }
             }
         });
-        albumsFlowPane.setPadding(new Insets(5, 5, 5, 0));
+        albumsFlowPane.setPadding(new Insets(10, 5, 5, 10));
         albumsFlowPane.setVgap(10);
         albumsFlowPane.setHgap(15);
         albumsFlowPane.getChildren().add(button);
@@ -139,7 +133,7 @@ public class VirtualAlbumsController {
             vBox.getChildren().add(button);
             vBox.getChildren().add(buttonNameLabel);
             //System.out.println("Putanja: " + image.getPath().getPath());
-            Image iconImage = new Image(new File(image.getPath().getPath()).toURI().toString());
+            Image iconImage = new Image(new File(image.getPath().getPath()).toURI().toString(), 90, 90, false, false);
             ImageView iv = new ImageView(iconImage);
             iv.setFitHeight(96);
             iv.setFitWidth(96);
