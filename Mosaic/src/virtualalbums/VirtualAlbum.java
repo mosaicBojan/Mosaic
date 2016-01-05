@@ -20,6 +20,20 @@ public class VirtualAlbum {
         this.description = description;
     }
 
+    //////////////  RETURN REQUIRED IMAGE FROM ALBUM  ////////////////
+    public AlbumImage getImageFromAlbumForString(String imageName){
+        AlbumImage image = null;
+        for(AlbumImage i: images){
+            if(i.getName().equals(imageName)){
+                image = i;
+                break;
+            }
+        }
+        
+        return image;
+    }
+    
+    
     public String getName() {
         return name;
     }
@@ -51,11 +65,13 @@ public class VirtualAlbum {
     public void setImages(ArrayList<AlbumImage> images) {
         this.images = images;
     }
-    
+   
+    ////////// ADD IMAGE TO this ALBUM ////////
     public void addImage(AlbumImage image){
         images.add(image);
     }
     
+    ///////// DELETE IMAGE FROM this ALBUM ////////
     public void deleteImage(String name){
         for(AlbumImage im: images){
             if(im.getName().equals(name)){

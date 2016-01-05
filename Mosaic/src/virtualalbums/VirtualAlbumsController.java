@@ -6,22 +6,29 @@ import java.awt.datatransfer.DataFlavor;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 
 public class VirtualAlbumsController {
 
     private Button lastClickedButton = null;    //remembers last album clicked
-    
+
     private ArrayList<VirtualAlbum> virtualAlbumList;
     private GridPane albumsGridPane;
     private GridPane albumImagesGridPane;
@@ -32,9 +39,14 @@ public class VirtualAlbumsController {
     private Label albumDescriptionLabel;
     private Label albumOrImageNameLabel;
     private Label descriptionTempLabel;
+    private FlowPane albumsFlowPane;
+    private FlowPane imagesFlowPane;
+    private HashMap<String, Label> buttonNameLabelHashMap = new HashMap<>();
 
-    public VirtualAlbumsController(GridPane albumsGridPane, GridPane albumImagesGridPane, Label albumsNavigationLabel,
-            Label albumNameLabel, Label albumDescriptionLabel, Label albumOrImageNameLabel, Label descriptionTempLabel) {
+    // KONSTRUKTOR //
+    public VirtualAlbumsController(Label albumsNavigationLabel,
+            Label albumNameLabel, Label albumDescriptionLabel, Label albumOrImageNameLabel, Label descriptionTempLabel,
+            FlowPane albumsFlowPane, FlowPane imagesFlowPane) {
         virtualAlbumList = new ArrayList<>();
         this.albumsGridPane = albumsGridPane;
         this.albumImagesGridPane = albumImagesGridPane;
@@ -43,404 +55,211 @@ public class VirtualAlbumsController {
         this.albumDescriptionLabel = albumDescriptionLabel;
         this.albumOrImageNameLabel = albumOrImageNameLabel;
         this.descriptionTempLabel = descriptionTempLabel;
-        albumImagesGridPane.setDisable(true);
-        albumImagesGridPane.setVisible(false);
+        this.albumsFlowPane = albumsFlowPane;
+        this.imagesFlowPane = imagesFlowPane;
+        this.imagesFlowPane.setVisible(false);
+        //albumImagesGridPane.setDisable(true);
+        //albumImagesGridPane.setVisible(false);
     }
 
+    ///////////////////   ADD VIRTUAL ALBUM    /////////////////////
     public void addVirtualAlbum(VirtualAlbum album) {
         virtualAlbumList.add(album);
         numberOfAlbums++;
         nextEmpty++;
     }
 
-    public void removeVirtualAlbum(String name) {
-        for (VirtualAlbum va : virtualAlbumList) {
-            if (va.getName().equals(name)) {
-                virtualAlbumList.remove(va);
-                
-                removeGridElement(va.getName());
-                break;
-            }
-        }
-    }
-
-    public void removeGridElement(String name) {
-        ObservableList<Node> list = albumsGridPane.getChildren();
-        albumNameLabel.setText("");
-        for (Node n : list) {
-            int firstIndex = n.toString().indexOf("'");
-            int lastIndex = n.toString().lastIndexOf("'");
-            String subName = n.toString().substring(firstIndex + 1, lastIndex);
-            if (subName.equals(name)) {
-                this.arrangeAlbums();
-                break;
-            }
-        }
-    }
-
-    public void arrangeAlbums() {
-        albumsGridPane.getChildren().clear();
-        addAllAlbumsToGridPane();
-    }
-    
-    public void removeImageFromAlbum(String album, String image){
-        VirtualAlbum virtualAlbum = getAlbumByString(album);
-        printAlbumInfos(virtualAlbum);
-        virtualAlbum.deleteImage(image);
-        removeImageGridElement(image);
-    }
-    
-    public void printAlbumInfos(VirtualAlbum album){
-        for(AlbumImage image: album.getImages()){
-            System.out.println("***" + image.getName());
-        }
-    }
-
-    public void removeImageGridElement(String name) {
-        ObservableList<Node> list = albumImagesGridPane.getChildren();
-        albumNameLabel.setText("");
-        for (Node n : list) {
-            int firstIndex = n.toString().indexOf("'");
-            int lastIndex = n.toString().lastIndexOf("'");
-            String subName = n.toString().substring(firstIndex + 1, lastIndex);
-            if (subName.equals(name)) {
-                this.arrangeImages();
-                break;
-            }
-        }
-    }
-    
-    public void arrangeImages(){
-        albumImagesGridPane.getChildren().clear();
-        VirtualAlbum album = getAlbumByString(albumsNavigationLabel.getText());
-        addAllImagesToGridPane(album);
-    }
-
-    
-    public void addAllAlbumsToGridPane() {
-        int nextEmpty = 1;
-        for (VirtualAlbum va : virtualAlbumList) {
-            Button button = new Button(va.getName());
-            button.setStyle("-fx-border-width: 0; -fx-graphic: url('icons/album.png');");
-            //button.getStyleClass().add("albumSelected");
-            button.wrapTextProperty().setValue(true);
-            button.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-
-                @Override
-                public void handle(MouseEvent event) {
-                    
-                    // setting single click highlight
-                    if ( lastClickedButton != null ){
-                        lastClickedButton.getStyleClass().remove("albumSelected");
-                        lastClickedButton.getStyleClass().add("albumNotSelected");
-                    }
-                    button.getStyleClass().remove("albumNotSelected");
-                    button.getStyleClass().add("albumSelected");
-                    lastClickedButton = button;
-                    // end highlight
-                    
-                    if (event.getButton().equals(MouseButton.PRIMARY)) {
-                        if (event.getClickCount() == 2) {
-                            System.out.println("Double clicked");
-                            albumOrImageNameLabel.setText("Image name:");
-                            albumNameLabel.setText("");
-                            albumDescriptionLabel.setText("");
-                            descriptionTempLabel.setText("");
-                            albumsNavigationLabel.setText(va.getName());
-                            albumsGridPane.setDisable(true);
-                            albumImagesGridPane.setDisable(false);
-                            albumsGridPane.setVisible(false);
-                            albumImagesGridPane.setVisible(true);
-                            setImagesToGridPane(va);
-                        } else if (event.getClickCount() == 1) {
-                            albumNameLabel.setText(va.getName());
-                            albumDescriptionLabel.setText(va.getDescription());
-                        }
-                    }
-                }
-
-            });
-
-            int x = 0;
-            int y = 0;
-            if (nextEmpty > 0 & nextEmpty <= 6) {
-                y = 0;
-                x = nextEmpty - 1;
-            } else if (nextEmpty > 6 & nextEmpty <= 12) {
-                y = 1;
-                if (nextEmpty == 12) {
-                    x = 5;
-                } else {
-                    x = nextEmpty % 6 - 1;
-                }
-            } else if (nextEmpty > 12 & nextEmpty <= 18) {
-                y = 2;
-                if (nextEmpty == 12) {
-                    x = 5;
-                } else {
-                    x = nextEmpty % 6 - 1;
-                }
-            } else if (nextEmpty > 18 & nextEmpty <= 24) {
-                y = 3;
-                if (nextEmpty == 12) {
-                    x = 5;
-                } else {
-                    x = nextEmpty % 6 - 1;
-                }
-            } else {
-                y = 4;
-                if (nextEmpty == 12) {
-                    x = 5;
-                } else {
-                    x = nextEmpty % 6 - 1;
-                }
-            }
-            albumsGridPane.add(button, x, y);
-            nextEmpty++;
-        }
-    }
-    
-    public void addAllImagesToGridPane(VirtualAlbum album) {
-        albumImagesGridPane.getChildren().clear();
-        int numOfImages = album.getImages().size();
-        int tempCount = 1;
-        for (AlbumImage image : album.getImages()) {
-            Button button = new Button(image.getName());
-            //button.setStyle("-fx-border-width: 0; -fx-graphic: url('icons/album.png');");
-            //button.wrapTextProperty().setValue(true);
-            button.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-
-                @Override
-                public void handle(MouseEvent event) {
-                    if (event.getButton().equals(MouseButton.PRIMARY)) {
-                        if (event.getClickCount() == 2) {
-                            System.out.println("Double clicked");
-                            try {
-                                Desktop.getDesktop().open(image.getPath());
-                            } catch (IOException ex) {
-                                ex.printStackTrace();
-                            }
-
-                        } else if (event.getClickCount() == 1) {
-                            albumNameLabel.setText(image.getName());
-                        }
-                    }
-                }
-
-            });
-
-            int x = 0;
-            int y = 0;
-            if (tempCount > 0 & tempCount <= 6) {
-                y = 0;
-                x = tempCount - 1;
-            } else if (tempCount > 6 & tempCount <= 12) {
-                y = 1;
-                if (tempCount == 12) {
-                    x = 5;
-                } else {
-                    x = tempCount % 6 - 1;
-                }
-            } else if (tempCount > 12 & tempCount <= 18) {
-                y = 2;
-                if (tempCount == 12) {
-                    x = 5;
-                } else {
-                    x = tempCount % 6 - 1;
-                }
-            } else if (tempCount > 18 & tempCount <= 24) {
-                y = 3;
-                if (tempCount == 12) {
-                    x = 5;
-                } else {
-                    x = tempCount % 6 - 1;
-                }
-            } else {
-                y = 4;
-                if (tempCount == 12) {
-                    x = 5;
-                } else {
-                    x = tempCount % 6 - 1;
-                }
-            }
-            albumImagesGridPane.add(button, x, y);
-            tempCount++;
-        }
-    }
-    
-    
-    public VirtualAlbum getAlbumByString(String name){
-        VirtualAlbum album = null;
-        for(VirtualAlbum va: virtualAlbumList){
-            if(va.getName().equals(name)){
-                album = va;
-                break;
-            }
-        }
-        return album;
-    }
-    
-
-    public ArrayList<VirtualAlbum> getVirtualAlbumList() {
-        return virtualAlbumList;
-    }
-
-    public void setImagesToGridPane(VirtualAlbum album) {
-        VirtualAlbum va = null;
-        for (VirtualAlbum temp : virtualAlbumList) {
-            if (temp.getName().equals(album.getName())) {
-                va = temp;
-                break;
-            }
-        }
-        albumImagesGridPane.getChildren().clear();
-        int numOfImages = va.getImages().size();
-        int tempCount = 1;
-        for (AlbumImage image : va.getImages()) {
-            Button button = new Button(image.getName());
-            //button.setStyle("-fx-border-width: 0; -fx-graphic: url('icons/album.png');");
-            //button.wrapTextProperty().setValue(true);
-            button.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-
-                @Override
-                public void handle(MouseEvent event) {
-                    if (event.getButton().equals(MouseButton.PRIMARY)) {
-                        if (event.getClickCount() == 2) {
-                            System.out.println("Double clicked");
-                            try {
-                                Desktop.getDesktop().open(image.getPath());
-                            } catch (IOException ex) {
-                                ex.printStackTrace();
-                            }
-
-                        } else if (event.getClickCount() == 1) {
-                            albumNameLabel.setText(image.getName());
-                        }
-                    }
-                }
-
-            });
-
-            int x = 0;
-            int y = 0;
-            if (tempCount > 0 & tempCount <= 6) {
-                y = 0;
-                x = tempCount - 1;
-            } else if (tempCount > 6 & tempCount <= 12) {
-                y = 1;
-                if (tempCount == 12) {
-                    x = 5;
-                } else {
-                    x = tempCount % 6 - 1;
-                }
-            } else if (tempCount > 12 & tempCount <= 18) {
-                y = 2;
-                if (tempCount == 12) {
-                    x = 5;
-                } else {
-                    x = tempCount % 6 - 1;
-                }
-            } else if (tempCount > 18 & tempCount <= 24) {
-                y = 3;
-                if (tempCount == 12) {
-                    x = 5;
-                } else {
-                    x = tempCount % 6 - 1;
-                }
-            } else {
-                y = 4;
-                if (tempCount == 12) {
-                    x = 5;
-                } else {
-                    x = tempCount % 6 - 1;
-                }
-            }
-            albumImagesGridPane.add(button, x, y);
-            tempCount++;
-        }
-    }
-
-    public void addAlbumToGridPane(VirtualAlbum album) {
+    public void addAlbumToAlbumsFlowPane(VirtualAlbum album) {
         Button button = new Button(album.getName());
-        //button.setGraphic(new ImageView(new Image("icons/album.png")));
-        //button.setStyle("-fx-border-width: 0; -fx-graphic: url('icons/album.png');");
         button.getStyleClass().add("albumNotSelected");
         button.wrapTextProperty().setValue(true);
+        button.setPrefWidth(150);
+        button.setPrefHeight(60);
         button.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 
             @Override
             public void handle(MouseEvent event) {
-            
-                // setting single click highlight
-                if ( lastClickedButton != null ){
-                    lastClickedButton.getStyleClass().remove("albumSelected");
-                    lastClickedButton.getStyleClass().add("albumNotSelected");
-                }
-                button.getStyleClass().remove("albumNotSelected");
-                button.getStyleClass().add("albumSelected");
-                lastClickedButton = button;
-                // end highlight
-                
-                
+
                 if (event.getButton().equals(MouseButton.PRIMARY)) {
                     if (event.getClickCount() == 2) {
+                        /////// Double click //////
                         System.out.println("Double clicked");
                         albumOrImageNameLabel.setText("Image name:");
                         albumNameLabel.setText("");
                         albumDescriptionLabel.setText("");
                         descriptionTempLabel.setText("");
                         albumsNavigationLabel.setText(album.getName());
-                        albumsGridPane.setDisable(true);
-                        albumImagesGridPane.setDisable(false);
-                        albumsGridPane.setVisible(false);
-                        albumImagesGridPane.setVisible(true);
-                        setImagesToGridPane(album);
+                        albumsFlowPane.setVisible(false);
+                        imagesFlowPane.setVisible(true);
+                        setImagesToImagesFlowPane(album);
                     } else if (event.getClickCount() == 1) {
+                        //////// Single click  ////////
+                        // setting single click highlight
+                        if (lastClickedButton != null) {
+                            lastClickedButton.getStyleClass().remove("albumSelected");
+                            lastClickedButton.getStyleClass().add("albumNotSelected");
+                        }
+                        button.getStyleClass().remove("albumNotSelected");
+                        button.getStyleClass().add("albumSelected");
+                        lastClickedButton = button;
+                        // end highlight
+
                         albumNameLabel.setText(album.getName());
                         albumDescriptionLabel.setText(album.getDescription());
                     }
                 }
             }
-
         });
+        albumsFlowPane.setPadding(new Insets(5, 5, 5, 0));
+        albumsFlowPane.setVgap(10);
+        albumsFlowPane.setHgap(15);
+        albumsFlowPane.getChildren().add(button);
+    }
+    ///////////////////////////////////////////////////////////////////////////////
+    
+    
+    ///////////////   SET IMAGES OF REQUIRED ALBUM TO FLOW PANE   //////////////
+    public void setImagesToImagesFlowPane(VirtualAlbum album) {
 
-        int x = 0;
-        int y = 0;
-        if (nextEmpty > 0 & nextEmpty <= 6) {
-            y = 0;
-            x = nextEmpty - 1;
-        } else if (nextEmpty > 6 & nextEmpty <= 12) {
-            y = 1;
-            if (nextEmpty == 12) {
-                x = 5;
-            } else {
-                x = nextEmpty % 6 - 1;
-            }
-        } else if (nextEmpty > 12 & nextEmpty <= 18) {
-            y = 2;
-            if (nextEmpty == 12) {
-                x = 5;
-            } else {
-                x = nextEmpty % 6 - 1;
-            }
-        } else if (nextEmpty > 18 & nextEmpty <= 24) {
-            y = 3;
-            if (nextEmpty == 12) {
-                x = 5;
-            } else {
-                x = nextEmpty % 6 - 1;
-            }
+        VirtualAlbum va = getAlbumForString(album.getName());
+        imagesFlowPane.getChildren().clear();
+        //int numOfImages = va.getImages().size();
+        //int tempCount = 1;
+        for (AlbumImage image : va.getImages()) {
+            Button button = new Button();
+            Label buttonNameLabel = new Label(image.getName());
+            buttonNameLabel.setWrapText(true);
+            buttonNameLabel.setMaxWidth(100);
+            buttonNameLabel.setMaxHeight(50);
+            button.setPrefWidth(96);
+            button.setPrefHeight(96);
+            VBox vBox = new VBox();
+            vBox.getChildren().add(button);
+            vBox.getChildren().add(buttonNameLabel);
+            //System.out.println("Putanja: " + image.getPath().getPath());
+            Image iconImage = new Image(new File(image.getPath().getPath()).toURI().toString());
+            ImageView iv = new ImageView(iconImage);
+            iv.setFitHeight(96);
+            iv.setFitWidth(96);
+            button.setGraphic(iv);
+            buttonNameLabelHashMap.put(image.getName(), buttonNameLabel);
+            //button.setGraphic(new ImageView(new Image("icons/move.png")));
+            button.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+
+                @Override
+                public void handle(MouseEvent event) {
+                    if (event.getButton().equals(MouseButton.PRIMARY)) {
+                        if (event.getClickCount() == 2) {
+                            System.out.println("Double clicked");
+                            try {
+                                Desktop.getDesktop().open(image.getPath());
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                            }
+
+                        } else if (event.getClickCount() == 1) {
+                            albumNameLabel.setText(image.getName());
+                        }
+                    }
+                }
+
+            });
+            imagesFlowPane.setPadding(new Insets(5, 5, 5, 5));
+            imagesFlowPane.setVgap(20);
+            imagesFlowPane.setHgap(20);
+            imagesFlowPane.getChildren().add(vBox);
+        }
+    }
+    ///////////////////////////////////////////////////////////////////////////////
+    
+    
+    /////////////////////////  REMOVE VIRTUAL ALBUM  //////////////////////////
+    public void removeVirtualAlbum(String name) {
+        System.out.println("Remove album: " + name);
+        VirtualAlbum va = getAlbumForString(name);
+        virtualAlbumList.remove(va);
+        albumsFlowPane.getChildren().clear();
+        for (VirtualAlbum v : virtualAlbumList) {
+            addAlbumToAlbumsFlowPane(v);
+        }
+    }
+    ///////////////////////////////////////////////////////////////////////////
+    
+    
+    /////////////////////////  REMOVE IMAGE FROM ALBUM  /////////////////////////
+    public void removeImageFromAlbum(String album, String image) {
+        VirtualAlbum virtualAlbum = getAlbumForString(album);
+        virtualAlbum.deleteImage(image);
+        /*for (String name : buttonNameLabelHashMap.keySet()) {
+            buttonNameLabelHashMap.remove(name);
+        }*/
+        imagesFlowPane.getChildren().clear();
+        setImagesToImagesFlowPane(virtualAlbum);
+    }
+    ////////////////////////////////////////////////////////////////////////////
+    
+    
+    /////////////////////////  OPEN ALBUM OR IMAGE  ////////////////////////////
+    public void openAlbumOrImage(String albumName, String imageName) {
+        if (imageName == null) {
+            // Selektovan je album //
+            albumOrImageNameLabel.setText("Image name:");
+            albumNameLabel.setText("");
+            albumDescriptionLabel.setText("");
+            descriptionTempLabel.setText("");
+            albumsNavigationLabel.setText(albumName);
+            albumsFlowPane.setVisible(false);
+            imagesFlowPane.setVisible(true);
+            VirtualAlbum va = getAlbumForString(albumName);
+            setImagesToImagesFlowPane(va);
         } else {
-            y = 4;
-            if (nextEmpty == 12) {
-                x = 5;
-            } else {
-                x = nextEmpty % 6 - 1;
+            // Selektovana je slika //
+            VirtualAlbum va = getAlbumForString(albumName);
+            AlbumImage image = va.getImageFromAlbumForString(imageName);
+            try {
+                Desktop.getDesktop().open(image.getPath());
+            } catch (IOException ex) {
+                Logger.getLogger(VirtualAlbumsController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        albumsGridPane.add(button, x, y);
     }
-
+    ////////////////////////////////////////////////////////////////////////////
+    
+    
+    ////////////////////////// RENAME ALBUM OR IMAGE ///////////////////////////
+    public void renameAlbumOrImage(String oldName, String imageOldName, String newName) {
+        if (imageOldName == null) {
+            // rename album //
+            VirtualAlbum va = getAlbumForString(oldName);
+            va.setName(newName);
+            //ObservableList<Node> list = albumsFlowPane.getChildren();
+            albumNameLabel.setText(newName);
+            lastClickedButton.setText(newName);
+        }
+        else{
+            // rename image //
+            VirtualAlbum va = getAlbumForString(oldName);
+            AlbumImage im = va.getImageFromAlbumForString(imageOldName);
+            im.setName(newName);
+            //ObservableList<Node> list = albumsFlowPane.getChildren();
+            albumNameLabel.setText(newName);
+            //lastClickedButton.setText(newName);
+            //((Parent)lastClickedButton.getParent()).getChildren();
+            Label selLabel = buttonNameLabelHashMap.get(imageOldName);
+            for (String name : buttonNameLabelHashMap.keySet()) {
+                if(name.equals(imageOldName)){
+                    name = newName;
+                    break;
+                }
+            }
+            System.out.println("LABEL: " + selLabel);
+            selLabel.setText(newName);
+        }
+    }
+    ////////////////////////////////////////////////////////////////////////////
+    
+    
+    ///////////////////////  IS ALBUM NAME VALID  //////////////////////////////
     public boolean isAlbumNameValid(String name) {
         boolean isOK = true;
         for (VirtualAlbum va : virtualAlbumList) {
@@ -451,10 +270,10 @@ public class VirtualAlbumsController {
         return isOK;
     }
 
-    public static int getNumberOfAlbums() {
-        return numberOfAlbums;
-    }
-
+    ////////////////////////////////////////////////////////////////////////////
+    
+    
+    ///////////////////  GET LIST OF ALBUMS NAME (STRING)  /////////////////////
     public ObservableList<String> getAllAlbumsName() {
         ObservableList<String> list = FXCollections.observableArrayList();
         for (VirtualAlbum va : virtualAlbumList) {
@@ -463,5 +282,30 @@ public class VirtualAlbumsController {
 
         return list;
     }
+    ////////////////////////////////////////////////////////////////////////////
 
+    
+    /////////////// GET REQUIRED ALBUM FROM VIRTUAL ALBUM LIST /////////
+    public VirtualAlbum getAlbumForString(String name) {
+        VirtualAlbum album = null;
+        for (VirtualAlbum va : virtualAlbumList) {
+            System.out.println(va.getName() + " - " + name);
+            if (va.getName().equals(name)) {
+                album = va;
+                break;
+            }
+        }
+        return album;
+    }
+    ///////////////////////////////////////////////////////////////////////////
+    
+    
+    //////////////////    ALL GETERS    //////////////////
+    public ArrayList<VirtualAlbum> getVirtualAlbumList() {
+        return virtualAlbumList;
+    }
+
+    public static int getNumberOfAlbums() {
+        return numberOfAlbums;
+    }
 }
