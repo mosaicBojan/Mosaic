@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
@@ -621,7 +622,9 @@ public class FXMLDocumentController implements Initializable {
         albumNameLabel.setText("");
         descriptionTempLabel.setText("Description:");
         albumsFlowPane.setVisible(true);
+        albumsScrollPane.setVisible(true);
         imagesFlowPane.setVisible(false);
+        imagesScrollPane.setVisible(false);
     }
     ///////////////////////////////////////////////////////////////////////////
     
@@ -779,7 +782,68 @@ public class FXMLDocumentController implements Initializable {
     }
     ///////////////////////////////////////////////////////////////////////////
     
+    /* Explorer image panel hiding controlls */
+    @FXML private javafx.scene.control.ToggleButton explorerImagePaneToggleButton;
+    @FXML private javafx.scene.control.SplitPane explorerSplitPane;
+    private double explorerDividerPosition;
+    @FXML private javafx.scene.layout.AnchorPane explorerSplitPaneRightAnchor;
+    private double explorerSplitPaneRightAnchorMinWidth;
 
+    @FXML
+    private void explorerImagePaneToggleButtonAction(){
+        if (Math.abs(1.0 - (explorerSplitPane.getDividerPositions()[0])) > 0.01){
+            explorerSplitPaneRightAnchorMinWidth = explorerSplitPaneRightAnchor.getMinWidth();
+            explorerSplitPaneRightAnchor.setMinWidth(0);
+            explorerDividerPosition = (explorerSplitPane.getDividerPositions())[0];
+            explorerSplitPane.setDividerPositions(1);
+        }
+        else {
+            explorerSplitPaneRightAnchor.setMinWidth(explorerSplitPaneRightAnchorMinWidth);
+            explorerSplitPane.setDividerPositions(explorerDividerPosition);
+        }
+    }
+    
+    /* Albums image panel hiding controlls */
+    @FXML private javafx.scene.control.ToggleButton albumsImagePaneToggleButton;
+    @FXML private javafx.scene.control.SplitPane albumsSplitPane;
+    private double albumsDividerPosition;
+    @FXML private javafx.scene.layout.AnchorPane albumsSplitPaneRightAnchor;
+    private double albumsSplitPaneRightAnchorMinWidth;
+
+    @FXML
+    private void albumsImagePaneToggleButtonAction(){
+        if (Math.abs(1.0 - (albumsSplitPane.getDividerPositions()[0])) > 0.01){
+            albumsSplitPaneRightAnchorMinWidth = albumsSplitPaneRightAnchor.getMinWidth();
+            albumsSplitPaneRightAnchor.setMinWidth(0);
+            albumsDividerPosition = (albumsSplitPane.getDividerPositions())[0];
+            albumsSplitPane.setDividerPositions(1);
+        }
+        else {
+            albumsSplitPaneRightAnchor.setMinWidth(albumsSplitPaneRightAnchorMinWidth);
+            albumsSplitPane.setDividerPositions(albumsDividerPosition);
+        }
+    }
+    
+    /* Messages image panel hiding controlls */
+    @FXML private javafx.scene.control.ToggleButton messagesImagePaneToggleButton;
+    @FXML private javafx.scene.control.SplitPane messagesSplitPane;
+    private double messagesDividerPosition;
+    @FXML private javafx.scene.layout.AnchorPane messagesSplitPaneRightAnchor;
+    private double messagesSplitPaneRightAnchorMinWidth;
+
+    @FXML
+    private void messagesImagePaneToggleButtonAction(){
+        if (Math.abs(1.0 - (messagesSplitPane.getDividerPositions()[0])) > 0.01){
+            messagesSplitPaneRightAnchorMinWidth = messagesSplitPaneRightAnchor.getMinWidth();
+            messagesSplitPaneRightAnchor.setMinWidth(0);
+            messagesDividerPosition = (messagesSplitPane.getDividerPositions())[0];
+            messagesSplitPane.setDividerPositions(1);
+        }
+        else {
+            messagesSplitPaneRightAnchor.setMinWidth(messagesSplitPaneRightAnchorMinWidth);
+            messagesSplitPane.setDividerPositions(messagesDividerPosition);
+        }
+    }
     
     
     /***************************** INITIALIZE  *******************************/

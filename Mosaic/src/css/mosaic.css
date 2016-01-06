@@ -16,6 +16,10 @@
     -fx-padding: 0 1 0 0;
 }
 
+.toggle-button {
+    -fx-cursor: hand;
+}
+
 /*********************************************************************************
 *
 * TAB PANE
@@ -389,6 +393,16 @@
     -fx-background-color: #2b84c2;
 }
 
+#explorerImagePaneToggleButton {
+    -fx-background-color: none;
+    -fx-graphic: url('../icons/imagePanelToggleOn.png');
+}
+
+#explorerImagePaneToggleButton:selected {
+    -fx-background-color: none;
+    -fx-graphic: url('../icons/imagePanelToggleOff.png');
+}
+
 /*
 *
 * END EXPLORER TAB
@@ -493,7 +507,7 @@
     -fx-border-color: #cccccc;
 }
 
-/* albums tab main content button styles */
+/* albums tab main content button selected styles */
 .albumNotSelected {
     -fx-background-radius: 0;
     -fx-background-insets: 0;
@@ -510,6 +524,22 @@
     -fx-border-color: #3399ff;
     -fx-background-color: #e5f2ff;
     -fx-graphic: url('../icons/albumHover.png');
+}
+
+/* albums tab main content images selected styles */
+.imageNotSelected {
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-border-width: 1px;
+    -fx-border-color: none;
+}
+
+.imageSelected {
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-border-width: 1px;
+    -fx-border-color: #3399ff;
+    -fx-background-color: #e5f2ff;
 }
 
 
@@ -642,6 +672,17 @@
     -fx-background-color: #2b84c2;
 }
 
+#albumsImagePaneToggleButton {
+    -fx-background-color: none;
+    -fx-graphic: url('../icons/imagePanelToggleOn.png');
+}
+
+#albumsImagePaneToggleButton:selected {
+    -fx-background-color: none;
+    -fx-graphic: url('../icons/imagePanelToggleOff.png');
+}
+
+
 /*
 * albums navigation label
 */
@@ -655,5 +696,35 @@
 /*
 *
 * END ALBUMS TAB
+*
+*/
+
+/*********************************************************************************
+*
+* MESSAGES TAB
+*
+**********************************************************************************/
+
+
+/* messages tab main menu anchor */
+#messagesMainMenuAnchorPane {
+    -fx-background-color: white;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #cccccc;
+}
+
+#messagesImagePaneToggleButton {
+    -fx-background-color: none;
+    -fx-graphic: url('../icons/imagePanelToggleOn.png');
+}
+
+#messagesImagePaneToggleButton:selected {
+    -fx-background-color: none;
+    -fx-graphic: url('../icons/imagePanelToggleOff.png');
+}
+
+/*
+*
+* END MESSSAGES TAB
 *
 */
