@@ -13,6 +13,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
@@ -126,23 +127,25 @@ public class VirtualAlbumsController {
         //int tempCount = 1;
         for (AlbumImage image : va.getImages()) {
             Button button = new Button();
-            Label buttonNameLabel = new Label(image.getName());
+            /*Label buttonNameLabel = new Label(image.getName());
             buttonNameLabel.setWrapText(true);
             buttonNameLabel.setMaxWidth(100);
-            buttonNameLabel.setMaxHeight(50);
-            button.setPrefWidth(96);
-            button.setPrefHeight(96);
-            VBox vBox = new VBox();
+            buttonNameLabel.setMaxHeight(50);*/
+            button.setPrefWidth(100);
+            button.setPrefHeight(125);
+            button.setContentDisplay(ContentDisplay.TOP);
+            button.setText(image.getName());
+            /*VBox vBox = new VBox();
             vBox.setAlignment(Pos.CENTER);
             vBox.getChildren().add(button);
-            vBox.getChildren().add(buttonNameLabel);
+            vBox.getChildren().add(buttonNameLabel);*/
             
             Image iconImage = new Image(new File(image.getPath().getPath()).toURI().toString(), 72, 72, true, true, true);
             ImageView iv = new ImageView(iconImage);
             //iv.setFitHeight(72);
             //iv.setFitWidth(72);
             button.setGraphic(iv);
-            buttonNameLabelHashMap.put(image.getName(), buttonNameLabel);
+            //buttonNameLabelHashMap.put(image.getName(), buttonNameLabel);
             //button.setGraphic(new ImageView(new Image("icons/move.png")));
             button.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 
@@ -167,7 +170,7 @@ public class VirtualAlbumsController {
             imagesFlowPane.setPadding(new Insets(5, 5, 5, 5));
             imagesFlowPane.setVgap(20);
             imagesFlowPane.setHgap(20);
-            imagesFlowPane.getChildren().add(vBox);
+            imagesFlowPane.getChildren().add(button);
         }
     }
     ///////////////////////////////////////////////////////////////////////////////
@@ -245,17 +248,18 @@ public class VirtualAlbumsController {
             im.setName(newName);
             //ObservableList<Node> list = albumsFlowPane.getChildren();
             albumNameLabel.setText(newName);
+            lastClickedButton.setText(newName);
             //lastClickedButton.setText(newName);
             //((Parent)lastClickedButton.getParent()).getChildren();
-            Label selLabel = buttonNameLabelHashMap.get(imageOldName);
-            for (String name : buttonNameLabelHashMap.keySet()) {
+            //Label selLabel = buttonNameLabelHashMap.get(imageOldName);
+            /*for (String name : buttonNameLabelHashMap.keySet()) {
                 if(name.equals(imageOldName)){
                     name = newName;
                     break;
                 }
-            }
-            System.out.println("LABEL: " + selLabel);
-            selLabel.setText(newName);
+            }*/
+            //System.out.println("LABEL: " + selLabel);
+            //selLabel.setText(newName);
         }
     }
     ////////////////////////////////////////////////////////////////////////////

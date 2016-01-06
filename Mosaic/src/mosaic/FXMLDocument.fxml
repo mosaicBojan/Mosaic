@@ -129,24 +129,6 @@
                           <items>
                             <AnchorPane minWidth="300.0">
                                  <children>
-                                    <ScrollPane fx:id="albumsScrollPane" fitToWidth="true" layoutX="14.0" layoutY="47.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="47.0">
-                                      <content>
-                                        <AnchorPane>
-                                             <children>
-                                                <FlowPane fx:id="albumsFlowPane" layoutY="1.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                             </children>
-                                          </AnchorPane>
-                                      </content>
-                                    </ScrollPane>
-                                    <ScrollPane fx:id="imagesScrollPane" fitToWidth="true" layoutX="24.0" layoutY="57.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="47.0">
-                                       <content>
-                                          <AnchorPane>
-                                             <children>
-                                                <FlowPane fx:id="imagesFlowPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                             </children>
-                                          </AnchorPane>
-                                       </content>
-                                    </ScrollPane>
                                     <HBox alignment="CENTER_LEFT" prefHeight="32.0" prefWidth="200.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                        <children>
                                           <Button fx:id="albumsBackButton" mnemonicParsing="false" onAction="#albumsBackButtonAction" prefHeight="32.0" prefWidth="32.0">
@@ -157,6 +139,16 @@
                                           <Label fx:id="albumsNavigationLabel" text="Albums" />
                                        </children>
                                     </HBox>
+                                    <ScrollPane fx:id="albumsScrollPane" fitToWidth="true" layoutX="14.0" layoutY="48.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="47.0">
+                                       <content>
+                                          <FlowPane fx:id="albumsFlowPane" />
+                                       </content>
+                                    </ScrollPane>
+                                    <ScrollPane fx:id="imagesScrollPane" fitToWidth="true" layoutX="15.0" layoutY="57.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="47.0">
+                                       <content>
+                                          <FlowPane fx:id="imagesFlowPane" />
+                                       </content>
+                                    </ScrollPane>
                                  </children></AnchorPane>
                             <AnchorPane fx:id="albumsSplitPaneRightAnchor" minWidth="300.0" SplitPane.resizableWithParent="false">
                                  <children>
