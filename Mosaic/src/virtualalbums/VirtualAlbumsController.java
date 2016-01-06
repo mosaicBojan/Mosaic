@@ -1,8 +1,6 @@
 package virtualalbums;
 
-import com.sun.media.jfxmedia.control.VideoDataBuffer;
 import java.awt.Desktop;
-import java.awt.datatransfer.DataFlavor;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,16 +12,14 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 public class VirtualAlbumsController {
@@ -40,12 +36,14 @@ public class VirtualAlbumsController {
     private Label descriptionTempLabel;
     private FlowPane albumsFlowPane;
     private FlowPane imagesFlowPane;
+    private ScrollPane albumsScrollPane;
+    private ScrollPane imagesScrollPane;
     private HashMap<String, Label> buttonNameLabelHashMap = new HashMap<>();
 
     // KONSTRUKTOR //
     public VirtualAlbumsController(Label albumsNavigationLabel,
             Label albumNameLabel, Label albumDescriptionLabel, Label albumOrImageNameLabel, Label descriptionTempLabel,
-            FlowPane albumsFlowPane, FlowPane imagesFlowPane) {
+            FlowPane albumsFlowPane, FlowPane imagesFlowPane, ScrollPane albumsScrollPane, ScrollPane imagesScrollPane) {
         virtualAlbumList = new ArrayList<>();
         this.albumsNavigationLabel = albumsNavigationLabel;
         this.albumNameLabel = albumNameLabel;
@@ -54,6 +52,9 @@ public class VirtualAlbumsController {
         this.descriptionTempLabel = descriptionTempLabel;
         this.albumsFlowPane = albumsFlowPane;
         this.imagesFlowPane = imagesFlowPane;
+        this.albumsScrollPane = albumsScrollPane;
+        this.imagesScrollPane = imagesScrollPane;
+        this.imagesScrollPane.setVisible(false);
         this.imagesFlowPane.setVisible(false);
     }
 
@@ -87,6 +88,8 @@ public class VirtualAlbumsController {
                         albumsNavigationLabel.setText(album.getName());
                         albumsFlowPane.setVisible(false);
                         imagesFlowPane.setVisible(true);
+                        albumsScrollPane.setVisible(false);
+                        imagesScrollPane.setVisible(true);
                         setImagesToImagesFlowPane(album);
                     } else if (event.getClickCount() == 1) {
                         //////// Single click  ////////
@@ -130,13 +133,14 @@ public class VirtualAlbumsController {
             button.setPrefWidth(96);
             button.setPrefHeight(96);
             VBox vBox = new VBox();
+            vBox.setAlignment(Pos.CENTER);
             vBox.getChildren().add(button);
             vBox.getChildren().add(buttonNameLabel);
-            //System.out.println("Putanja: " + image.getPath().getPath());
-            Image iconImage = new Image(new File(image.getPath().getPath()).toURI().toString(), 90, 90, false, false);
+            
+            Image iconImage = new Image(new File(image.getPath().getPath()).toURI().toString(), 72, 72, true, true, true);
             ImageView iv = new ImageView(iconImage);
-            iv.setFitHeight(96);
-            iv.setFitWidth(96);
+            //iv.setFitHeight(72);
+            //iv.setFitWidth(72);
             button.setGraphic(iv);
             buttonNameLabelHashMap.put(image.getName(), buttonNameLabel);
             //button.setGraphic(new ImageView(new Image("icons/move.png")));
@@ -206,6 +210,8 @@ public class VirtualAlbumsController {
             albumsNavigationLabel.setText(albumName);
             albumsFlowPane.setVisible(false);
             imagesFlowPane.setVisible(true);
+            albumsScrollPane.setVisible(false);
+            imagesScrollPane.setVisible(true);
             VirtualAlbum va = getAlbumForString(albumName);
             setImagesToImagesFlowPane(va);
         } else {

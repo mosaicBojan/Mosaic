@@ -15,38 +15,29 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
-import java.nio.file.DirectoryNotEmptyException;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.Path;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import treeviewclasses.FileSystemTree;
-import treeviewclasses.NodeOfTree;
 import virtualalbums.*;
 
 /**
@@ -65,6 +56,7 @@ public class FXMLDocumentController implements Initializable {
     private boolean isMoveToAlbumButtonPressed = false;
     private static String type;
     private static String selectedImageName;
+    private List<File> choosenFiles;
 
     @FXML
     private TreeView explorerTreeView;
@@ -103,9 +95,6 @@ public class FXMLDocumentController implements Initializable {
     private ImageView fullscreenImageView;
 
     @FXML
-    private GridPane albumsGridPane1;
-
-    @FXML
     private TextField albumNameTextField;
 
     @FXML
@@ -122,9 +111,6 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private Button explorerMoveImageButton;
-
-    @FXML
-    private GridPane albumImagesGridPane1;
 
     @FXML
     private Label albumsNavigationLabel;
@@ -152,6 +138,26 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private FlowPane imagesFlowPane;
+    
+    @FXML
+    private ChoiceBox albumsImportPopUpChoiseBox;
+
+    @FXML
+    private Button albumsImportPopUpAddToAlbumButton;
+
+    @FXML
+    private Button albumsImportPopUpBrowseButton;
+
+    @FXML
+    private Label albumsImportPopUpChoosenNumLabel;
+
+    @FXML
+    private ScrollPane albumsScrollPane;
+    
+    @FXML
+    private ScrollPane imagesScrollPane;
+    
+    
     
     // Kreiranje novog foldera //
     @FXML
@@ -492,7 +498,6 @@ public class FXMLDocumentController implements Initializable {
 
     
     ///////////////////  ADD IMAGE TO ALBUM FROM EXPLORER  //////////////////////
-    
     @FXML
     void explorerBtn7Action(ActionEvent event) throws IOException {
         isMoveToAlbumButtonPressed = true;
@@ -514,22 +519,16 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void explorerMoveImageButtonAction(ActionEvent event) {
         String nameOfAlbum = (String) moveImagePopUpChoiceBox.getValue();
-        System.out.println("Choosen value: " + nameOfAlbum);
-        AlbumImage image = new AlbumImage(new File(selectedPath).getName(), new File(selectedPath));
-        VirtualAlbum album = virtualAlbumsController.getAlbumForString(nameOfAlbum);
-        album.addImage(image);
-        /*ArrayList<VirtualAlbum> albums = virtualAlbumsController.getVirtualAlbumList();
-        
-        for (VirtualAlbum v : albums) {
-            if (v.getName().equals(nameOfAlbum)) {
-                v.addImage(image);
-            }
-        }*/
-        
-        app_stage = (Stage) explorerMoveImageButton.getScene().getWindow();
-        app_stage.close();
+        if (nameOfAlbum != null && !"".equals(nameOfAlbum)) {
+            System.out.println("Choosen value: " + nameOfAlbum);
+            AlbumImage image = new AlbumImage(new File(selectedPath).getName(), new File(selectedPath));
+            VirtualAlbum album = virtualAlbumsController.getAlbumForString(nameOfAlbum);
+            album.addImage(image);
+
+            app_stage = (Stage) explorerMoveImageButton.getScene().getWindow();
+            app_stage.close();
+        }
     }
-    
     /////////////////////////////////////////////////////////////////////////////////
     
     
@@ -729,10 +728,62 @@ public class FXMLDocumentController implements Initializable {
     ////////////////////////////////////////////////////////////////////////////
     
     
+    //////////////////////// ALBUMS IMPORT BUTTON /////////////////////////////
+    @FXML
+    void albumsImportButtonAction(ActionEvent event) throws IOException {
+        Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLAlbumsImportPopUpForm.fxml"));
+        Scene create_folder_scene = new Scene(home_page_parent);
+        app_stage = new Stage();
+        app_stage.setScene(create_folder_scene);
+        app_stage.initModality(Modality.APPLICATION_MODAL);
+        app_stage.initOwner(explorerBtn1.getScene().getWindow());
+        app_stage.showAndWait();
+        
+    }
+    
+    @FXML
+    void albumsImportPopUpBrowseButtonAction(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose images...");
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("All Images", "*.*"),
+                new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+                new FileChooser.ExtensionFilter("GIF", "*.gif"),
+                new FileChooser.ExtensionFilter("BMP", "*.bmp"),
+                new FileChooser.ExtensionFilter("PNG", "*.png"));
+        choosenFiles = fileChooser.showOpenMultipleDialog(app_stage);
+        if(choosenFiles != null){
+            albumsImportPopUpChoosenNumLabel.setText("You choosen " + choosenFiles.size() + " images");
+        } 
+        else{
+            albumsImportPopUpChoosenNumLabel.setText("You didnt choose any images");
+        }
+    }
+    
+    @FXML
+    void albumsImportPopUpAddToAlbumButtonAction(ActionEvent event) {
+        String nameOfAlbum = (String) albumsImportPopUpChoiseBox.getValue();
+        if (nameOfAlbum != null && !"".equals(nameOfAlbum)) {
+            System.out.println("Choosen value: " + nameOfAlbum);
+            for (File f : choosenFiles) {
+                AlbumImage image = new AlbumImage(f.getName(), f);
+                VirtualAlbum album = virtualAlbumsController.getAlbumForString(nameOfAlbum);
+                album.addImage(image);
+            }
+
+            app_stage = (Stage) albumsImportPopUpAddToAlbumButton.getScene().getWindow();
+            app_stage.close();
+        }
+        
+    }
+    ///////////////////////////////////////////////////////////////////////////
     
 
     
-
+    
+    /***************************** INITIALIZE  *******************************/
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println("Initialize");
@@ -741,14 +792,22 @@ public class FXMLDocumentController implements Initializable {
             fst = new FileSystemTree(explorerTreeView, explorerImgView, explorerPathTextField, explorerImageLabel);
             fst.start();
             virtualAlbumsController = new VirtualAlbumsController(albumsNavigationLabel, albumNameLabel, albumDescriptionLabel,
-                    albumOrImageNameLabel, descriptionTempLabel, albumsFlowPane, imagesFlowPane);
+                    albumOrImageNameLabel, descriptionTempLabel, albumsFlowPane, imagesFlowPane, albumsScrollPane, imagesScrollPane);
         }
         ObservableList<String> albumNames = virtualAlbumsController.getAllAlbumsName();
         try {
-            moveImagePopUpChoiceBox.getItems().addAll(albumNames);
+            //System.out.println("add albums to choise box 1");
+            if (moveImagePopUpChoiceBox != null) {
+                moveImagePopUpChoiceBox.getItems().addAll(albumNames);
+            }
+            //System.out.println("add albums to choise box 2");
+            if (albumsImportPopUpChoiseBox != null) {
+                albumsImportPopUpChoiseBox.getItems().addAll(albumNames);
+            }
         } catch (Exception ex) {
-
+            ex.printStackTrace();
         }
+        
     }
 
 }

@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 <?import java.net.*?>
 
-<AnchorPane id="AnchorPane" minHeight="600.0" minWidth="900.0" prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mosaic.FXMLDocumentController">
+<AnchorPane id="AnchorPane" minHeight="600.0" minWidth="900.0" prefHeight="700.0" prefWidth="1158.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mosaic.FXMLDocumentController">
    <children>
       <TabPane layoutX="6.0" layoutY="25.0" prefHeight="482.0" prefWidth="950.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="10.0">
         <tabs>
@@ -125,7 +125,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <SplitPane dividerPositions="0.7409326424870466" layoutX="58.0" layoutY="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="53.0">
+                        <SplitPane dividerPositions="0.6955958549222798" layoutX="58.0" layoutY="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="53.0">
                           <items>
                             <AnchorPane minWidth="400.0">
                                  <children>
@@ -139,16 +139,20 @@
                                           <Label fx:id="albumsNavigationLabel" text="Albums" />
                                        </children>
                                     </HBox>
-                                    <ScrollPane fx:id="albumsScrollPane" fitToWidth="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="42.0">
-                                       <content>
+                                    <ScrollPane fx:id="albumsScrollPane" layoutX="14.0" layoutY="47.0" prefHeight="487.0" prefWidth="776.0" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="47.0">
+                                      <content>
                                         <AnchorPane>
                                              <children>
-                                                <StackPane alignment="TOP_LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <FlowPane fx:id="imagesFlowPane" />
-                                                      <FlowPane fx:id="albumsFlowPane" />
-                                                   </children>
-                                                </StackPane>
+                                                <FlowPane fx:id="albumsFlowPane" layoutY="1.0" prefHeight="200.0" prefWidth="750.0" />
+                                             </children>
+                                          </AnchorPane>
+                                      </content>
+                                    </ScrollPane>
+                                    <ScrollPane fx:id="imagesScrollPane" layoutX="24.0" layoutY="57.0" prefHeight="487.0" prefWidth="776.0" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="47.0">
+                                       <content>
+                                          <AnchorPane>
+                                             <children>
+                                                <FlowPane fx:id="imagesFlowPane" prefHeight="200.0" prefWidth="753.0" />
                                              </children>
                                           </AnchorPane>
                                        </content>
@@ -175,7 +179,7 @@
                                     <Insets left="7.0" top="1.0" />
                                  </padding>
                                  <children>
-                                    <Button fx:id="albumsImport" layoutX="17.0" layoutY="11.0" mnemonicParsing="false" onAction="#albumsNewAlbumButtonAction" prefHeight="32.0" prefWidth="32.0">
+                                    <Button fx:id="albumsImport" layoutX="17.0" layoutY="11.0" mnemonicParsing="false" onAction="#albumsImportButtonAction" prefHeight="32.0" prefWidth="32.0">
                                        <HBox.margin>
                                           <Insets right="5.0" />
                                        </HBox.margin>
