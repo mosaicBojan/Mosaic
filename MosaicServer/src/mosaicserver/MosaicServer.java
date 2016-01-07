@@ -16,35 +16,16 @@ import javafx.stage.Stage;
  * @author John
  */
 public class MosaicServer extends Application {
-    
+
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-        
-        
-        ActivationKeyController k = new ActivationKeyController();
-        System.out.println(k.addActivationKey("12341.341234234s"));
-        System.out.println(k.getActivationKeyList().size());
-        System.out.println(k.addActivationKey("123412341234234s"));
-        System.out.println(k.getActivationKeyList().size());
-        //System.out.println(k.sadrzi("123412341234234s"));
-        System.out.println(k.addActivationKey("123412341234234s"));
-        System.out.println(k.getActivationKeyList().size());
-        System.out.println(k.addActivationKey("1111111111111111"));
-        System.out.println(k.getActivationKeyList().size());
-        System.out.println(k.addActivationKey("1111111111111111"));
-        System.out.println(k.getActivationKeyList().size());
-        System.out.println(k.removeActivationKey("123412341234234s"));
-        System.out.println(k.getActivationKeyList().size());
-        System.out.println(k.removeActivationKey("123412341234234s"));
-        System.out.println(k.getActivationKeyList().size());
-        
-        
-        
-        
-        
+
+        Server server = new Server();
+        server.start();
+
         Scene scene = new Scene(root);
-        
+
         stage.setScene(scene);
         stage.show();
     }
@@ -55,5 +36,5 @@ public class MosaicServer extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }

@@ -8,12 +8,19 @@ package mosaic;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.Socket;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
@@ -58,6 +65,10 @@ public class FXMLDocumentController implements Initializable {
     private static String type;
     private static String selectedImageName;
     private List<File> choosenFiles;
+    private Socket mySocket;
+    private BufferedReader in;
+    private PrintWriter out;
+    private MessageListener listener;
 
     @FXML
     private TreeView explorerTreeView;
@@ -857,6 +868,23 @@ public class FXMLDocumentController implements Initializable {
             fst.start();
             virtualAlbumsController = new VirtualAlbumsController(albumsNavigationLabel, albumNameLabel, albumDescriptionLabel,
                     albumOrImageNameLabel, descriptionTempLabel, albumsFlowPane, imagesFlowPane, albumsScrollPane, imagesScrollPane);
+            System.out.println("First time in...");
+            try {
+                InetAddress addr = InetAddress.getByName("127.0.0.1");
+                System.out.println("First time in...");
+                mySocket = new Socket(addr, 9000);
+                System.out.println("First time in...");
+                in = new BufferedReader(new InputStreamReader(mySocket.getInputStream()));
+                System.out.println("First time in...");
+                out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(mySocket.getOutputStream())), true);
+                System.out.println("First time in...");
+                listener = new MessageListener(out, in);
+                System.out.println("First time in...");
+                listener.start();
+                System.out.println("Client side created!");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
         ObservableList<String> albumNames = virtualAlbumsController.getAllAlbumsName();
         try {

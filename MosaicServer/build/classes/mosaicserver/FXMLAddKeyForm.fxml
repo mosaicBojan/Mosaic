@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="152.0" prefWidth="425.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mosaicserver.FXMLDocumentController">
+   <children>
+      <Label layoutX="14.0" layoutY="40.0" text="Enter key:" />
+      <TextField fx:id="addKeyFormTextField" layoutX="85.0" layoutY="36.0" prefHeight="25.0" prefWidth="315.0" />
+      <Button fx:id="addKeyFormButton" layoutX="297.0" layoutY="86.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="103.0" text="Add" />
+      <Label fx:id="addKeyFormLabel" layoutX="85.0" layoutY="90.0" prefHeight="17.0" prefWidth="195.0" textFill="#e40000" />
+   </children>
+</AnchorPane>
