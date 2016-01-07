@@ -95,12 +95,6 @@ public class VirtualAlbumsController {
                     } else if (event.getClickCount() == 1) {
                         //////// Single click  ////////
                         // setting single click highlight
-                        if (lastClickedButton != null) {
-                            lastClickedButton.getStyleClass().remove("albumSelected");
-                            lastClickedButton.getStyleClass().add("albumNotSelected");
-                        }
-                        button.getStyleClass().remove("albumNotSelected");
-                        button.getStyleClass().add("albumSelected");
                         lastClickedButton = button;
                         // end highlight
 
@@ -127,6 +121,7 @@ public class VirtualAlbumsController {
         //int tempCount = 1;
         for (AlbumImage image : va.getImages()) {
             Button button = new Button();
+            button.getStyleClass().add("imageNotSelected");
             /*Label buttonNameLabel = new Label(image.getName());
             buttonNameLabel.setWrapText(true);
             buttonNameLabel.setMaxWidth(100);
@@ -161,6 +156,9 @@ public class VirtualAlbumsController {
                             }
 
                         } else if (event.getClickCount() == 1) {
+                            // setting single click highlight
+                            lastClickedButton = button;
+                            // end highlight
                             albumNameLabel.setText(image.getName());
                         }
                     }

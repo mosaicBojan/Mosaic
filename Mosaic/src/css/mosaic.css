@@ -516,6 +516,22 @@
     -fx-background-color: none;
     -fx-graphic: url('../icons/album.png');
 }
+.albumNotSelected:focused {
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-border-width: 1px;
+    -fx-border-color: #3399ff;
+    -fx-background-color: #e5f2ff;
+    -fx-graphic: url('../icons/albumHover.png');
+}
+.albumNotSelected:focus {
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-border-width: 1px;
+    -fx-border-color: #3399ff;
+    -fx-background-color: #e5f2ff;
+    -fx-graphic: url('../icons/albumHover.png');
+}
 
 .albumSelected {
     -fx-background-radius: 0;
@@ -532,6 +548,20 @@
     -fx-background-insets: 0;
     -fx-border-width: 1px;
     -fx-border-color: none;
+}
+.imageNotSelected:focused {
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-border-width: 1px;
+    -fx-border-color: #3399ff;
+    -fx-background-color: #e5f2ff;
+}
+.imageNotSelected:focus {
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-border-width: 1px;
+    -fx-border-color: #3399ff;
+    -fx-background-color: #e5f2ff;
 }
 
 .imageSelected {
