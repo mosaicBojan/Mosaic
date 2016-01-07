@@ -759,3 +759,57 @@
 * END MESSSAGES TAB
 *
 */
+
+
+/*********************************************************************************
+*
+* LOGIN AND VALIDATION SCREENS
+*
+**********************************************************************************/
+
+#validationScreenAnchorPane {
+    -fx-background-image: url('../icons/validationScreenBackground.png');
+}
+#validationScreenValidateButton {
+    -fx-background-color: #cccccc;
+    -fx-text-fill: #666666;
+    -fx-border-width: 1;
+    -fx-border-color: #a6a6a6;
+}
+#validationScreenValidateButton:hover {
+    -fx-background-color: #d9d9d9;
+}
+
+#validationScreenQuitButton {
+    -fx-background-color: #cccccc;
+    -fx-text-fill: #666666;
+    -fx-border-width: 1;
+    -fx-border-color: #a6a6a6;
+}
+#validationScreenQuitButton:hover {
+    -fx-background-color: #d9d9d9;
+}
+
+#loginScreenAnchorPane {
+    -fx-background-image: url('../icons/loginScreenBackGround.png');
+}
+
+#loginScreenLoginButton {
+    -fx-background-color: #cccccc;
+    -fx-text-fill: #666666;
+    -fx-border-width: 1;
+    -fx-border-color: #a6a6a6;
+}
+#loginScreenLoginButton:hover {
+    -fx-background-color: #d9d9d9;
+}
+
+#loginScreenQuitButton {
+    -fx-background-color: #cccccc;
+    -fx-text-fill: #666666;
+    -fx-border-width: 1;
+    -fx-border-color: #a6a6a6;
+}
+#loginScreenQuitButton:hover {
+    -fx-background-color: #d9d9d9;
+}

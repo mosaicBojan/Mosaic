@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="validationScreenAnchorPane" maxHeight="700.0" maxWidth="600.0" minHeight="700.0" minWidth="600.0" prefHeight="700.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mosaic.FXMLDocumentController">
+    <stylesheets>
+        <URL value="@/css/mosaic.css" />
+    </stylesheets>
+   <children>
+      <TextField fx:id="validationScreenTextField" layoutX="113.0" layoutY="527.0" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" />
+      <Button fx:id="validationScreenValidateButton" layoutX="404.0" layoutY="569.0" minWidth="80.0" mnemonicParsing="false" prefWidth="80.0" text="Validate" AnchorPane.bottomAnchor="70.0" AnchorPane.rightAnchor="115.0" />
+      <Button fx:id="validationScreenQuitButton" layoutX="488.0" layoutY="569.0" minWidth="80.0" mnemonicParsing="false" prefWidth="80.0" text="Quit" AnchorPane.bottomAnchor="70.0" AnchorPane.rightAnchor="25.0" />
+   </children>
+</AnchorPane>
