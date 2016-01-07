@@ -1,0 +1,78 @@
+#menuBarAnchorPane {
+    -fx-background-color: #f5f5f0;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #cccccc;
+}
+
+.split-pane {
+    -fx-background-color: #f9f9f9;
+}
+.split-pane *.split-pane-divider {
+    -fx-padding: 0 1 0 0;
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab:top {  
+    -fx-padding: 14 30 0 10;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 5 5 0 0;
+    -fx-background-color: #f5f5f0;  
+    -fx-pref-height: 70px;    
+    -fx-background-insets: 0;  
+}  
+
+.tab-pane > .tab-header-area > .headers-region {  
+    -fx-padding: 10 0 0 0;
+}
+  
+.tab-pane > .tab-header-area > .headers-region > .tab:selected:top {
+    -fx-border-color: #cccccc #cccccc #ffffff #cccccc;
+    -fx-border-width: 0 1 0 1;     
+    -fx-background-color: white;  
+    -fx-background-insets:  0;  
+}  
+
+.tab-pane > .tab-header-area > .headers-region > .tab:top:hover {  
+    -fx-background-color: #e6e6e6;    
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab:selected:top:hover {  
+    -fx-background-color: #ffffff;    
+}  
+  
+.tab-pane > .tab-header-area > .headers-region > .tab:selected > .tab-container > .tab-label {
+    -fx-border-width: 0 0 0 0;
+    -fx-border-color: #cccccc;
+    /*-fx-padding: 0 0 10 0; */
+    -fx-alignment: CENTER;  
+    -fx-text-fill: #a6a6a6;  
+    -fx-font-weight: bold;  
+}  
+  
+.tab-pane > .tab-header-area > .headers-region > .tab > .tab-container > .tab-label { 
+    -fx-alignment: CENTER;  
+    -fx-text-fill: #a6a6a6;
+    -fx-padding: 0 0 0 20;
+    /*-fx-font-weight: bold;  */
+}  
+  
+.tab-pane > .tab-header-area > .tab-header-background {  
+    -fx-background-color: #f5f5f0;  
+    -fx-border-color: #cccccc;  
+    -fx-border-width: 0 0 1 0;  
+    -fx-background-insets: 0;  
+    -fx-pref-height: 45px;    
+}  
+
+.tab-pane > .tab-header-area > .headers-region > .tab:selected:top > .tab-container > .focus-indicator {
+    -fx-border-width: 0;
+}
+
+.tab-pane:top {
+    -fx-background-color: #ffffff;
+    /*-fx-font-family: Arial;*/
+}
+
+.tab-pane .tab-header-area {
+    -fx-padding: 0 0 0 -1;  /* removing default indentation before the first tab. -1 so that first tabs left border wouldnt be 2px wide while selected */
+}
