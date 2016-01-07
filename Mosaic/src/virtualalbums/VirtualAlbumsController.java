@@ -120,6 +120,7 @@ public class VirtualAlbumsController {
         //int numOfImages = va.getImages().size();
         //int tempCount = 1;
         for (AlbumImage image : va.getImages()) {
+            //Button button = new Button();
             Button button = new Button();
             button.getStyleClass().add("imageNotSelected");
             /*Label buttonNameLabel = new Label(image.getName());
@@ -163,13 +164,13 @@ public class VirtualAlbumsController {
                         }
                     }
                 }
-
             });
-            imagesFlowPane.setPadding(new Insets(5, 5, 5, 5));
+            imagesFlowPane.setPadding(new Insets(10, 5, 5, 10));
             imagesFlowPane.setVgap(20);
             imagesFlowPane.setHgap(20);
             imagesFlowPane.getChildren().add(button);
         }
+        imagesFlowPane.requestFocus();      //first image selected patch
     }
     ///////////////////////////////////////////////////////////////////////////////
     

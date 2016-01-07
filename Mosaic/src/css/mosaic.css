@@ -516,6 +516,7 @@
     -fx-background-color: none;
     -fx-graphic: url('../icons/album.png');
 }
+
 .albumNotSelected:focused {
     -fx-background-radius: 0;
     -fx-background-insets: 0;
@@ -524,31 +525,31 @@
     -fx-background-color: #e5f2ff;
     -fx-graphic: url('../icons/albumHover.png');
 }
-.albumNotSelected:focus {
+/*.albumNotSelected:focus {
     -fx-background-radius: 0;
     -fx-background-insets: 0;
     -fx-border-width: 1px;
     -fx-border-color: #3399ff;
     -fx-background-color: #e5f2ff;
     -fx-graphic: url('../icons/albumHover.png');
-}
+}*/
 
-.albumSelected {
+/*.albumSelected {
     -fx-background-radius: 0;
     -fx-background-insets: 0;
     -fx-border-width: 1px;
     -fx-border-color: #3399ff;
     -fx-background-color: #e5f2ff;
     -fx-graphic: url('../icons/albumHover.png');
-}
+}*/
 
 /* albums tab main content images selected styles */
-.imageNotSelected {
+/*.imageNotSelected {
     -fx-background-radius: 0;
     -fx-background-insets: 0;
     -fx-border-width: 1px;
     -fx-border-color: none;
-}
+}*/
 .imageNotSelected:focused {
     -fx-background-radius: 0;
     -fx-background-insets: 0;
@@ -556,13 +557,13 @@
     -fx-border-color: #3399ff;
     -fx-background-color: #e5f2ff;
 }
-.imageNotSelected:focus {
+/*.imageNotSelected:focus {
     -fx-background-radius: 0;
     -fx-background-insets: 0;
     -fx-border-width: 1px;
     -fx-border-color: #3399ff;
     -fx-background-color: #e5f2ff;
-}
+}*/
 
 .imageSelected {
     -fx-background-radius: 0;
