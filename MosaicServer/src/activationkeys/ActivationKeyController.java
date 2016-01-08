@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
@@ -99,7 +100,15 @@ public class ActivationKeyController {
         activationKeyList.remove(ak);
         String s = getStringValueOfKeyForString(key);
         System.out.println("Key for remove: " + s);
-        keyListString.remove(s);
+        Platform.runLater(new Runnable() {
+
+            @Override
+            public void run() {
+                //stage.hide();
+                keyListString.remove(s);
+            }
+        });
+        
         keysListView.setItems(keyListString);
         (new File("ListOfKey" + File.separator +  key + ".ser")).delete();
     }

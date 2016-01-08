@@ -32,9 +32,9 @@ public class Mosaic extends Application {
 
         stage.setScene(scene);
         //stage.hide();
-        stage.show();
+        stage.hide();
         
-        /*ActivationTest activationTest = new ActivationTest();
+        ActivationTest activationTest = new ActivationTest();
         boolean isActivated = activationTest.isValidate();
         if (!isActivated) {
             Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLValidationScreen.fxml"));
@@ -44,21 +44,36 @@ public class Mosaic extends Application {
             app_stage.setScene(create_folder_scene);
             app_stage.showAndWait();
             System.out.println("Wait");
-            
-            Parent home_page_parent_2 = FXMLLoader.load(getClass().getResource("FXMLLoginScreen.fxml"));
-            Scene create_folder_scene_2 = new Scene(home_page_parent_2);
-            Stage app_stage_2 = new Stage();
-            app_stage_2.setScene(create_folder_scene_2);
-            app_stage_2.showAndWait();
-            stage.show();
+            if (!FXMLDocumentController.getIsRegistrationQuit()) {
+                Parent home_page_parent_2 = FXMLLoader.load(getClass().getResource("FXMLLoginScreen.fxml"));
+                Scene create_folder_scene_2 = new Scene(home_page_parent_2);
+                Stage app_stage_2 = new Stage();
+                app_stage_2.setScene(create_folder_scene_2);
+                app_stage_2.showAndWait();
+                if(!FXMLDocumentController.getIsLoginQuit()){
+                    stage.show();
+                }
+                else{
+                    stage.close();
+                }
+                
+            }
+            else{
+                stage.close();
+            }
         } else {
             Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLLoginScreen.fxml"));
             Scene create_folder_scene = new Scene(home_page_parent);
             Stage app_stage = new Stage();
             app_stage.setScene(create_folder_scene);
             app_stage.showAndWait();
-            stage.show();
-        }*/
+            if (!FXMLDocumentController.getIsLoginQuit()) {
+                stage.show();
+            } else {
+                stage.close();
+            }
+        }
+        
     }
 
     public static void showRootStage(){
@@ -70,7 +85,7 @@ public class Mosaic extends Application {
     }
     
     public static void closeStage(String stageName){
-        //stage.close();
+        getCurrentStage(stageName).close();
     }
     /**
      * @param args the command line arguments

@@ -60,10 +60,9 @@ public class ServerCommunicationThread extends Thread {
                         }
                         
                     }
-                    //System.out.println("Send message to client");
-                    //out.println("Hello Client");
-                    //String msg = in.readLine();
-                    //System.out.println("SERVER MSG: " + msg);
+                    else if("QUIT".equals(typeOfMsg.split("#")[0])){
+                        out.println("QUIT#");
+                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

@@ -73,6 +73,9 @@ public class FXMLDocumentController implements Initializable {
     private static BufferedReader in;
     private static PrintWriter out;
     private static MessageListener listener;
+    private static boolean isRegistrationQuit = false;
+    private static boolean isLoginQuit = false;
+    
 
     @FXML
     private TreeView explorerTreeView;
@@ -174,7 +177,7 @@ public class FXMLDocumentController implements Initializable {
     private ScrollPane imagesScrollPane;
     
     @FXML
-    private Button validationScreenValidateButton;
+    public Button validationScreenValidateButton;
 
     @FXML
     private Button validationScreenQuitButton;
@@ -194,13 +197,16 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Label validationScreenWarningLabel;
 
+    public static Button tempButton;
     
     ///////////////////////////////  REGISTRATION  /////////////////////////////
     @FXML
-    void validationScreenValidateButton(ActionEvent event) throws IOException {
-        /*System.out.println("Stage: " + app_stage);
+    void validationScreenValidateButtonAction(ActionEvent event) throws IOException {
+        System.out.println("Stage: " + app_stage);
         app_stage = (Stage) validationScreenValidateButton.getScene().getWindow();
         System.out.println("Stage after: " + app_stage);
+        System.out.println("BUTTON: " + this.getValidationScreenValidateButton());
+        tempButton = this.getValidationScreenValidateButton();
         String typedKey = validationScreenTextField.getText();
         System.out.println("Typed key: " + typedKey);
         boolean isOK = isValidKey(typedKey);
@@ -212,8 +218,8 @@ public class FXMLDocumentController implements Initializable {
         else{
             System.out.println("Bad key");
             validationScreenWarningLabel.setText("Key must contains letters and numbers (16 chars)!");
-        }*/
-        Mosaic.showRootStage();
+        }
+        //Mosaic.showRootStage();
     }
     
     public boolean isValidKey(String key) {
@@ -231,6 +237,25 @@ public class FXMLDocumentController implements Initializable {
     ////////////////////////////////////////////////////////////////////////////
     
     
+    /////////////////////////// VALIDATION QUIT  ///////////////////////////////
+    @FXML
+    void validationScreenQuitButtonAction(ActionEvent event) {
+        isRegistrationQuit = true;
+        app_stage = (Stage) validationScreenValidateButton.getScene().getWindow();
+        app_stage.close();
+        try{
+            out.println("QUIT#");
+        } catch(Exception ex){
+            ex.printStackTrace();
+        }
+    }
+    
+    public static boolean getIsRegistrationQuit(){
+        return isRegistrationQuit;
+    }
+    ////////////////////////////////////////////////////////////////////////////
+    
+    
     ///////////////////////// LOGIN SCREEN LOGIN BUTTON ////////////////////////
     @FXML
     void loginScreenLoginButtonAction(ActionEvent event) throws IOException {
@@ -242,7 +267,28 @@ public class FXMLDocumentController implements Initializable {
     }
     ////////////////////////////////////////////////////////////////////////////
     
-    // Kreiranje novog foldera //
+    
+    ///////////////////////////// LOGIN QUIT  //////////////////////////////////
+    @FXML
+    void loginScreenQuitButtonAction(ActionEvent event) {
+        isLoginQuit = true;
+        app_stage = (Stage) loginScreenLoginButton.getScene().getWindow();
+        app_stage.close();
+        try{
+            out.println("QUIT#");
+        } catch(Exception ex){
+            ex.printStackTrace();
+        }
+    }
+    
+    public static boolean getIsLoginQuit(){
+        return isLoginQuit;
+    }
+    ///////////////////////////////////////////////////////////////////////////
+    
+    
+    
+    ///////////////////////////  CREATE NEW FOLDER  ////////////////////////////
     @FXML
     void explorerBtn1Action(ActionEvent event) throws IOException {
         selectedPath = fst.getSelectedPath();
@@ -285,7 +331,9 @@ public class FXMLDocumentController implements Initializable {
         }
         fst.addNewFolderNodeToTree(file);
     }
-
+    ////////////////////////////////////////////////////////////////////////////
+    
+    
     // Brisanje fajlova i foldera //
     @FXML
     void explorerBtn2Action(ActionEvent event) {
@@ -932,9 +980,10 @@ public class FXMLDocumentController implements Initializable {
         return validationScreenValidateButton;
     }
     
-    public void closeValidationScreen(){
-        System.out.println("Close button: " + validationScreenValidateButton);
-        (Mosaic.getCurrentStage("validationScreen")).close();
+    public static void closeValidationScreen(){
+        //System.out.println("Close button: " + validationScreenValidateButton);
+        //Mosaic.closeStage("validationScreen");
+        //((Stage) tempButton.getScene().getWindow()).close();
     }
     
     /***************************** INITIALIZE  *******************************/
@@ -950,22 +999,15 @@ public class FXMLDocumentController implements Initializable {
                     albumOrImageNameLabel, descriptionTempLabel, albumsFlowPane, imagesFlowPane, albumsScrollPane, imagesScrollPane);
             System.out.println("First time in...");
             try {
-                /*InetAddress addr = InetAddress.getByName("127.0.0.1");
+                InetAddress addr = InetAddress.getByName("127.0.0.1");
                 mySocket = new Socket(addr, 9000);
                 out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(mySocket.getOutputStream())), true);
                 in = new BufferedReader(new InputStreamReader(mySocket.getInputStream()));
-                listener = new MessageListener(this, out, in, validationScreenValidateButton);
+                listener = new MessageListener(out, in);
                 System.out.println("listener created");
                 listener.start();
-                System.out.println("OUT: " + out);*/
+                System.out.println("OUT: " + out);
                 
-                /*Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLValidationScreen.fxml"));
-                Scene create_folder_scene = new Scene(home_page_parent);
-                app_stage = new Stage();
-                app_stage.setScene(create_folder_scene);
-                //app_stage.initModality(Modality.APPLICATION_MODAL);
-                //app_stage.initOwner(explorerBtn1.getScene().getWindow());
-                app_stage.showAndWait();*/
                 
                 
                 
