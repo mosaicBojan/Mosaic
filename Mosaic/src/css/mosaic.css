@@ -265,6 +265,35 @@
 }
 
 
+
+
+#newScreenshotReceived {
+    -fx-graphic: url('../icons/screenshot.png');
+}
+#newScreenshotReceived:hover {
+    -fx-graphic: url('../icons/screenshotHover.png');
+}
+#newScreenshotReceived:pressed {
+    -fx-background-color: #f0f0f0;
+}
+#newScreenshotReceivedTooltip {
+    -fx-background-color: #2b84c2;
+}
+
+#sendScreenshotButton {
+    -fx-graphic: url('../icons/newMessage.png');
+}
+#sendScreenshotButton:hover {
+    -fx-graphic: url('../icons/newMessageHover.png');
+}
+#sendScreenshotButton:pressed {
+    -fx-background-color: #f0f0f0;
+}
+#sendScreenshotButtonTooltip {
+    -fx-background-color: #2b84c2;
+}
+
+
 /*
 * explorer tab buttons
 */
