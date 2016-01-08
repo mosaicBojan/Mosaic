@@ -20,15 +20,17 @@ public class ServerCommunicationThread extends Thread {
     private BufferedReader in;
     private PrintWriter out;
     private ActivationKeyController activationKeyController;
+    private UsersController usersController;
 
     public ServerCommunicationThread() {
         super();
     }
 
-    public ServerCommunicationThread(Socket socket, ActivationKeyController activationKeyController) {
+    public ServerCommunicationThread(Socket socket, ActivationKeyController activationKeyController, UsersController usersController) {
         super();
         this.socket = socket;
         this.activationKeyController = activationKeyController;
+        this.usersController = usersController;
         System.out.println("Server thread creating...");
         try {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -59,9 +61,19 @@ public class ServerCommunicationThread extends Thread {
                             out.println("registration#keyIsNotOK");
                         }
                         
+                    }else if("login".equals(typeOfMsg.split("#")[0])){
+                        String requestedUsername = typeOfMsg.split("#")[1];
+                        if(usersController.isUsernameAvailable(requestedUsername)){
+                            usersController.addNewOnlineUser(socket, typeOfMsg.split("#")[1]);
+                            out.println("login#usernameIsAvailable");
+                        }
+                        else{
+                            out.println("login#usernameIsNotAvailable");
+                        }
                     }
                     else if("QUIT".equals(typeOfMsg.split("#")[0])){
                         out.println("QUIT#");
+                        test = false;
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();

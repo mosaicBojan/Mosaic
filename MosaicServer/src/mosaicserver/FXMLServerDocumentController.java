@@ -23,6 +23,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import users.User;
 import users.UsersController;
 
 /**
@@ -35,6 +36,7 @@ public class FXMLServerDocumentController implements Initializable {
     private static UsersController usersController;
     private Stage app_stage;
     private String selectedItem;
+    private static Server server;
     
     @FXML
     private Button keysAddButton;
@@ -50,9 +52,12 @@ public class FXMLServerDocumentController implements Initializable {
     
     @FXML
     private ListView<String> keysListView;
+    
+    @FXML
+    private ListView<User> onlineUsersListView;
 
     @FXML
-    void addKeyFormButtonAction(ActionEvent event) {
+    void addKeyFormButtonAction(ActionEvent event) throws IOException {
         String key = addKeyFormTextField.getText();
         if(activationKeyController.isValidKey(key)){
             activationKeyController.addActivationKey(key);
@@ -78,14 +83,22 @@ public class FXMLServerDocumentController implements Initializable {
         activationKeyController.removeActivationKey(selectedItem);
     }
     
+    @FXML
+    void shutDownButtonAction(ActionEvent event) throws IOException {
+        app_stage = (Stage) keysAddButton.getScene().getWindow();
+        app_stage.close();
+        Server.getServerSocket().close();
+        server.interrupt();
+    }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println("Sever Initialize");
         if(isFirstTime){
             System.out.println("Server set up!");
             activationKeyController = new ActivationKeyController(keysListView);
-            usersController = new UsersController();
-            Server server = new Server(activationKeyController);
+            usersController = new UsersController(onlineUsersListView);
+            server = new Server(activationKeyController, usersController);
             server.start();
             isFirstTime = false;
             

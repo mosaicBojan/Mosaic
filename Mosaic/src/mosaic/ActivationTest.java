@@ -69,4 +69,9 @@ public class ActivationTest implements Serializable {
         return isAvtivated;
     }
 
+    public void setIsAvtivated(boolean isAvtivated) {
+        this.isAvtivated = isAvtivated;
+    }
+
+    
 }

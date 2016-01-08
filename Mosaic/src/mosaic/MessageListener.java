@@ -39,6 +39,9 @@ public class MessageListener extends Thread{
                     if("keyIsOK".equals(typeOfMsg.split("#")[1])){
                         //Uspjesna registracija
                         System.out.println("Uspjena registracija");
+                        ActivationTest at = new ActivationTest();
+                        at.setIsAvtivated(true);
+                        at.serializeActivationTest();
                         Platform.runLater(new Runnable() {
 
                             @Override
@@ -50,6 +53,21 @@ public class MessageListener extends Thread{
                     else{
                         //Neuspjesna registracija
                         System.out.println("Neuspjesna registracija");
+                    }
+                }
+                else if("login".equals(typeOfMsg.split("#")[0])){
+                    if("usernameIsAvailable".equals(typeOfMsg.split("#")[1])){
+                        System.out.println("Uspjena prijava");
+                        Platform.runLater(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                stage.hide();
+                            }
+                        });
+                    }
+                    else{
+                        System.out.println("Neuspjesna prijava");
                     }
                 }
                 else if("QUIT".equals(typeOfMsg.split("#")[0])){

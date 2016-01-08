@@ -40,4 +40,12 @@ public class User {
         this.username = username;
     }
 
+    @Override
+    public String toString() {
+        String retString = "";
+        retString = String.format("%-10s\t\t:\t\t%s", username, mySocket.getLocalSocketAddress().toString());
+        return retString;
+    }
+    
+
 }

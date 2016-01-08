@@ -202,24 +202,17 @@ public class FXMLDocumentController implements Initializable {
     ///////////////////////////////  REGISTRATION  /////////////////////////////
     @FXML
     void validationScreenValidateButtonAction(ActionEvent event) throws IOException {
-        System.out.println("Stage: " + app_stage);
         app_stage = (Stage) validationScreenValidateButton.getScene().getWindow();
-        System.out.println("Stage after: " + app_stage);
-        System.out.println("BUTTON: " + this.getValidationScreenValidateButton());
-        tempButton = this.getValidationScreenValidateButton();
         String typedKey = validationScreenTextField.getText();
-        System.out.println("Typed key: " + typedKey);
         boolean isOK = isValidKey(typedKey);
         if (isOK) {
             listener.setStage(app_stage);
-            System.out.println("OUT2: " + out);
             out.println("registration#" + typedKey);  //send key to server
         }
         else{
             System.out.println("Bad key");
             validationScreenWarningLabel.setText("Key must contains letters and numbers (16 chars)!");
         }
-        //Mosaic.showRootStage();
     }
     
     public boolean isValidKey(String key) {
@@ -262,8 +255,28 @@ public class FXMLDocumentController implements Initializable {
         String typedUsername = loginScreenTextField.getText();
         if (!"".equals(typedUsername)) {
             app_stage = (Stage) loginScreenLoginButton.getScene().getWindow();
-            app_stage.close();
+            boolean isOK = isValidUsername(typedUsername);
+            if (isOK) {
+                listener.setStage(app_stage);
+                out.println("login#" + typedUsername);  //send key to server
+            } else {
+                System.out.println("Name must contains minimum 4 letters or numbers!");
+                //validationScreenWarningLabel.setText("Key must contains letters and numbers (16 chars)!");
+            }
         }
+    }
+    
+    public boolean isValidUsername(String username) {
+        if (username.length() < 4) {
+            return false;
+        }
+
+        for (char ch : username.toCharArray()) {
+            if (!Character.isLetterOrDigit(ch)) {
+                return false;
+            }
+        }
+        return true;
     }
     ////////////////////////////////////////////////////////////////////////////
     
