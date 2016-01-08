@@ -22,7 +22,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <ListView layoutX="20.0" layoutY="41.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="47.0" AnchorPane.topAnchor="5.0" />
+                        <ListView fx:id="keysListView" layoutX="20.0" layoutY="41.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="47.0" AnchorPane.topAnchor="5.0" />
                         <VBox alignment="TOP_CENTER" layoutX="403.0" layoutY="87.0" prefHeight="200.0" prefWidth="42.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                            <children>
                               <Button fx:id="keysAddButton" mnemonicParsing="false" onAction="#keysAddButtonAction" prefHeight="32.0" prefWidth="32.0">
@@ -30,7 +30,7 @@
                                     <Insets bottom="5.0" />
                                  </VBox.margin>
                               </Button>
-                              <Button fx:id="keysRemoveButton" layoutX="15.0" layoutY="10.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" />
+                              <Button fx:id="keysRemoveButton" layoutX="15.0" layoutY="10.0" mnemonicParsing="false" onAction="#keysRemoveButtonAction" prefHeight="32.0" prefWidth="32.0" />
                            </children>
                         </VBox>
                      </children>

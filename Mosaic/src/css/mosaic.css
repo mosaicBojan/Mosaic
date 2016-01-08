@@ -791,7 +791,7 @@
 }
 
 #loginScreenAnchorPane {
-    -fx-background-image: url('../icons/loginScreenBackGround.png');
+    -fx-background-image: url('../icons/loginScreenBackground.png');
 }
 
 #loginScreenLoginButton {

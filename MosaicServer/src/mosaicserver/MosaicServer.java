@@ -20,7 +20,10 @@ public class MosaicServer extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLServerDocument.fxml"));
-        
+        /*
+        Server server = new Server();
+        server.start();
+        */
         Scene scene = new Scene(root);
         
         stage.setScene(scene);

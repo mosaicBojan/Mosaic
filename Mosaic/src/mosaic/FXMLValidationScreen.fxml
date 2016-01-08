@@ -13,7 +13,8 @@
     </stylesheets>
    <children>
       <TextField fx:id="validationScreenTextField" layoutX="113.0" layoutY="527.0" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" />
-      <Button fx:id="validationScreenValidateButton" layoutX="404.0" layoutY="569.0" minWidth="80.0" mnemonicParsing="false" prefWidth="80.0" text="Validate" AnchorPane.bottomAnchor="70.0" AnchorPane.rightAnchor="115.0" />
+      <Button fx:id="validationScreenValidateButton" layoutX="404.0" layoutY="569.0" minWidth="80.0" mnemonicParsing="false" onAction="#validationScreenValidateButton" prefWidth="80.0" text="Validate" AnchorPane.bottomAnchor="70.0" AnchorPane.rightAnchor="115.0" />
       <Button fx:id="validationScreenQuitButton" layoutX="488.0" layoutY="569.0" minWidth="80.0" mnemonicParsing="false" prefWidth="80.0" text="Quit" AnchorPane.bottomAnchor="70.0" AnchorPane.rightAnchor="25.0" />
+      <Label fx:id="validationScreenWarningLabel" layoutX="25.0" layoutY="609.0" prefHeight="17.0" prefWidth="342.0" textFill="#f50000" />
    </children>
 </AnchorPane>

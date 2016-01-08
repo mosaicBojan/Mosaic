@@ -30,6 +30,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -47,6 +48,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import treeviewclasses.FileSystemTree;
 import virtualalbums.*;
+import javafx.scene.Node;
+import javafx.stage.Screen;
 
 /**
  *
@@ -57,7 +60,8 @@ public class FXMLDocumentController implements Initializable {
     private static FileSystemTree fst = null;
     private static VirtualAlbumsController virtualAlbumsController = null;
     private static boolean isFirstTime = true;
-    private Stage app_stage;
+    private static boolean isMainFormActive = true;
+    private static Stage app_stage;
     private String folderName;
     private static String selectedPath;
     private static String selectedAlbum;
@@ -66,9 +70,9 @@ public class FXMLDocumentController implements Initializable {
     private static String selectedImageName;
     private List<File> choosenFiles;
     private Socket mySocket;
-    private BufferedReader in;
-    private PrintWriter out;
-    private MessageListener listener;
+    private static BufferedReader in;
+    private static PrintWriter out;
+    private static MessageListener listener;
 
     @FXML
     private TreeView explorerTreeView;
@@ -169,7 +173,74 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private ScrollPane imagesScrollPane;
     
+    @FXML
+    private Button validationScreenValidateButton;
+
+    @FXML
+    private Button validationScreenQuitButton;
+
+    @FXML
+    private TextField validationScreenTextField;
     
+    @FXML
+    private Button loginScreenQuitButton;
+
+    @FXML
+    private Button loginScreenLoginButton;
+
+    @FXML
+    private TextField loginScreenTextField;
+    
+    @FXML
+    private Label validationScreenWarningLabel;
+
+    
+    ///////////////////////////////  REGISTRATION  /////////////////////////////
+    @FXML
+    void validationScreenValidateButton(ActionEvent event) throws IOException {
+        /*System.out.println("Stage: " + app_stage);
+        app_stage = (Stage) validationScreenValidateButton.getScene().getWindow();
+        System.out.println("Stage after: " + app_stage);
+        String typedKey = validationScreenTextField.getText();
+        System.out.println("Typed key: " + typedKey);
+        boolean isOK = isValidKey(typedKey);
+        if (isOK) {
+            listener.setStage(app_stage);
+            System.out.println("OUT2: " + out);
+            out.println("registration#" + typedKey);  //send key to server
+        }
+        else{
+            System.out.println("Bad key");
+            validationScreenWarningLabel.setText("Key must contains letters and numbers (16 chars)!");
+        }*/
+        Mosaic.showRootStage();
+    }
+    
+    public boolean isValidKey(String key) {
+        if (16 != key.length()) {
+            return false;
+        }
+
+        for (char ch : key.toCharArray()) {
+            if (!Character.isLetterOrDigit(ch)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    ////////////////////////////////////////////////////////////////////////////
+    
+    
+    ///////////////////////// LOGIN SCREEN LOGIN BUTTON ////////////////////////
+    @FXML
+    void loginScreenLoginButtonAction(ActionEvent event) throws IOException {
+        String typedUsername = loginScreenTextField.getText();
+        if (!"".equals(typedUsername)) {
+            app_stage = (Stage) loginScreenLoginButton.getScene().getWindow();
+            app_stage.close();
+        }
+    }
+    ////////////////////////////////////////////////////////////////////////////
     
     // Kreiranje novog foldera //
     @FXML
@@ -591,6 +662,7 @@ public class FXMLDocumentController implements Initializable {
         app_stage.initModality(Modality.APPLICATION_MODAL);
         app_stage.initOwner(explorerBtn1.getScene().getWindow());
         app_stage.showAndWait();
+        
     }
 
     @FXML
@@ -855,7 +927,15 @@ public class FXMLDocumentController implements Initializable {
             messagesSplitPane.setDividerPositions(messagesDividerPosition);
         }
     }
+
+    public Button getValidationScreenValidateButton() {
+        return validationScreenValidateButton;
+    }
     
+    public void closeValidationScreen(){
+        System.out.println("Close button: " + validationScreenValidateButton);
+        (Mosaic.getCurrentStage("validationScreen")).close();
+    }
     
     /***************************** INITIALIZE  *******************************/
     
@@ -870,34 +950,43 @@ public class FXMLDocumentController implements Initializable {
                     albumOrImageNameLabel, descriptionTempLabel, albumsFlowPane, imagesFlowPane, albumsScrollPane, imagesScrollPane);
             System.out.println("First time in...");
             try {
-                InetAddress addr = InetAddress.getByName("127.0.0.1");
-                System.out.println("First time in...");
+                /*InetAddress addr = InetAddress.getByName("127.0.0.1");
                 mySocket = new Socket(addr, 9000);
-                System.out.println("First time in...");
-                in = new BufferedReader(new InputStreamReader(mySocket.getInputStream()));
-                System.out.println("First time in...");
                 out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(mySocket.getOutputStream())), true);
-                System.out.println("First time in...");
-                listener = new MessageListener(out, in);
-                System.out.println("First time in...");
+                in = new BufferedReader(new InputStreamReader(mySocket.getInputStream()));
+                listener = new MessageListener(this, out, in, validationScreenValidateButton);
+                System.out.println("listener created");
                 listener.start();
-                System.out.println("Client side created!");
+                System.out.println("OUT: " + out);*/
+                
+                /*Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLValidationScreen.fxml"));
+                Scene create_folder_scene = new Scene(home_page_parent);
+                app_stage = new Stage();
+                app_stage.setScene(create_folder_scene);
+                //app_stage.initModality(Modality.APPLICATION_MODAL);
+                //app_stage.initOwner(explorerBtn1.getScene().getWindow());
+                app_stage.showAndWait();*/
+                
+                
+                
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
-        ObservableList<String> albumNames = virtualAlbumsController.getAllAlbumsName();
-        try {
-            //System.out.println("add albums to choise box 1");
-            if (moveImagePopUpChoiceBox != null) {
-                moveImagePopUpChoiceBox.getItems().addAll(albumNames);
+        if (isFirstTime || isMainFormActive) {
+            ObservableList<String> albumNames = virtualAlbumsController.getAllAlbumsName();
+            try {
+                //System.out.println("add albums to choise box 1");
+                if (moveImagePopUpChoiceBox != null) {
+                    moveImagePopUpChoiceBox.getItems().addAll(albumNames);
+                }
+                //System.out.println("add albums to choise box 2");
+                if (albumsImportPopUpChoiseBox != null) {
+                    albumsImportPopUpChoiseBox.getItems().addAll(albumNames);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
-            //System.out.println("add albums to choise box 2");
-            if (albumsImportPopUpChoiseBox != null) {
-                albumsImportPopUpChoiseBox.getItems().addAll(albumNames);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
         
     }
