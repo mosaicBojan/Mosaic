@@ -21,17 +21,63 @@ import javafx.stage.StageStyle;
  * @author Asus
  */
 public class Mosaic extends Application {
+
     private static HashMap<String, Stage> stringStageHashMap = new HashMap<String, Stage>();
     private static Stage stage;
     private double xOffset = 0;
     private double yOffset = 0;
     
+    private Boolean resizebottom = false;
+    private double dx;
+    private double dy;
+
     @Override
     public void start(Stage stage) throws Exception {
         this.stage = stage;
         stage.initStyle(StageStyle.UNDECORATED);
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
         Scene scene = new Scene(root);
+
+        scene.setOnMousePressed(event -> {
+            xOffset = stage.getX() - event.getScreenX();
+            yOffset = stage.getY() - event.getScreenY();
+        });
+        //Lambda mouse event handler
+        scene.setOnMouseDragged(event -> {
+            stage.setX(event.getScreenX() + xOffset);
+            stage.setY(event.getScreenY() + yOffset);
+        });
+
+        scene.setOnMousePressed(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                if (event.getX() > stage.getWidth() - 20
+                        && event.getX() < stage.getWidth() + 20
+                        && event.getY() > stage.getHeight() - 20
+                        && event.getY() < stage.getHeight() + 20) {
+                    resizebottom = true;
+                    dx = stage.getWidth() - event.getX();
+                    dy = stage.getHeight() - event.getY();
+
+                } else {
+                    resizebottom = false;
+                    xOffset = event.getSceneX();
+                    yOffset = event.getSceneY();
+                }
+            }
+        });
+
+        scene.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent event) {
+                if (resizebottom == false) {
+                    stage.setX(event.getScreenX() - xOffset);
+                    stage.setY(event.getScreenY() - yOffset);
+                } else {
+                    stage.setWidth((event.getX() + dx) < 1000 ? 1000 : event.getX() + dx);
+                    stage.setHeight((event.getY() + dy) < 700 ? 700 : event.getY() + dy);
+                }
+            }
+        });
+
         // setting min stage dimensions
         stage.setMinHeight(700);
         stage.setMinWidth(600);
@@ -40,7 +86,7 @@ public class Mosaic extends Application {
         stage.show();
         //stage.hide();
         stage.hide();
-        
+
         ActivationTest activationTest = new ActivationTest();
         boolean isActivated = activationTest.isValidate();
         if (!isActivated) {
@@ -48,7 +94,7 @@ public class Mosaic extends Application {
             Scene create_folder_scene = new Scene(home_page_parent);
             Stage app_stage = new Stage();
             app_stage.initStyle(StageStyle.UNDECORATED);
-            
+
             home_page_parent.setOnMousePressed(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
@@ -63,7 +109,7 @@ public class Mosaic extends Application {
                     app_stage.setY(event.getScreenY() - yOffset);
                 }
             });
-            
+
             stringStageHashMap.put("validationScreen", app_stage);
             app_stage.setScene(create_folder_scene);
             app_stage.showAndWait();
@@ -74,7 +120,7 @@ public class Mosaic extends Application {
                 Stage app_stage_2 = new Stage();
                 app_stage_2.initStyle(StageStyle.UNDECORATED);
                 app_stage_2.setScene(create_folder_scene_2);
-                
+
                 home_page_parent_2.setOnMousePressed(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
@@ -89,18 +135,16 @@ public class Mosaic extends Application {
                         app_stage_2.setY(event.getScreenY() - yOffset);
                     }
                 });
-                
+
                 //FXMLDocumentController.setIsLoginEnd();
                 app_stage_2.showAndWait();
-                if(!FXMLDocumentController.getIsLoginQuit()){
+                if (!FXMLDocumentController.getIsLoginQuit()) {
                     stage.show();
-                }
-                else{
+                } else {
                     stage.close();
                 }
-                
-            }
-            else{
+
+            } else {
                 stage.close();
             }
         } else {
@@ -109,9 +153,9 @@ public class Mosaic extends Application {
             Stage app_stage = new Stage();
             app_stage.initStyle(StageStyle.UNDECORATED);
             app_stage.setScene(create_folder_scene);
-            
+
             home_page_parent.setOnMousePressed(new EventHandler<MouseEvent>() {
-                   @Override
+                @Override
                 public void handle(MouseEvent event) {
                     xOffset = event.getSceneX();
                     yOffset = event.getSceneY();
@@ -124,7 +168,7 @@ public class Mosaic extends Application {
                     app_stage.setY(event.getScreenY() - yOffset);
                 }
             });
-            
+
             //FXMLDocumentController.setIsLoginEnd();
             app_stage.showAndWait();
             if (!FXMLDocumentController.getIsLoginQuit()) {
@@ -133,20 +177,21 @@ public class Mosaic extends Application {
                 stage.close();
             }
         }
-        
+
     }
 
-    public static void showRootStage(){
+    public static void showRootStage() {
         stage.show();
     }
-    
-    public static Stage getCurrentStage(String nameOfStage){
+
+    public static Stage getCurrentStage(String nameOfStage) {
         return stringStageHashMap.get(nameOfStage);
     }
-    
-    public static void closeStage(String stageName){
+
+    public static void closeStage(String stageName) {
         getCurrentStage(stageName).close();
     }
+
     /**
      * @param args the command line arguments
      */

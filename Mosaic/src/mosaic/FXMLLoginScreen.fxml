@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import java.net.*?>
@@ -14,7 +15,7 @@
     </stylesheets>
    <children>
       <Button fx:id="loginScreenQuitButton" layoutX="521.0" layoutY="155.0" mnemonicParsing="false" onAction="#loginScreenQuitButtonAction" prefHeight="25.0" prefWidth="60.0" text="Quit" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" />
-      <VBox layoutX="78.0" layoutY="89.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="80.0">
+      <VBox layoutX="78.0" layoutY="89.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="90.0">
          <children>
             <Label fx:id="loginScreenHelloLabel" text="Hello there!">
                <VBox.margin>
@@ -35,5 +36,10 @@
             <Label fx:id="loginScreenUsernameLabel" layoutX="78.0" layoutY="143.0" />
          </children>
       </VBox>
+      <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="24.0" layoutY="67.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="70.0">
+         <image>
+            <Image url="@../icons/user.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

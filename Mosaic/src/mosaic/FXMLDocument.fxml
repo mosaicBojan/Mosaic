@@ -9,8 +9,13 @@
 <?import javafx.scene.layout.*?>
 <?import java.net.*?>
 
-<AnchorPane id="AnchorPane" minHeight="600.0" minWidth="900.0" prefHeight="700.0" prefWidth="1158.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mosaic.FXMLDocumentController">
+<AnchorPane fx:id="mainAnchorPane" minHeight="600.0" minWidth="900.0" prefHeight="700.0" prefWidth="1158.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mosaic.FXMLDocumentController">
    <children>
+      <ImageView fx:id="resizeImage" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="-5.0" AnchorPane.rightAnchor="-5.0">
+         <image>
+            <Image url="@../icons/resize.png" />
+         </image>
+      </ImageView>
       <TabPane layoutX="6.0" layoutY="25.0" prefHeight="482.0" prefWidth="950.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="10.0">
         <tabs>
           <Tab fx:id="explorerTab" text="Explorer">
@@ -311,7 +316,7 @@
             </HBox>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="applicationWindowAnchorPane" onMouseClicked="#applicationWindowAnchorPaneAction" prefHeight="32.0" prefWidth="1158.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="applicationWindowAnchorPane" onMouseClicked="#applicationWindowAnchorPaneAction" prefHeight="32.0" prefWidth="1158.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox alignment="TOP_RIGHT" prefHeight="32.0" prefWidth="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
@@ -327,6 +332,9 @@
                      </HBox.margin>
                   </Button>
                </children>
+               <padding>
+                  <Insets top="2.0" />
+               </padding>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="32.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
@@ -347,4 +355,7 @@
    <stylesheets>
     <URL value="@../css/mosaic.css" />
     </stylesheets>
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" />
+   </padding>
 </AnchorPane>
