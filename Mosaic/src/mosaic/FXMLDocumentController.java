@@ -523,7 +523,7 @@ public class FXMLDocumentController implements Initializable {
         }
         else{
             System.out.println("Bad key");
-            validationScreenWarningLabel.setText("Key must contains letters and numbers (16 chars)!");
+            validationScreenWarningLabel.setText("Invalid key.");
         }
     }
     
@@ -538,6 +538,16 @@ public class FXMLDocumentController implements Initializable {
             }
         }
         return true;
+    }
+    
+    public void setWarningLabelText(String text){
+        Platform.runLater(new Runnable() {
+
+            @Override
+            public void run() {
+                validationScreenWarningLabel.setText(text);
+            }
+        });
     }
     ////////////////////////////////////////////////////////////////////////////
     

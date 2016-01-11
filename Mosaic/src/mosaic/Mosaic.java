@@ -7,11 +7,14 @@ package mosaic;
 
 import java.util.HashMap;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  *
@@ -20,6 +23,8 @@ import javafx.stage.Stage;
 public class Mosaic extends Application {
     private static HashMap<String, Stage> stringStageHashMap = new HashMap<String, Stage>();
     private static Stage stage;
+    private double xOffset = 0;
+    private double yOffset = 0;
     
     @Override
     public void start(Stage stage) throws Exception {
@@ -41,6 +46,23 @@ public class Mosaic extends Application {
             Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLValidationScreen.fxml"));
             Scene create_folder_scene = new Scene(home_page_parent);
             Stage app_stage = new Stage();
+            app_stage.initStyle(StageStyle.UNDECORATED);
+            
+            home_page_parent.setOnMousePressed(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    xOffset = event.getSceneX();
+                    yOffset = event.getSceneY();
+                }
+            });
+            home_page_parent.setOnMouseDragged(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    app_stage.setX(event.getScreenX() - xOffset);
+                    app_stage.setY(event.getScreenY() - yOffset);
+                }
+            });
+            
             stringStageHashMap.put("validationScreen", app_stage);
             app_stage.setScene(create_folder_scene);
             app_stage.showAndWait();
@@ -49,7 +71,24 @@ public class Mosaic extends Application {
                 Parent home_page_parent_2 = FXMLLoader.load(getClass().getResource("FXMLLoginScreen.fxml"));
                 Scene create_folder_scene_2 = new Scene(home_page_parent_2);
                 Stage app_stage_2 = new Stage();
+                app_stage_2.initStyle(StageStyle.UNDECORATED);
                 app_stage_2.setScene(create_folder_scene_2);
+                
+                home_page_parent_2.setOnMousePressed(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        xOffset = event.getSceneX();
+                        yOffset = event.getSceneY();
+                    }
+                });
+                home_page_parent_2.setOnMouseDragged(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        app_stage_2.setX(event.getScreenX() - xOffset);
+                        app_stage_2.setY(event.getScreenY() - yOffset);
+                    }
+                });
+                
                 //FXMLDocumentController.setIsLoginEnd();
                 app_stage_2.showAndWait();
                 if(!FXMLDocumentController.getIsLoginQuit()){
@@ -67,7 +106,24 @@ public class Mosaic extends Application {
             Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLLoginScreen.fxml"));
             Scene create_folder_scene = new Scene(home_page_parent);
             Stage app_stage = new Stage();
+            app_stage.initStyle(StageStyle.UNDECORATED);
             app_stage.setScene(create_folder_scene);
+            
+            home_page_parent.setOnMousePressed(new EventHandler<MouseEvent>() {
+                   @Override
+                public void handle(MouseEvent event) {
+                    xOffset = event.getSceneX();
+                    yOffset = event.getSceneY();
+                }
+            });
+            home_page_parent.setOnMouseDragged(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    app_stage.setX(event.getScreenX() - xOffset);
+                    app_stage.setY(event.getScreenY() - yOffset);
+                }
+            });
+            
             //FXMLDocumentController.setIsLoginEnd();
             app_stage.showAndWait();
             if (!FXMLDocumentController.getIsLoginQuit()) {

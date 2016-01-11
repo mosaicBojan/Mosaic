@@ -87,6 +87,13 @@ public class MessageListener extends Thread{
                     else{
                         //Neuspjesna registracija
                         System.out.println("Neuspjesna registracija");
+                        Platform.runLater(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                docController.setWarningLabelText("Invalid key.");
+                            }
+                        });
                     }
                 }
                 else if("login".equals(typeOfMsg.split("#")[0])){
