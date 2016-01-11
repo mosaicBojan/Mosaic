@@ -2,6 +2,7 @@ package users;
 
 import java.net.Socket;
 import java.util.ArrayList;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
@@ -31,7 +32,39 @@ public class UsersController {
     
     public void addNewOnlineUser(Socket socket, String username){
         User user = new User(socket, username);
-        onlineUsersList.add(user);
+        Platform.runLater(new Runnable() {
+
+            @Override
+            public void run() {
+                onlineUsersList.add(user);
+            }
+        });
+        //onlineUsersList.add(user);
         onlineUsersListView.setItems(onlineUsersList);
     }
+    
+    public void removeUser(String username){
+        User user = getUserFromListForString(username);
+        Platform.runLater(new Runnable() {
+
+            @Override
+            public void run() {
+                onlineUsersList.remove(user);
+            }
+        });
+        onlineUsersListView.setItems(onlineUsersList);
+    }
+    
+    public User getUserFromListForString(String username){
+        User user = null;
+        for(User u: onlineUsersList){
+            if(u.getUsername().equals(username)){
+                user = u;
+                break;
+            }
+        }
+        
+        return user;
+    }
+    
 }

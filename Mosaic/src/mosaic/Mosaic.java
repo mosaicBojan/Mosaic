@@ -31,6 +31,7 @@ public class Mosaic extends Application {
         stage.setMinWidth(600);
 
         stage.setScene(scene);
+        stage.show();
         //stage.hide();
         stage.hide();
         
@@ -49,6 +50,7 @@ public class Mosaic extends Application {
                 Scene create_folder_scene_2 = new Scene(home_page_parent_2);
                 Stage app_stage_2 = new Stage();
                 app_stage_2.setScene(create_folder_scene_2);
+                //FXMLDocumentController.setIsLoginEnd();
                 app_stage_2.showAndWait();
                 if(!FXMLDocumentController.getIsLoginQuit()){
                     stage.show();
@@ -66,6 +68,7 @@ public class Mosaic extends Application {
             Scene create_folder_scene = new Scene(home_page_parent);
             Stage app_stage = new Stage();
             app_stage.setScene(create_folder_scene);
+            //FXMLDocumentController.setIsLoginEnd();
             app_stage.showAndWait();
             if (!FXMLDocumentController.getIsLoginQuit()) {
                 stage.show();

@@ -37,7 +37,7 @@ public class ActivationKeyController {
         File[] files = folder.listFiles();
         for (File f : files) {
             ActivationKey key = null;
-            System.out.println("***" + f.getPath());
+            //System.out.println("***" + f.getPath());
             try {
                 ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
                 key = (ActivationKey) ois.readObject();

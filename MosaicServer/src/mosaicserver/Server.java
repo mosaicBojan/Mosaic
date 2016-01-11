@@ -15,11 +15,13 @@ public class Server extends Thread {
     private UsersController usersController;
     private static ServerSocket ss;
     //private ArrayList<ServerCommunicationThread> threads = new ArrayList<>();
+    private FXMLServerDocumentController serverController;
     
-    public Server(ActivationKeyController activationKeyController, UsersController usersController) {
+    public Server(ActivationKeyController activationKeyController, UsersController usersController, FXMLServerDocumentController serverController) {
         super();
         this.activationKeyController = activationKeyController;
         this.usersController = usersController;
+        this.serverController = serverController;
         System.out.println("Server created!");
     }
 
@@ -36,7 +38,7 @@ public class Server extends Thread {
             while (test) {
                 try {
                     Socket sc = ss.accept();
-                    ServerCommunicationThread sct = new ServerCommunicationThread(sc, activationKeyController, usersController);
+                    ServerCommunicationThread sct = new ServerCommunicationThread(sc, activationKeyController, usersController, serverController);
                     sct.start();
                 } catch (Exception ex) {
                     test = false;

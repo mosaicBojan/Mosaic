@@ -9,6 +9,7 @@ import activationkeys.ActivationKeyController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -19,6 +20,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
@@ -55,7 +57,22 @@ public class FXMLServerDocumentController implements Initializable {
     
     @FXML
     private ListView<User> onlineUsersListView;
+    
+    @FXML
+    private TextArea trafficTextArea;
 
+    public void setTextToTrafficTextArea(String s){
+        Platform.runLater(new Runnable() {
+
+            @Override
+            public void run() {
+                trafficTextArea.appendText(s);
+            }
+        });
+        
+    }
+    
+    
     @FXML
     void addKeyFormButtonAction(ActionEvent event) throws IOException {
         String key = addKeyFormTextField.getText();
@@ -98,7 +115,7 @@ public class FXMLServerDocumentController implements Initializable {
             System.out.println("Server set up!");
             activationKeyController = new ActivationKeyController(keysListView);
             usersController = new UsersController(onlineUsersListView);
-            server = new Server(activationKeyController, usersController);
+            server = new Server(activationKeyController, usersController, this);
             server.start();
             isFirstTime = false;
             

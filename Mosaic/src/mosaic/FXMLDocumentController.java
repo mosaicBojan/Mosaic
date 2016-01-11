@@ -7,7 +7,10 @@ package mosaic;
 
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.awt.Robot;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -22,34 +25,40 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URL;
-import java.util.Arrays;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javax.imageio.ImageIO;
+import screenshots.ScreenshotMessage;
+import screenshots.ScreenshotMessageController;
+import screenshots.ScreenshotNumberTest;
 import treeviewclasses.FileSystemTree;
 import virtualalbums.*;
-import javafx.scene.Node;
-import javafx.stage.Screen;
 
 /**
  *
@@ -69,13 +78,26 @@ public class FXMLDocumentController implements Initializable {
     private static String type;
     private static String selectedImageName;
     private List<File> choosenFiles;
-    private Socket mySocket;
+    private static Socket mySocket;
     private static BufferedReader in;
     private static PrintWriter out;
     private static MessageListener listener;
     private static boolean isRegistrationQuit = false;
     private static boolean isLoginQuit = false;
-    
+    private static boolean isMainFormQuit = false;
+    private static String myUsername;
+    private static int numOfScreenshotSent;
+    private static int numOfScreenshotReceive;
+    private static ScreenshotMessageController screenshotMessageController;
+    private static ScreenshotMessage screenshotMessage;
+    private static Image iconImage;
+    private static ObservableList<String> onlineUsers = FXCollections.observableArrayList();
+    //private static ObservableList<ScreenshotMessage> messageList = 
+    private static boolean isRequestPopUpRun = false;
+    private static ScreenshotMessage screenshotListViewSelectedItem;
+    private static boolean isTimeToSetListener = false;
+    private static boolean isLoginEnd = false;
+    private static int numOfInitialize = 1;
 
     @FXML
     private TreeView explorerTreeView;
@@ -196,8 +218,293 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private Label validationScreenWarningLabel;
+    
+    @FXML
+    private Button logoutButton;
+    
+    @FXML
+    private Button screenshotPopUpQuitButton;
 
-    public static Button tempButton;
+    @FXML
+    private Button screenshotPopUpSendButton;
+
+    @FXML
+    private ChoiceBox screenshotPopUpChoiseBox;
+
+    @FXML
+    private ImageView screenshotPopUpImageView;
+    
+    @FXML
+    private Button newScreenshotReceived;
+
+    @FXML
+    private Button screenshotRequestDeclineButton;
+
+    @FXML
+    private Button screenshotRequestAcceptButton;
+
+    @FXML
+    private Button screenshotRequestCancelButton;
+
+    @FXML
+    private ListView screenshotRequestListView;
+
+    @FXML
+    private ListView messagesListView;
+    
+    
+    
+    public static void setIsLoginEnd(){
+        isLoginEnd = true;
+    }
+
+    ////////////////////////  SEND SCREENSHOT MESSAGE  /////////////////////////
+    @FXML
+    void sendScreenshotButtonAction(ActionEvent event) {
+        try {
+            System.out.println("\nCREATING SCREENSHOT...");
+            Robot ro = new Robot();
+            Rectangle rect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+            int width = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+            int height = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+            BufferedImage im = ro.createScreenCapture(rect);
+            System.out.println("SCREENSHOT CREATED!");
+            File folder = new File("SentScreenshots");
+            if(!folder.exists()){
+                System.out.println("CREATE FOLDER SentScreenshots");
+                folder.mkdir();
+            }
+            File screenShotFile = new File("SentScreenshots" + File.separator + "screenshotMessage_" + numOfScreenshotSent + ".jpg");
+            numOfScreenshotSent++;
+            ImageIO.write(im, "jpg", screenShotFile);
+            System.out.println("SCREENSHOT SAVE LIKE JPG");
+            screenshotMessage = new ScreenshotMessage(screenShotFile);
+            screenshotMessage.setSender(myUsername);
+            screenshotMessage.setIsISentThisMessage(true);
+            /*System.out.println("ADD TO SCREENSHOT LIST: " + screenshotMessage);
+            screenshotMessageController.addScreenshotMessage(screenshotMessage);*/
+            
+            iconImage = new Image(new File(screenShotFile.getPath()).toURI().toString(), 250, 200, true, true, true);
+            System.out.println("ICON IMAGE CREATED.");
+            
+            System.out.println("SENDING GET LIST REQUEST...");
+            out.println("screenshot#getList#" + myUsername);
+            System.out.println("SENT REQUEST: " + "screenshot#getList#" + myUsername);
+            //String destinationUsername = "";
+            
+            Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLScreenshotPopUpForm.fxml"));
+            Scene create_folder_scene = new Scene(home_page_parent);
+            app_stage = new Stage();
+            app_stage.setScene(create_folder_scene);
+            app_stage.initModality(Modality.APPLICATION_MODAL);
+            app_stage.initOwner(explorerBtn1.getScene().getWindow());
+            app_stage.show();
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    @FXML
+    void screenshotPopUpSendButtonAction(ActionEvent event) {
+        try{
+            String destinaionUsername = (String) screenshotPopUpChoiseBox.getValue();
+            if (destinaionUsername != null && !"".equals(destinaionUsername)) {
+                //System.out.println("I SET RECEIVER: " + destinaionUsername);
+                screenshotMessage.setReceiver(destinaionUsername);
+                //LocalDate date = LocalDate.now();
+                long date = System.currentTimeMillis();
+                System.out.println("MILLIS:" + date);
+                screenshotMessage.setSentTimeString("" + date);
+                
+                System.out.println("\nSCREENSHOT MESSAGE ATRIBUTES:");
+                System.out.println("********************************************************");
+                System.out.println("Sender*: " + screenshotMessage.getSender());
+                System.out.println("Receiver*: " + screenshotMessage.getReceiver());
+                System.out.println("Is I sent*: " + screenshotMessage.getIsISentThisMessage());
+                System.out.println("Sent time string*: " + screenshotMessage.getSentTimeString());
+                System.out.println("Is accepted: " + screenshotMessage.getIsAccepted());
+                System.out.println("********************************************************\n");
+                
+                System.out.println("SENDING TO SERVER...");
+                out.println(destinaionUsername + "#" + date);
+                System.out.println("SENT: " + destinaionUsername + "#" + date);
+                // slanje ka serveru //
+                long duzina = screenshotMessage.getPath().length();
+                System.out.println("\nSENDING DUZINA TO SERVER...");
+                out.println(duzina);
+                System.out.println("SENT: " + duzina);
+                byte[] buffer = new byte[2 * 1024 * 40];
+                InputStream fajl = new FileInputStream(screenshotMessage.getPath());
+                int length = 0;
+                OutputStream os = mySocket.getOutputStream();
+                System.out.println("SENDING IMAGE TO SERVER...");
+                System.out.println("**************************************************");
+                while ((length = fajl.read(buffer)) > 0) {
+                    os.write(buffer, 0, length);
+                    System.out.println("Preostalo jos " + (duzina - length));
+                }
+                System.out.println("Slanje zavrseno...");
+                fajl.close();
+                System.out.println("***************************************************");
+            }
+            
+            System.out.println("\nADD TO SCREENSHOT LIST: " + screenshotMessage);
+            screenshotMessageController.addScreenshotMessage(screenshotMessage);
+            System.out.println("*******************************************************");
+            for(ScreenshotMessage s: screenshotMessageController.getScreenshotMessageList()){
+                System.out.println("Message: " + s);
+            }
+            System.out.println("*******************************************************");
+            
+            app_stage = (Stage) screenshotPopUpSendButton.getScene().getWindow();
+            app_stage.close();
+            
+        } catch(Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
+    @FXML
+    void screenshotPopUpQuitButtonAction(ActionEvent event) {
+        out.println("SENDING_OF_SCREENSHOT_DECLINED#");
+        app_stage = (Stage) screenshotPopUpSendButton.getScene().getWindow();
+        app_stage.close();
+    }
+    
+    @FXML
+    void newScreenshotReceivedAction(ActionEvent event) throws IOException {
+        isRequestPopUpRun = true;
+        
+        System.out.println("Received Button Clicked!");
+        Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLScreenshotRequestPopUpForm.fxml"));
+        Scene create_folder_scene = new Scene(home_page_parent);
+        app_stage = new Stage();
+        app_stage.setScene(create_folder_scene);
+        app_stage.initModality(Modality.APPLICATION_MODAL);
+        app_stage.initOwner(explorerBtn1.getScene().getWindow());
+        app_stage.show();
+        
+        isRequestPopUpRun = false;
+    }
+    
+    public void setEnableButton(){
+        Platform.runLater(() -> {
+            newScreenshotReceived.setDisable(false);
+        });
+        
+    }
+    
+    @FXML
+    void screenshotRequestAcceptButtonAction(ActionEvent event) {
+        System.out.println("\nACEEPT BUTTON CLICKED");
+        String sender = screenshotListViewSelectedItem.getSender();
+        String receiver = screenshotListViewSelectedItem.getReceiver();
+        String millis = screenshotListViewSelectedItem.getSentTimeString();
+        System.out.println("SENDING ACCEPT RESPONSE");
+        out.println("screenshotResponseAccept#" + sender + "#" + receiver + "#" + millis);
+        System.out.println("SENT ACCEPT: " + "screenshotResponseAccept#" + sender + "#" + receiver + "#" + millis);
+        ObservableList<ScreenshotMessage> msgs = screenshotMessageController.getScreenshotMessageList();
+        ScreenshotMessage msg = null;
+        for (ScreenshotMessage m : msgs) {
+            if (m.getSender().equals(sender) && m.getReceiver().equals(receiver) && m.getSentTimeString().equals(millis)) {
+                msg = m;
+                break;
+            }
+        }
+        msg.setIsAccepted(1);
+        
+        ObservableList<ScreenshotMessage> tempList = FXCollections.observableArrayList();
+        for (ScreenshotMessage m : screenshotMessageController.getScreenshotMessageList()) {
+            if (m.getIsAccepted() == 0 && m.getIsISentThisMessage() == false) {
+                System.out.println("Message: " + m.getSender() + " - " + m.getReceiver() + " - " + m.getSentTimeString());
+                tempList.add(m);
+            }
+        }
+        screenshotRequestListView.setItems(tempList);
+        screenshotRequestListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+                screenshotListViewSelectedItem = (ScreenshotMessage) screenshotRequestListView.getSelectionModel().getSelectedItem();
+                System.out.println("Selected item: " + screenshotListViewSelectedItem);
+            }
+
+        });
+    }
+
+    @FXML
+    void screenshotRequestDeclineButtonAction(ActionEvent event) {
+        System.out.println("\nDECLINE BUTTON CLICKED");
+        screenshotListViewSelectedItem.setIsAccepted(-1);
+        String sender = screenshotListViewSelectedItem.getSender();
+        String receiver = screenshotListViewSelectedItem.getReceiver();
+        String millis = screenshotListViewSelectedItem.getSentTimeString();
+        System.out.println("SENDING ACCEPT RESPONSE");
+        out.println("screenshotResponseDecline#" + sender + "#" + receiver + "#" + millis);
+        
+        ObservableList<ScreenshotMessage> msgs = screenshotMessageController.getScreenshotMessageList();
+        ScreenshotMessage msg = null;
+        for (ScreenshotMessage m : msgs) {
+            if (m.getSender().equals(sender) && m.getReceiver().equals(receiver) && m.getSentTimeString().equals(millis)) {
+                msg = m;
+                break;
+            }
+        }
+        msg.setIsAccepted(-1);
+
+        ObservableList<ScreenshotMessage> tempList = FXCollections.observableArrayList();
+        for (ScreenshotMessage m : screenshotMessageController.getScreenshotMessageList()) {
+            if (m.getIsAccepted() == 0 && m.getIsISentThisMessage() == false) {
+                System.out.println("Message: " + m.getSender() + " - " + m.getReceiver() + " - " + m.getSentTimeString());
+                tempList.add(m);
+            }
+        }
+        screenshotRequestListView.setItems(tempList);
+        screenshotRequestListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+                screenshotListViewSelectedItem = (ScreenshotMessage) screenshotRequestListView.getSelectionModel().getSelectedItem();
+                System.out.println("Selected item: " + screenshotListViewSelectedItem);
+            }
+
+        });
+    }
+
+    @FXML
+    void screenshotRequestCancelButtonAction(ActionEvent event) {
+        app_stage = (Stage) screenshotRequestAcceptButton.getScene().getWindow();
+        app_stage.close();
+    }
+    ////////////////////////////////////////////////////////////////////////////
+    
+    
+    
+    /////////////////////////////////  LOGOUT  /////////////////////////////////
+    @FXML
+    void logoutButtonAction(ActionEvent event) {
+        isMainFormQuit = true;
+        for(ScreenshotMessage msg: screenshotMessageController.getScreenshotMessageList()){
+            if(myUsername.equals(msg.getReceiver())){
+                msg.setIsAccepted(-1);
+            }
+        }
+        ScreenshotNumberTest test = new ScreenshotNumberTest(numOfScreenshotSent, numOfScreenshotReceive);
+        System.out.println("numSent: " + numOfScreenshotSent + " -- numReceive: " + numOfScreenshotReceive);
+        test.serializeScreenshotNumbers();
+        screenshotMessageController.serializeScreenshotMessageList();
+        app_stage = (Stage) explorerBtn1.getScene().getWindow();
+        app_stage.close();
+        try{
+            out.println("QUIT#" + myUsername);
+        } catch(Exception ex){
+            ex.printStackTrace();
+        }
+    }
+    ////////////////////////////////////////////////////////////////////////////
+    
+    
     
     ///////////////////////////////  REGISTRATION  /////////////////////////////
     @FXML
@@ -237,7 +544,7 @@ public class FXMLDocumentController implements Initializable {
         app_stage = (Stage) validationScreenValidateButton.getScene().getWindow();
         app_stage.close();
         try{
-            out.println("QUIT#");
+            out.println("QUIT#nop");
         } catch(Exception ex){
             ex.printStackTrace();
         }
@@ -257,8 +564,11 @@ public class FXMLDocumentController implements Initializable {
             app_stage = (Stage) loginScreenLoginButton.getScene().getWindow();
             boolean isOK = isValidUsername(typedUsername);
             if (isOK) {
+                myUsername = typedUsername;
+                listener.setMyUsername(myUsername);
                 listener.setStage(app_stage);
                 out.println("login#" + typedUsername);  //send key to server
+                //isLoginEnd = true;
             } else {
                 System.out.println("Name must contains minimum 4 letters or numbers!");
                 //validationScreenWarningLabel.setText("Key must contains letters and numbers (16 chars)!");
@@ -288,7 +598,7 @@ public class FXMLDocumentController implements Initializable {
         app_stage = (Stage) loginScreenLoginButton.getScene().getWindow();
         app_stage.close();
         try{
-            out.println("QUIT#");
+            out.println("QUIT#nop");
         } catch(Exception ex){
             ex.printStackTrace();
         }
@@ -680,7 +990,7 @@ public class FXMLDocumentController implements Initializable {
     // FULLSCREEN Action //
     @FXML
     void explorerBtn8Action(ActionEvent event) throws IOException {
-        selectedPath = fst.getSelectedPath();
+        /*selectedPath = fst.getSelectedPath();
         System.out.println("Selected: " + selectedPath);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double width = screenSize.getWidth();
@@ -699,8 +1009,43 @@ public class FXMLDocumentController implements Initializable {
             File file = new File(selectedPath);
             Image image = new Image(file.toURI().toString());
             fullscreenImageView.setImage(image);
-        }
+        }*/
 
+        System.out.println("***********************************************************");
+            ObservableList<ScreenshotMessage> tempListAccept = FXCollections.observableArrayList();
+            ObservableList<ScreenshotMessage> tempListDecline = FXCollections.observableArrayList();
+            ObservableList<ScreenshotMessage> tempListWithoutDecision = FXCollections.observableArrayList();
+            for (ScreenshotMessage m : screenshotMessageController.getScreenshotMessageList()) {
+                System.out.println("M: " + m);
+                if (m.getIsAccepted() == 0) {
+                    System.out.println("accepted");
+                    tempListWithoutDecision.add(m);
+                } else if (m.getIsAccepted() == 1) {
+                    System.out.println("declined");
+                    tempListAccept.add(m);
+                } else if (m.getIsAccepted() == -1) {
+                    System.out.println("notsure");
+                    tempListDecline.add(m);
+                }
+            }
+            ObservableList<ScreenshotMessage> tempList = FXCollections.observableArrayList();
+            tempList.addAll(tempListAccept);
+            tempList.addAll(tempListDecline);
+            tempList.addAll(tempListWithoutDecision);
+            for(ScreenshotMessage ms: tempList){
+                System.out.println("ms: " + ms);
+            }
+            messagesListView.setItems(tempList);
+            messagesListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+                @Override
+                public void handle(MouseEvent event) {
+                    screenshotListViewSelectedItem = (ScreenshotMessage) messagesListView.getSelectionModel().getSelectedItem();
+                    System.out.println("Selected item: " + screenshotListViewSelectedItem);
+                }
+
+            });
+            System.out.println("***********************************************************");
     }
 
     @FXML
@@ -999,51 +1344,187 @@ public class FXMLDocumentController implements Initializable {
         //((Stage) tempButton.getScene().getWindow()).close();
     }
     
+    public ListView getRequestListView(){
+        return screenshotRequestListView;
+    }
+    
+    public void refreshRequestList(){
+        Platform.runLater(() -> {
+            ObservableList<ScreenshotMessage> tempList = FXCollections.observableArrayList();
+            for (ScreenshotMessage m : screenshotMessageController.getScreenshotMessageList()) {
+                if (m.getIsAccepted() == 0 && m.getIsISentThisMessage() == false) {
+                    System.out.println("Message: " + m.getSender() + " - " + m.getReceiver() + " - " + m.getSentTimeString());
+                    tempList.add(m);
+                }
+            }
+            screenshotRequestListView.setItems(tempList);
+            screenshotRequestListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+                @Override
+                public void handle(MouseEvent event) {
+                    screenshotListViewSelectedItem = (ScreenshotMessage) screenshotRequestListView.getSelectionModel().getSelectedItem();
+                    System.out.println("Selected item: " + screenshotListViewSelectedItem);
+                }
+
+            });
+        });
+    }
+    
+    
+    
     /***************************** INITIALIZE  *******************************/
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        System.out.println("Initialize");
+        System.out.println("Initialize " + numOfInitialize);
+        numOfInitialize++;
+        
         if (isFirstTime) {
+            System.out.println("FIRST SET");
             isFirstTime = false;
             fst = new FileSystemTree(explorerTreeView, explorerImgView, explorerPathTextField, explorerImageLabel);
             fst.start();
             virtualAlbumsController = new VirtualAlbumsController(albumsNavigationLabel, albumNameLabel, albumDescriptionLabel,
                     albumOrImageNameLabel, descriptionTempLabel, albumsFlowPane, imagesFlowPane, albumsScrollPane, imagesScrollPane);
             System.out.println("First time in...");
+            ScreenshotNumberTest test = new ScreenshotNumberTest();
+            numOfScreenshotSent = test.getNumOfSent();
+            numOfScreenshotReceive = test.getNumOfReceive();
+            
+            screenshotMessageController = new ScreenshotMessageController();
+            screenshotMessageController.deserializeScreenshotMessages();
             try {
                 InetAddress addr = InetAddress.getByName("127.0.0.1");
                 mySocket = new Socket(addr, 9000);
                 out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(mySocket.getOutputStream())), true);
                 in = new BufferedReader(new InputStreamReader(mySocket.getInputStream()));
-                listener = new MessageListener(out, in);
+                System.out.println("CREATE LISTENER - myUsername: " + myUsername);
+                listener = new MessageListener(this, out, in, onlineUsers, screenshotMessageController, myUsername, mySocket, screenshotListViewSelectedItem);
                 System.out.println("listener created");
                 listener.start();
-                System.out.println("OUT: " + out);
-                
-                
-                
-                
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
+            
+            System.out.println("***********************************************************");
+            ObservableList<ScreenshotMessage> tempListAccept = FXCollections.observableArrayList();
+            ObservableList<ScreenshotMessage> tempListDecline = FXCollections.observableArrayList();
+            ObservableList<ScreenshotMessage> tempListWithoutDecision = FXCollections.observableArrayList();
+            for (ScreenshotMessage m : screenshotMessageController.getScreenshotMessageList()) {
+                System.out.println("M: " + m);
+                if (m.getIsAccepted() == 0) {
+                    System.out.println("accepted");
+                    tempListWithoutDecision.add(m);
+                } else if (m.getIsAccepted() == 1) {
+                    System.out.println("declined");
+                    tempListAccept.add(m);
+                } else if (m.getIsAccepted() == -1) {
+                    System.out.println("notsure");
+                    tempListDecline.add(m);
+                }
+            }
+            ObservableList<ScreenshotMessage> tempList = FXCollections.observableArrayList();
+            tempList.addAll(tempListAccept);
+            tempList.addAll(tempListDecline);
+            tempList.addAll(tempListWithoutDecision);
+            for(ScreenshotMessage ms: tempList){
+                System.out.println("ms: " + ms);
+            }
+            messagesListView.setItems(tempList);
+            messagesListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+                @Override
+                public void handle(MouseEvent event) {
+                    screenshotListViewSelectedItem = (ScreenshotMessage) messagesListView.getSelectionModel().getSelectedItem();
+                    System.out.println("Selected item: " + screenshotListViewSelectedItem);
+                }
+
+            });
+            System.out.println("***********************************************************");
+            
         }
+        /*System.out.println("IS LOGIN END: " + isLoginEnd);
+        if(isFirstTime){
+            System.out.println("SECOND SET");
+            System.out.println("***********************************************************");
+            ObservableList<ScreenshotMessage> tempListAccept = FXCollections.observableArrayList();
+            ObservableList<ScreenshotMessage> tempListDecline = FXCollections.observableArrayList();
+            ObservableList<ScreenshotMessage> tempListWithoutDecision = FXCollections.observableArrayList();
+            for (ScreenshotMessage m : screenshotMessageController.getScreenshotMessageList()) {
+                System.out.println("M: " + m);
+                if (m.getIsAccepted() == 0) {
+                    System.out.println("accepted");
+                    tempListWithoutDecision.add(m);
+                } else if (m.getIsAccepted() == 1) {
+                    System.out.println("declined");
+                    tempListAccept.add(m);
+                } else if (m.getIsAccepted() == -1) {
+                    System.out.println("notsure");
+                    tempListDecline.add(m);
+                }
+            }
+            ObservableList<ScreenshotMessage> tempList = FXCollections.observableArrayList();
+            tempList.addAll(tempListAccept);
+            tempList.addAll(tempListDecline);
+            tempList.addAll(tempListWithoutDecision);
+            for(ScreenshotMessage ms: tempList){
+                System.out.println("ms: " + ms);
+            }
+            messagesListView.setItems(tempList);
+            messagesListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+                @Override
+                public void handle(MouseEvent event) {
+                    screenshotListViewSelectedItem = (ScreenshotMessage) messagesListView.getSelectionModel().getSelectedItem();
+                    System.out.println("Selected item: " + screenshotListViewSelectedItem);
+                }
+
+            });
+            System.out.println("***********************************************************");
+        }*/
+        //isLoginEnd = true;
         if (isFirstTime || isMainFormActive) {
             ObservableList<String> albumNames = virtualAlbumsController.getAllAlbumsName();
             try {
-                //System.out.println("add albums to choise box 1");
                 if (moveImagePopUpChoiceBox != null) {
                     moveImagePopUpChoiceBox.getItems().addAll(albumNames);
                 }
-                //System.out.println("add albums to choise box 2");
                 if (albumsImportPopUpChoiseBox != null) {
                     albumsImportPopUpChoiseBox.getItems().addAll(albumNames);
+                }
+                if (screenshotPopUpImageView != null && iconImage != null) {
+                    screenshotPopUpImageView.setImage(iconImage);
+                }
+
+                if (screenshotPopUpChoiseBox != null && onlineUsers.size() != 0) {
+                    screenshotPopUpChoiseBox.setItems(onlineUsers);
+                }
+                if(isRequestPopUpRun){
+                    System.out.println("\nINITIALIZE ADD MESSAGES TO LIST");
+                    System.out.println("***********************************************************");
+                    ObservableList<ScreenshotMessage> tempListForListView = FXCollections.observableArrayList();
+                    for(ScreenshotMessage m: screenshotMessageController.getScreenshotMessageList()){
+                        if(m.getIsAccepted() == 0 && m.getIsISentThisMessage() == false){
+                            System.out.println("Message: " + m.getSender() + " - " + m.getReceiver() + " - " + m.getSentTimeString());
+                            tempListForListView.add(m);
+                        }
+                    }
+                    screenshotRequestListView.setItems(tempListForListView);
+                    screenshotRequestListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+                        @Override
+                        public void handle(MouseEvent event) {
+                            screenshotListViewSelectedItem = (ScreenshotMessage) screenshotRequestListView.getSelectionModel().getSelectedItem();
+                            System.out.println("Selected item: " + screenshotListViewSelectedItem);
+                        }
+
+                    });
+                    System.out.println("***********************************************************");
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
-        
     }
 
 }
