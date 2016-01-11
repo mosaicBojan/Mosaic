@@ -34,7 +34,7 @@
                                  <children>
                                     <StackPane AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                                        <children>
-                                          <ImageView fx:id="explorerImgView" fitHeight="608.0" fitWidth="364.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" />
+                                          <ImageView fx:id="explorerImgView" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER" />
                                           <Label fx:id="explorerImageLabel" text="Select a file to preview" textFill="#797979" />
                                        </children>
                                     </StackPane>
