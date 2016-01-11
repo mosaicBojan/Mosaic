@@ -268,11 +268,9 @@
 
 
 #newScreenshotReceived {
-    //-fx-graphic: url('../icons/screenshot.png');
     -fx-graphic: url('../icons/newMessage.png');
 }
 #newScreenshotReceived:hover {
-    //-fx-graphic: url('../icons/screenshotHover.png');
     -fx-graphic: url('../icons/newMessageHover.png');
 }
 #newScreenshotReceived:pressed {
@@ -283,11 +281,9 @@
 }
 
 #sendScreenshotButton {
-    //-fx-graphic: url('../icons/newMessage.png');
     -fx-graphic: url('../icons/screenshot.png');
 }
 #sendScreenshotButton:hover {
-    //-fx-graphic: url('../icons/newMessageHover.png');
     -fx-graphic: url('../icons/screenshotHover.png');
 }
 #sendScreenshotButton:pressed {

@@ -7,8 +7,11 @@ import java.net.UnknownHostException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.HashMap;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.CacheHint;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
@@ -16,6 +19,8 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 
 public class FileSystemTree extends Thread {
 
@@ -36,6 +41,12 @@ public class FileSystemTree extends Thread {
     private Label explorerImageLabel;
     private boolean rootAlreadySet = false;
     private int numOfRootDirs = 0;
+    private  double originalImageHeight = 0;
+    private double originalImageWidth = 0;
+    private double imageStackPaneWidth = 0;
+    private double imageStackPaneHeight = 0;
+    private double resizedImageHeight = 0;
+    private double resizedImageWidth = 0;
 
     public FileSystemTree() {
     }
@@ -149,35 +160,53 @@ public class FileSystemTree extends Thread {
                         //  U slucaju da se kllikne na bilo koji drugi fajl   //
                         if (selectedItem.getPathWithoutHost().toLowerCase().endsWith(".jpg") || selectedItem.getPathWithoutHost().toLowerCase().endsWith(".png")) {
                             //Ovdje se definise koje akcije ce se izvrsiti ako je selektovani fajl slika
-                            //System.out.println("IMAGE PREVIEW");
                             imageView.setVisible(true);
+                            
+                            imageView.setCache(true);
+                            imageView.setCacheHint(CacheHint.SPEED);
+                            
+                            //imageView.setFitHeight(0);
+                            //imageView.setFitHeight(0);
+                            
                             explorerImageLabel.setVisible(false);
                             Image image = new Image(new File(selectedItem.getPathWithoutHost()).toURI().toString());
-                            double imageHeight = image.getHeight();
-                            double imageWidth = image.getWidth();
-                            double imageViewHeight = imageView.getFitHeight();
-                            double imageViewWidth = imageView.getFitWidth();
-                            if (isFirstPicture) {
-                                originalHeight = imageViewHeight;
-                                originalWidth = imageViewWidth;
-                                isFirstPicture = false;
+                            if ( image.getHeight() > 1600 || image.getWidth() > 1600 ){
+                                image = new Image(new File(selectedItem.getPathWithoutHost()).toURI().toString(), 1600, 1600, true, true);
                             }
-                            if (imageViewWidth < originalWidth) {
-                                imageViewHeight = originalHeight;
-                                imageViewWidth = originalWidth;
+                            originalImageHeight = image.getHeight();
+                            originalImageWidth = image.getWidth();
+                            
+                            
+                            
+                            imageStackPaneWidth = ((StackPane)(imageView.getParent())).getWidth();
+                            imageStackPaneHeight = ((StackPane)(imageView.getParent())).getHeight();
+                            
+                            //((StackPane)(imageView.getParent())).setStyle("-fx-background-color: red;");
+                            
+                           
+                            
+                            
+                            if ( originalImageWidth/imageStackPaneWidth > originalImageHeight/imageStackPaneHeight ) {
+                                if (image.getWidth() < imageStackPaneWidth){
+                                    //System.out.println("FIT PO SIRINI SLIKE: " + image.getWidth());
+                                    imageView.setFitWidth(image.getWidth());
+                                }
+                                else {
+                                    //System.out.println("FIT PO SIRINI PANELA: " + imageStackPaneWidth);
+                                    imageView.setFitWidth(imageStackPaneWidth);
+                                }
+                            }
+                            else {
+                                if (image.getHeight() < imageStackPaneHeight){
+                                    //System.out.println("FIT PO DUZINI SLIKE: " + image.getHeight());
+                                    imageView.setFitHeight(image.getHeight());
+                                }
+                                else {
+                                    //System.out.println("FIT PO DUZINI PANELA: " + imageStackPaneHeight);
+                                    imageView.setFitHeight(imageStackPaneHeight);
+                                }
                             }
                             imageView.setImage(image);
-                            if (imageWidth < imageViewWidth && imageHeight < imageViewHeight) {
-                                imageView.setFitWidth(imageWidth);
-                                imageView.setPreserveRatio(true);
-                                imageView.setSmooth(true);
-                                imageView.setCache(true);
-                            } else {
-                                imageView.setFitWidth(imageViewWidth);
-                                imageView.setPreserveRatio(true);
-                                imageView.setSmooth(true);
-                                imageView.setCache(true);
-                            }
                         } else {
                             // Ovdje se definise koje akcije ce se izvrsiti ako je selektovan folder //
                             Image img = imageView.getImage();
@@ -245,6 +274,27 @@ public class FileSystemTree extends Thread {
                             }
                         }
                     }
+                    
+                    ((AnchorPane)(imageView.getParent().getParent())).widthProperty().addListener(new ChangeListener<Number>() {
+                                @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldStackPaneWidth, Number newStackPaneWidth) {
+                                    imageStackPaneWidth = newStackPaneWidth.doubleValue();
+                                    if ( originalImageWidth >= newStackPaneWidth.doubleValue() & resizedImageHeight <= imageStackPaneHeight) {
+                                        imageView.setFitWidth(newStackPaneWidth.doubleValue() - 40);
+                                        resizedImageWidth = newStackPaneWidth.doubleValue() - 20;
+                                        resizedImageHeight = originalHeight/(originalImageWidth/(newStackPaneWidth.doubleValue() - 20));
+                                    }
+                                }
+                            });
+                    ((AnchorPane)(imageView.getParent().getParent())).heightProperty().addListener(new ChangeListener<Number>() {
+                                @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldStackPaneHeight, Number newStackPaneHeight) {
+                                    imageStackPaneHeight = newStackPaneHeight.doubleValue();
+                                    if ( originalImageHeight >= newStackPaneHeight.doubleValue()  & resizedImageWidth <= imageStackPaneWidth) {
+                                        imageView.setFitHeight(newStackPaneHeight.doubleValue() - 40);
+                                        resizedImageHeight = newStackPaneHeight.doubleValue() - 20;
+                                        resizedImageWidth = originalWidth/(originalImageHeight/(newStackPaneHeight.doubleValue() - 20));
+                                    }
+                                }
+                            });
                     if (selectedItem.isExpanded()) {          //Ovaj kod omogucava da se otvaraju tree item-i na klik
                         selectedItem.setExpanded(false);
                     } else {

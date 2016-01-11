@@ -30,10 +30,14 @@
                                     <TreeView fx:id="explorerTreeView" layoutX="5.0" layoutY="52.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="42.0" />
                                  </children>
                               </AnchorPane>
-                            <AnchorPane fx:id="explorerSplitPaneRightAnchor" minWidth="300.0" SplitPane.resizableWithParent="false">
+                            <AnchorPane fx:id="explorerSplitPaneRightAnchor" minWidth="300.0">
                                  <children>
-                                    <ImageView fx:id="explorerImgView" fitHeight="608.0" fitWidth="364.0" layoutX="6.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
-                                    <Label fx:id="explorerImageLabel" layoutX="132.0" layoutY="283.0" text="Select a file to preview" textFill="#797979" />
+                                    <StackPane AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                       <children>
+                                          <ImageView fx:id="explorerImgView" fitHeight="608.0" fitWidth="364.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" />
+                                          <Label fx:id="explorerImageLabel" text="Select a file to preview" textFill="#797979" />
+                                       </children>
+                                    </StackPane>
                                  </children>
                               </AnchorPane>
                           </items>

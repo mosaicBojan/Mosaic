@@ -36,6 +36,8 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -49,9 +51,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import screenshots.ScreenshotMessage;
@@ -990,62 +995,78 @@ public class FXMLDocumentController implements Initializable {
     // FULLSCREEN Action //
     @FXML
     void explorerBtn8Action(ActionEvent event) throws IOException {
-        /*selectedPath = fst.getSelectedPath();
-        System.out.println("Selected: " + selectedPath);
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        double width = screenSize.getWidth();
-        double height = screenSize.getHeight();
-
+        selectedPath = fst.getSelectedPath();
         if (selectedPath != null && new File(selectedPath).isFile()) {
-            Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLFullscreenForm.fxml"));
-            Scene create_folder_scene = new Scene(home_page_parent, width, height);
-            app_stage = new Stage();
-            app_stage.setScene(create_folder_scene);
-            app_stage.initModality(Modality.APPLICATION_MODAL);
-            app_stage.initOwner(explorerBtn1.getScene().getWindow());
-            app_stage.show();
+            final Stage dialog = new Stage();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.initOwner(explorerBtn1.getScene().getWindow());
+            HBox dialogHbox = new HBox(20);
+            dialogHbox.setAlignment(Pos.CENTER);
+            Image image = new Image("file:\\" + selectedPath.toString());
+            ImageView iv = new ImageView();
+            
+            dialogHbox.getChildren().add(iv);
+            
+            Screen screen = Screen.getPrimary();
+            Rectangle2D bounds = screen.getVisualBounds();
+            dialog.setX(bounds.getMinX());
+            dialog.setY(bounds.getMinY());
+            dialog.setWidth(bounds.getWidth());
+            dialog.setHeight(bounds.getHeight());
+            
+            if ( image.getHeight() > bounds.getHeight() || image.getWidth() > bounds.getWidth() ){
+                image = new Image(("file:\\" + selectedPath.toString()), bounds.getWidth(), bounds.getHeight(), true, true);
+            }
+            
+            iv.setImage(image);
+            
+            if ( image.getWidth()/bounds.getWidth() > image.getHeight()/bounds.getHeight() ) {
+                if (image.getWidth() < bounds.getWidth()){
+                    iv.setFitWidth(image.getWidth());
+                }
+                else {
+                    iv.setFitWidth(bounds.getWidth());
+                }
+            }
+            else {
+                if (image.getHeight() < bounds.getHeight()){
+                    iv.setFitHeight(image.getHeight());
+                }
+                else {
+                    iv.setFitHeight(bounds.getHeight());
+                }
+            }
+            
+            Scene dialogScene = new Scene(dialogHbox, image.getWidth(), image.getHeight());
+            dialog.setTitle(selectedPath);
+            dialog.getIcons().add(new Image("icons/explorerTreeViewIcons/imagePlaceholder.png"));
+            dialog.setResizable(false);
+            dialog.setScene(dialogScene);
+            dialog.show();
+            System.out.println("file:\\" + selectedPath.toString());
+            System.out.println("image.getWidth(): " + image.getWidth());
+            System.out.println("image.getHeight(): " + image.getHeight());
+            
         }
-        if (selectedPath != null) {
-            File file = new File(selectedPath);
-            Image image = new Image(file.toURI().toString());
-            fullscreenImageView.setImage(image);
-        }*/
-
-        System.out.println("***********************************************************");
-            ObservableList<ScreenshotMessage> tempListAccept = FXCollections.observableArrayList();
-            ObservableList<ScreenshotMessage> tempListDecline = FXCollections.observableArrayList();
-            ObservableList<ScreenshotMessage> tempListWithoutDecision = FXCollections.observableArrayList();
-            for (ScreenshotMessage m : screenshotMessageController.getScreenshotMessageList()) {
-                System.out.println("M: " + m);
-                if (m.getIsAccepted() == 0) {
-                    System.out.println("accepted");
-                    tempListWithoutDecision.add(m);
-                } else if (m.getIsAccepted() == 1) {
-                    System.out.println("declined");
-                    tempListAccept.add(m);
-                } else if (m.getIsAccepted() == -1) {
-                    System.out.println("notsure");
-                    tempListDecline.add(m);
-                }
-            }
-            ObservableList<ScreenshotMessage> tempList = FXCollections.observableArrayList();
-            tempList.addAll(tempListAccept);
-            tempList.addAll(tempListDecline);
-            tempList.addAll(tempListWithoutDecision);
-            for(ScreenshotMessage ms: tempList){
-                System.out.println("ms: " + ms);
-            }
-            messagesListView.setItems(tempList);
-            messagesListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-                @Override
-                public void handle(MouseEvent event) {
-                    screenshotListViewSelectedItem = (ScreenshotMessage) messagesListView.getSelectionModel().getSelectedItem();
-                    System.out.println("Selected item: " + screenshotListViewSelectedItem);
-                }
-
-            });
-            System.out.println("***********************************************************");
+        else {
+            //System.out.println("Please select a file to preview.");
+            final Stage dialog = new Stage();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.initOwner(explorerBtn1.getScene().getWindow());
+            HBox dialogHbox = new HBox(20);
+            dialogHbox.setAlignment(Pos.CENTER);
+            Image image = new Image("icons/warningSign.png");
+            ImageView iv = new ImageView();
+            iv.setImage(image);
+            dialogHbox.getChildren().add(iv);
+            dialogHbox.getChildren().add(new Text("Please select an image to open in fullscreen."));
+            Scene dialogScene = new Scene(dialogHbox, 400, 100);
+            dialog.setTitle("Select an image!");
+            dialog.getIcons().add(image);
+            dialog.setResizable(false);
+            dialog.setScene(dialogScene);
+            dialog.show();
+        }
     }
 
     @FXML
