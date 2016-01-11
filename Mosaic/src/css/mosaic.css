@@ -3,7 +3,7 @@
     -fx-border-width: 0;
 }
 
-#menuBarAnchorPane {
+#applicationWindowAnchorPane {
     -fx-background-color: #f5f5f0;
     -fx-border-width: 0 0 1 0;
     -fx-border-color: #cccccc;
@@ -19,6 +19,67 @@
 .toggle-button {
     -fx-cursor: hand;
 }
+
+/*********************************************************************************
+*
+* APPLICATION WINDOW BUTTONS CSS
+*
+**********************************************************************************/
+
+
+#applicationWindowCloseButton {
+    /*-fx-border-width: 2px;
+    -fx-border-color: #666666;*/
+    -fx-background-color: none;
+    -fx-graphic: url('../icons/close.png');
+}
+#applicationWindowCloseButton:hover {
+    -fx-background-color: #e60000;
+    -fx-graphic: url('../icons/closeHover.png');
+}
+#applicationWindowCloseButton:pressed {
+    -fx-background-color: #ffb3b3;
+}
+
+#applicationWindowMinimizeButton {
+    -fx-background-color: none;
+    -fx-graphic: url('../icons/minimize.png');
+}
+#applicationWindowMinimizeButton:hover {
+    -fx-background-color: #e6e6e6;
+}
+#applicationWindowMinimizeButton:pressed {
+    -fx-background-color: #f0f0f0;
+}
+
+#applicationWindowRestoreButton {
+    /*-fx-color: paleturquoise;*/
+    -fx-background-color: none;
+    -fx-graphic: url('../icons/maximizeUp.png');
+}
+#applicationWindowRestoreButton:hover {
+    -fx-background-color: #e6e6e6;
+}
+#applicationWindowRestoreButton:pressed {
+    -fx-background-color: #f0f0f0;
+}
+
+#applicationWindowRestoreButton:selected {
+    -fx-background-color: none;
+    -fx-graphic: url('../icons/maximizeDown.png');
+}
+#applicationWindowRestoreButton:selected:hover {
+    -fx-background-color: #e6e6e6;
+    -fx-graphic: url('../icons/maximizeDown.png');
+}
+#applicationWindowRestoreButton:selected:pressed {
+    -fx-background-color: #f0f0f0;
+}
+
+/*
+* APPLICATION WINDOW BUTTONS CSS END
+*/
+
 
 /*********************************************************************************
 *
@@ -90,6 +151,11 @@
 
 .tab-pane .tab-header-area {
     -fx-padding: 0 0 0 -1;  /* removing default indentation before the first tab. -1 so that first tabs left border wouldnt be 2px wide while selected */
+}
+
+#mosaicWindowTitleLabel {
+    -fx-font-size: 15px;
+    -fx-text-fill: #494949;
 }
 
 .menu-bar {
@@ -820,7 +886,8 @@
 }
 
 #loginScreenAnchorPane {
-    -fx-background-image: url('../icons/loginScreenBackground.png');
+    /*-fx-background-image: url('../icons/loginScreenBackground.png');*/
+    -fx-background-color: #cccccc;
 }
 
 #loginScreenLoginButton {
@@ -836,11 +903,13 @@
 #loginScreenQuitButton {
     -fx-background-color: #cccccc;
     -fx-text-fill: #666666;
-    -fx-border-width: 1;
-    -fx-border-color: #a6a6a6;
+    /*-fx-border-width: 1;*/
+    /*-fx-border-color: #a6a6a6;*/
 }
 #loginScreenQuitButton:hover {
-    -fx-background-color: #d9d9d9;
+    -fx-cursor: hand;
+    -fx-text-fill: white;
+    /*-fx-background-color: #d9d9d9;*/
 }
 .label {
     -fx-font-family: Helvetica;
@@ -859,4 +928,14 @@
 #validationKeyLabel {
     -fx-text-fill: #494949;
     -fx-font-size: 16px;
+}
+
+#loginScreenUsernameLabel {
+    -fx-text-fill: #494949;
+    -fx-font-size: 16px;
+}
+
+#loginScreenHelloLabel {
+    -fx-text-fill: #494949;
+    -fx-font-size: 20px;
 }

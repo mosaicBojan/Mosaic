@@ -29,6 +29,7 @@ public class Mosaic extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         this.stage = stage;
+        stage.initStyle(StageStyle.UNDECORATED);
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
         Scene scene = new Scene(root);
         // setting min stage dimensions

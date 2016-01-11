@@ -262,7 +262,118 @@ public class FXMLDocumentController implements Initializable {
     public static void setIsLoginEnd(){
         isLoginEnd = true;
     }
+    
+    ////////////////////////  APPLICATION WINDOW BUTTONS  /////////////////////////
+    
+    @FXML private Button applicationWindowCloseButton;
+    
+    @FXML
+    private void applicationWindowCloseButtonAction(){
+        isMainFormQuit = true;
+        for(ScreenshotMessage msg: screenshotMessageController.getScreenshotMessageList()){
+            if(myUsername.equals(msg.getReceiver())){
+                msg.setIsAccepted(-1);
+            }
+        }
+        ScreenshotNumberTest test = new ScreenshotNumberTest(numOfScreenshotSent, numOfScreenshotReceive);
+        System.out.println("numSent: " + numOfScreenshotSent + " -- numReceive: " + numOfScreenshotReceive);
+        test.serializeScreenshotNumbers();
+        screenshotMessageController.serializeScreenshotMessageList();
+        app_stage = (Stage) explorerBtn1.getScene().getWindow();
+        app_stage.close();
+        try{
+            out.println("QUIT#" + myUsername);
+        } catch(Exception ex){
+            ex.printStackTrace();
+        }
+    }
+    
+    @FXML private javafx.scene.control.Button applicationWindowMinimizeButton;
 
+    @FXML
+    private void applicationWindowMinimizeButtonAction(){
+        Stage stage = (Stage) applicationWindowCloseButton.getScene().getWindow();
+        stage.setIconified(true);
+    }
+    
+    @FXML private javafx.scene.control.ToggleButton applicationWindowRestoreButton;
+
+    @FXML
+    private void applicationWindowRestoreButtonAction(){
+        if (isMaximized){
+                //isMaximized = false;
+                applicationWindowRestoreDown();
+            }
+            else if (!isMaximized){
+                //isMaximized = true;
+                applicationWindowRestoreUp();
+            }
+    }
+    
+    private double restoreUpWidth;
+    private double restoreUpHeight;
+    private double restoreUpXPosition;
+    private double restoreUpYPosition;
+    private boolean isMaximized;
+    
+    private void applicationWindowRestoreDown(){
+        if(isMaximized){
+            isMaximized = false;
+            applicationWindowRestoreButton.setSelected(false);
+            Screen screen = Screen.getPrimary();
+            javafx.geometry.Rectangle2D bounds = screen.getVisualBounds();
+            Stage stage = (Stage) applicationWindowCloseButton.getScene().getWindow();
+            stage.setX(restoreUpXPosition);
+            stage.setY(restoreUpYPosition);
+            stage.setWidth(restoreUpWidth);
+            stage.setHeight(restoreUpHeight);
+        }
+    }
+    
+    private void applicationWindowRestoreUp(){
+        if (!isMaximized){
+            isMaximized = true;
+            applicationWindowRestoreButton.setSelected(true);
+            //applicationWindowMaximizeButton.
+            /*// get a handle to the stage
+            Stage stage = (Stage) applicationWindowCloseButton.getScene().getWindow();
+            //maximise the stage
+            stage.setMaximized(true);*/
+            Screen screen = Screen.getPrimary();
+            javafx.geometry.Rectangle2D bounds = screen.getVisualBounds();
+            Stage stage = (Stage) applicationWindowCloseButton.getScene().getWindow();
+            //storing width and height and relative window position
+            restoreUpWidth = stage.getWidth();
+            restoreUpHeight = stage.getHeight();
+            restoreUpXPosition = stage.getX();
+            restoreUpYPosition = stage.getY();
+            //setting new values
+            stage.setX(bounds.getMinX());
+            stage.setY(bounds.getMinY());
+            stage.setWidth(bounds.getWidth());
+            stage.setHeight(bounds.getHeight());
+        }
+    }
+    
+    @FXML
+    private javafx.scene.layout.AnchorPane applicationWindowAnchorPane;
+    
+    @FXML
+    private void applicationWindowAnchorPaneAction(MouseEvent click){
+        if (click.getClickCount() == 2) {
+            if (isMaximized){
+                //isMaximized = false;
+                applicationWindowRestoreDown();
+            }
+            else if (!isMaximized){
+                //isMaximized = true;
+                applicationWindowRestoreUp();
+            }
+        }
+    }
+    
+    //////////////////////////////////////////////////////////////////////////////
+    
     ////////////////////////  SEND SCREENSHOT MESSAGE  /////////////////////////
     @FXML
     void sendScreenshotButtonAction(ActionEvent event) {
@@ -541,13 +652,14 @@ public class FXMLDocumentController implements Initializable {
     }
     
     public void setWarningLabelText(String text){
-        Platform.runLater(new Runnable() {
+        /*Platform.runLater(new Runnable() {
 
             @Override
             public void run() {
                 validationScreenWarningLabel.setText(text);
             }
-        });
+        });*/
+        validationScreenWarningLabel.setText(text);
     }
     ////////////////////////////////////////////////////////////////////////////
     
