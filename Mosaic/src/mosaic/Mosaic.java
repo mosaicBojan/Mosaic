@@ -26,11 +26,15 @@ public class Mosaic extends Application {
     private static Stage stage;
     private double xOffset = 0;
     private double yOffset = 0;
-    
+    private static FXMLDocumentController docController;
     private Boolean resizebottom = false;
     private double dx;
     private double dy;
 
+    public static void setDocController(FXMLDocumentController doc){
+        docController = doc;
+    }
+    
     @Override
     public void start(Stage stage) throws Exception {
         this.stage = stage;
@@ -173,6 +177,7 @@ public class Mosaic extends Application {
             app_stage.showAndWait();
             if (!FXMLDocumentController.getIsLoginQuit()) {
                 stage.show();
+                docController.setUsername();
             } else {
                 stage.close();
             }

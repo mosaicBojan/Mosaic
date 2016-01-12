@@ -103,7 +103,10 @@ public class FXMLDocumentController implements Initializable {
     private static boolean isTimeToSetListener = false;
     private static boolean isLoginEnd = false;
     private static int numOfInitialize = 1;
+    private static String username = null;
 
+    
+    
     @FXML
     private TreeView explorerTreeView;
 
@@ -184,7 +187,7 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private FlowPane imagesFlowPane;
-    
+
     @FXML
     private ChoiceBox albumsImportPopUpChoiseBox;
 
@@ -199,10 +202,10 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private ScrollPane albumsScrollPane;
-    
+
     @FXML
     private ScrollPane imagesScrollPane;
-    
+
     @FXML
     public Button validationScreenValidateButton;
 
@@ -211,7 +214,7 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private TextField validationScreenTextField;
-    
+
     @FXML
     private Button loginScreenQuitButton;
 
@@ -220,13 +223,13 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private TextField loginScreenTextField;
-    
+
     @FXML
     private Label validationScreenWarningLabel;
-    
+
     @FXML
     private Button logoutButton;
-    
+
     @FXML
     private Button screenshotPopUpQuitButton;
 
@@ -238,7 +241,7 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private ImageView screenshotPopUpImageView;
-    
+
     @FXML
     private Button newScreenshotReceived;
 
@@ -256,22 +259,20 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private ListView messagesListView;
-    
-    
-    
-    public static void setIsLoginEnd(){
+
+    public static void setIsLoginEnd() {
         isLoginEnd = true;
     }
-    
+
     ////////////////////////  APPLICATION WINDOW BUTTONS  /////////////////////////
-    
-    @FXML private Button applicationWindowCloseButton;
-    
     @FXML
-    private void applicationWindowCloseButtonAction(){
+    private Button applicationWindowCloseButton;
+
+    @FXML
+    private void applicationWindowCloseButtonAction() {
         isMainFormQuit = true;
-        for(ScreenshotMessage msg: screenshotMessageController.getScreenshotMessageList()){
-            if(myUsername.equals(msg.getReceiver())){
+        for (ScreenshotMessage msg : screenshotMessageController.getScreenshotMessageList()) {
+            if (myUsername.equals(msg.getReceiver())) {
                 msg.setIsAccepted(-1);
             }
         }
@@ -281,43 +282,44 @@ public class FXMLDocumentController implements Initializable {
         screenshotMessageController.serializeScreenshotMessageList();
         app_stage = (Stage) explorerBtn1.getScene().getWindow();
         app_stage.close();
-        try{
+        try {
             out.println("QUIT#" + myUsername);
-        } catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
-    
-    @FXML private javafx.scene.control.Button applicationWindowMinimizeButton;
 
     @FXML
-    private void applicationWindowMinimizeButtonAction(){
+    private javafx.scene.control.Button applicationWindowMinimizeButton;
+
+    @FXML
+    private void applicationWindowMinimizeButtonAction() {
         Stage stage = (Stage) applicationWindowCloseButton.getScene().getWindow();
         stage.setIconified(true);
     }
-    
-    @FXML private javafx.scene.control.ToggleButton applicationWindowRestoreButton;
 
     @FXML
-    private void applicationWindowRestoreButtonAction(){
-        if (isMaximized){
-                //isMaximized = false;
-                applicationWindowRestoreDown();
-            }
-            else if (!isMaximized){
-                //isMaximized = true;
-                applicationWindowRestoreUp();
-            }
+    private javafx.scene.control.ToggleButton applicationWindowRestoreButton;
+
+    @FXML
+    private void applicationWindowRestoreButtonAction() {
+        if (isMaximized) {
+            //isMaximized = false;
+            applicationWindowRestoreDown();
+        } else if (!isMaximized) {
+            //isMaximized = true;
+            applicationWindowRestoreUp();
+        }
     }
-    
+
     private double restoreUpWidth;
     private double restoreUpHeight;
     private double restoreUpXPosition;
     private double restoreUpYPosition;
     private boolean isMaximized;
-    
-    private void applicationWindowRestoreDown(){
-        if(isMaximized){
+
+    private void applicationWindowRestoreDown() {
+        if (isMaximized) {
             isMaximized = false;
             applicationWindowRestoreButton.setSelected(false);
             Screen screen = Screen.getPrimary();
@@ -329,9 +331,9 @@ public class FXMLDocumentController implements Initializable {
             stage.setHeight(restoreUpHeight);
         }
     }
-    
-    private void applicationWindowRestoreUp(){
-        if (!isMaximized){
+
+    private void applicationWindowRestoreUp() {
+        if (!isMaximized) {
             isMaximized = true;
             applicationWindowRestoreButton.setSelected(true);
             //applicationWindowMaximizeButton.
@@ -354,26 +356,24 @@ public class FXMLDocumentController implements Initializable {
             stage.setHeight(bounds.getHeight());
         }
     }
-    
+
     @FXML
     private javafx.scene.layout.AnchorPane applicationWindowAnchorPane;
-    
+
     @FXML
-    private void applicationWindowAnchorPaneAction(MouseEvent click){
+    private void applicationWindowAnchorPaneAction(MouseEvent click) {
         if (click.getClickCount() == 2) {
-            if (isMaximized){
+            if (isMaximized) {
                 //isMaximized = false;
                 applicationWindowRestoreDown();
-            }
-            else if (!isMaximized){
+            } else if (!isMaximized) {
                 //isMaximized = true;
                 applicationWindowRestoreUp();
             }
         }
     }
-    
+
     //////////////////////////////////////////////////////////////////////////////
-    
     ////////////////////////  SEND SCREENSHOT MESSAGE  /////////////////////////
     @FXML
     void sendScreenshotButtonAction(ActionEvent event) {
@@ -386,7 +386,7 @@ public class FXMLDocumentController implements Initializable {
             BufferedImage im = ro.createScreenCapture(rect);
             System.out.println("SCREENSHOT CREATED!");
             File folder = new File("SentScreenshots");
-            if(!folder.exists()){
+            if (!folder.exists()) {
                 System.out.println("CREATE FOLDER SentScreenshots");
                 folder.mkdir();
             }
@@ -399,15 +399,15 @@ public class FXMLDocumentController implements Initializable {
             screenshotMessage.setIsISentThisMessage(true);
             /*System.out.println("ADD TO SCREENSHOT LIST: " + screenshotMessage);
             screenshotMessageController.addScreenshotMessage(screenshotMessage);*/
-            
+
             iconImage = new Image(new File(screenShotFile.getPath()).toURI().toString(), 250, 200, true, true, true);
             System.out.println("ICON IMAGE CREATED.");
-            
+
             System.out.println("SENDING GET LIST REQUEST...");
             out.println("screenshot#getList#" + myUsername);
             System.out.println("SENT REQUEST: " + "screenshot#getList#" + myUsername);
             //String destinationUsername = "";
-            
+
             Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLScreenshotPopUpForm.fxml"));
             Scene create_folder_scene = new Scene(home_page_parent);
             app_stage = new Stage();
@@ -415,15 +415,15 @@ public class FXMLDocumentController implements Initializable {
             app_stage.initModality(Modality.APPLICATION_MODAL);
             app_stage.initOwner(explorerBtn1.getScene().getWindow());
             app_stage.show();
-            
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
-    
+
     @FXML
     void screenshotPopUpSendButtonAction(ActionEvent event) {
-        try{
+        try {
             String destinaionUsername = (String) screenshotPopUpChoiseBox.getValue();
             if (destinaionUsername != null && !"".equals(destinaionUsername)) {
                 //System.out.println("I SET RECEIVER: " + destinaionUsername);
@@ -432,7 +432,7 @@ public class FXMLDocumentController implements Initializable {
                 long date = System.currentTimeMillis();
                 System.out.println("MILLIS:" + date);
                 screenshotMessage.setSentTimeString("" + date);
-                
+
                 System.out.println("\nSCREENSHOT MESSAGE ATRIBUTES:");
                 System.out.println("********************************************************");
                 System.out.println("Sender*: " + screenshotMessage.getSender());
@@ -441,7 +441,7 @@ public class FXMLDocumentController implements Initializable {
                 System.out.println("Sent time string*: " + screenshotMessage.getSentTimeString());
                 System.out.println("Is accepted: " + screenshotMessage.getIsAccepted());
                 System.out.println("********************************************************\n");
-                
+
                 System.out.println("SENDING TO SERVER...");
                 out.println(destinaionUsername + "#" + date);
                 System.out.println("SENT: " + destinaionUsername + "#" + date);
@@ -464,19 +464,19 @@ public class FXMLDocumentController implements Initializable {
                 fajl.close();
                 System.out.println("***************************************************");
             }
-            
+
             System.out.println("\nADD TO SCREENSHOT LIST: " + screenshotMessage);
             screenshotMessageController.addScreenshotMessage(screenshotMessage);
             System.out.println("*******************************************************");
-            for(ScreenshotMessage s: screenshotMessageController.getScreenshotMessageList()){
+            for (ScreenshotMessage s : screenshotMessageController.getScreenshotMessageList()) {
                 System.out.println("Message: " + s);
             }
             System.out.println("*******************************************************");
-            
+
             app_stage = (Stage) screenshotPopUpSendButton.getScene().getWindow();
             app_stage.close();
-            
-        } catch(Exception ex){
+
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
@@ -487,11 +487,11 @@ public class FXMLDocumentController implements Initializable {
         app_stage = (Stage) screenshotPopUpSendButton.getScene().getWindow();
         app_stage.close();
     }
-    
+
     @FXML
     void newScreenshotReceivedAction(ActionEvent event) throws IOException {
         isRequestPopUpRun = true;
-        
+
         System.out.println("Received Button Clicked!");
         Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLScreenshotRequestPopUpForm.fxml"));
         Scene create_folder_scene = new Scene(home_page_parent);
@@ -500,17 +500,17 @@ public class FXMLDocumentController implements Initializable {
         app_stage.initModality(Modality.APPLICATION_MODAL);
         app_stage.initOwner(explorerBtn1.getScene().getWindow());
         app_stage.show();
-        
+
         isRequestPopUpRun = false;
     }
-    
-    public void setEnableButton(){
+
+    public void setEnableButton() {
         Platform.runLater(() -> {
             newScreenshotReceived.setDisable(false);
         });
-        
+
     }
-    
+
     @FXML
     void screenshotRequestAcceptButtonAction(ActionEvent event) {
         System.out.println("\nACEEPT BUTTON CLICKED");
@@ -529,7 +529,7 @@ public class FXMLDocumentController implements Initializable {
             }
         }
         msg.setIsAccepted(1);
-        
+
         ObservableList<ScreenshotMessage> tempList = FXCollections.observableArrayList();
         for (ScreenshotMessage m : screenshotMessageController.getScreenshotMessageList()) {
             if (m.getIsAccepted() == 0 && m.getIsISentThisMessage() == false) {
@@ -558,7 +558,7 @@ public class FXMLDocumentController implements Initializable {
         String millis = screenshotListViewSelectedItem.getSentTimeString();
         System.out.println("SENDING ACCEPT RESPONSE");
         out.println("screenshotResponseDecline#" + sender + "#" + receiver + "#" + millis);
-        
+
         ObservableList<ScreenshotMessage> msgs = screenshotMessageController.getScreenshotMessageList();
         ScreenshotMessage msg = null;
         for (ScreenshotMessage m : msgs) {
@@ -594,15 +594,13 @@ public class FXMLDocumentController implements Initializable {
         app_stage.close();
     }
     ////////////////////////////////////////////////////////////////////////////
-    
-    
-    
+
     /////////////////////////////////  LOGOUT  /////////////////////////////////
     @FXML
     void logoutButtonAction(ActionEvent event) {
         isMainFormQuit = true;
-        for(ScreenshotMessage msg: screenshotMessageController.getScreenshotMessageList()){
-            if(myUsername.equals(msg.getReceiver())){
+        for (ScreenshotMessage msg : screenshotMessageController.getScreenshotMessageList()) {
+            if (myUsername.equals(msg.getReceiver())) {
                 msg.setIsAccepted(-1);
             }
         }
@@ -612,16 +610,14 @@ public class FXMLDocumentController implements Initializable {
         screenshotMessageController.serializeScreenshotMessageList();
         app_stage = (Stage) explorerBtn1.getScene().getWindow();
         app_stage.close();
-        try{
+        try {
             out.println("QUIT#" + myUsername);
-        } catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
     ////////////////////////////////////////////////////////////////////////////
-    
-    
-    
+
     ///////////////////////////////  REGISTRATION  /////////////////////////////
     @FXML
     void validationScreenValidateButtonAction(ActionEvent event) throws IOException {
@@ -631,13 +627,12 @@ public class FXMLDocumentController implements Initializable {
         if (isOK) {
             listener.setStage(app_stage);
             out.println("registration#" + typedKey);  //send key to server
-        }
-        else{
+        } else {
             System.out.println("Bad key");
             validationScreenWarningLabel.setText("Invalid key.");
         }
     }
-    
+
     public boolean isValidKey(String key) {
         if (16 != key.length()) {
             return false;
@@ -650,8 +645,8 @@ public class FXMLDocumentController implements Initializable {
         }
         return true;
     }
-    
-    public void setWarningLabelText(String text){
+
+    public void setWarningLabelText(String text) {
         /*Platform.runLater(new Runnable() {
 
             @Override
@@ -662,28 +657,33 @@ public class FXMLDocumentController implements Initializable {
         validationScreenWarningLabel.setText(text);
     }
     ////////////////////////////////////////////////////////////////////////////
-    
-    
+
     /////////////////////////// VALIDATION QUIT  ///////////////////////////////
     @FXML
     void validationScreenQuitButtonAction(ActionEvent event) {
         isRegistrationQuit = true;
         app_stage = (Stage) validationScreenValidateButton.getScene().getWindow();
         app_stage.close();
-        try{
+        try {
             out.println("QUIT#nop");
-        } catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
-    
-    public static boolean getIsRegistrationQuit(){
+
+    public static boolean getIsRegistrationQuit() {
         return isRegistrationQuit;
     }
     ////////////////////////////////////////////////////////////////////////////
-    
-    
+
     ///////////////////////// LOGIN SCREEN LOGIN BUTTON ////////////////////////
+    @FXML
+    private Label usernameLabel;
+
+    public void setUsername(){
+        usernameLabel.setText(username);
+    }
+    
     @FXML
     void loginScreenLoginButtonAction(ActionEvent event) throws IOException {
         String typedUsername = loginScreenTextField.getText();
@@ -695,6 +695,23 @@ public class FXMLDocumentController implements Initializable {
                 listener.setMyUsername(myUsername);
                 listener.setStage(app_stage);
                 out.println("login#" + typedUsername);  //send key to server
+                username = typedUsername;
+                //usernameLabel.setText(typedUsername);
+                /*Platform.runLater(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                System.out.println("Username label: "  + usernameLabel);
+                                boolean test = true;
+                                while(test){
+                                    System.out.println("Username label: "  + usernameLabel);
+                                    if(usernameLabel != null){
+                                    usernameLabel.setText(typedUsername);
+                                    test = false;
+                                    }
+                                }
+                            }
+                        });*/
                 //isLoginEnd = true;
             } else {
                 System.out.println("Name must contains minimum 4 letters or numbers!");
@@ -702,7 +719,7 @@ public class FXMLDocumentController implements Initializable {
             }
         }
     }
-    
+
     public boolean isValidUsername(String username) {
         if (username.length() < 4) {
             return false;
@@ -716,28 +733,25 @@ public class FXMLDocumentController implements Initializable {
         return true;
     }
     ////////////////////////////////////////////////////////////////////////////
-    
-    
+
     ///////////////////////////// LOGIN QUIT  //////////////////////////////////
     @FXML
     void loginScreenQuitButtonAction(ActionEvent event) {
         isLoginQuit = true;
         app_stage = (Stage) loginScreenLoginButton.getScene().getWindow();
         app_stage.close();
-        try{
+        try {
             out.println("QUIT#nop");
-        } catch(Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
-    
-    public static boolean getIsLoginQuit(){
+
+    public static boolean getIsLoginQuit() {
         return isLoginQuit;
     }
     ///////////////////////////////////////////////////////////////////////////
-    
-    
-    
+
     ///////////////////////////  CREATE NEW FOLDER  ////////////////////////////
     @FXML
     void explorerBtn1Action(ActionEvent event) throws IOException {
@@ -782,8 +796,7 @@ public class FXMLDocumentController implements Initializable {
         fst.addNewFolderNodeToTree(file);
     }
     ////////////////////////////////////////////////////////////////////////////
-    
-    
+
     // Brisanje fajlova i foldera //
     @FXML
     void explorerBtn2Action(ActionEvent event) {
@@ -796,12 +809,10 @@ public class FXMLDocumentController implements Initializable {
     public static void deleteFile(File file) {
         if (!file.isDirectory()) {
             file.delete();
+        } else if (file.list().length == 0) {
+            file.delete();
         } else {
-            if (file.list().length == 0) {
-                file.delete();
-            } else {
-                deleteNoEmptyFolder(file);
-            }
+            deleteNoEmptyFolder(file);
         }
 
         fst.removeOneNode(file);
@@ -1077,7 +1088,6 @@ public class FXMLDocumentController implements Initializable {
         }
     }
 
-    
     ///////////////////  ADD IMAGE TO ALBUM FROM EXPLORER  //////////////////////
     @FXML
     void explorerBtn7Action(ActionEvent event) throws IOException {
@@ -1111,8 +1121,6 @@ public class FXMLDocumentController implements Initializable {
         }
     }
     /////////////////////////////////////////////////////////////////////////////////
-    
-    
 
     // FULLSCREEN Action //
     @FXML
@@ -1126,39 +1134,34 @@ public class FXMLDocumentController implements Initializable {
             dialogHbox.setAlignment(Pos.CENTER);
             Image image = new Image("file:\\" + selectedPath.toString());
             ImageView iv = new ImageView();
-            
+
             dialogHbox.getChildren().add(iv);
-            
+
             Screen screen = Screen.getPrimary();
             Rectangle2D bounds = screen.getVisualBounds();
             dialog.setX(bounds.getMinX());
             dialog.setY(bounds.getMinY());
             dialog.setWidth(bounds.getWidth());
             dialog.setHeight(bounds.getHeight());
-            
-            if ( image.getHeight() > bounds.getHeight() || image.getWidth() > bounds.getWidth() ){
+
+            if (image.getHeight() > bounds.getHeight() || image.getWidth() > bounds.getWidth()) {
                 image = new Image(("file:\\" + selectedPath.toString()), bounds.getWidth(), bounds.getHeight(), true, true);
             }
-            
+
             iv.setImage(image);
-            
-            if ( image.getWidth()/bounds.getWidth() > image.getHeight()/bounds.getHeight() ) {
-                if (image.getWidth() < bounds.getWidth()){
+
+            if (image.getWidth() / bounds.getWidth() > image.getHeight() / bounds.getHeight()) {
+                if (image.getWidth() < bounds.getWidth()) {
                     iv.setFitWidth(image.getWidth());
-                }
-                else {
+                } else {
                     iv.setFitWidth(bounds.getWidth());
                 }
+            } else if (image.getHeight() < bounds.getHeight()) {
+                iv.setFitHeight(image.getHeight());
+            } else {
+                iv.setFitHeight(bounds.getHeight());
             }
-            else {
-                if (image.getHeight() < bounds.getHeight()){
-                    iv.setFitHeight(image.getHeight());
-                }
-                else {
-                    iv.setFitHeight(bounds.getHeight());
-                }
-            }
-            
+
             Scene dialogScene = new Scene(dialogHbox, image.getWidth(), image.getHeight());
             dialog.setTitle(selectedPath);
             dialog.getIcons().add(new Image("icons/explorerTreeViewIcons/imagePlaceholder.png"));
@@ -1168,9 +1171,8 @@ public class FXMLDocumentController implements Initializable {
             System.out.println("file:\\" + selectedPath.toString());
             System.out.println("image.getWidth(): " + image.getWidth());
             System.out.println("image.getHeight(): " + image.getHeight());
-            
-        }
-        else {
+
+        } else {
             //System.out.println("Please select a file to preview.");
             final Stage dialog = new Stage();
             dialog.initModality(Modality.APPLICATION_MODAL);
@@ -1198,9 +1200,9 @@ public class FXMLDocumentController implements Initializable {
     }
 
     /**
-     * **************************** ALBUM TAB **********************************
+     * **************************** ALBUM TAB
+     * **********************************
      */
-    
     ///////////////////////  CREATE NEW VIRTUAL ALBUM  /////////////////////////
     @FXML
     void albumsNewAlbumButtonAction(ActionEvent event) throws IOException {
@@ -1211,7 +1213,7 @@ public class FXMLDocumentController implements Initializable {
         app_stage.initModality(Modality.APPLICATION_MODAL);
         app_stage.initOwner(explorerBtn1.getScene().getWindow());
         app_stage.showAndWait();
-        
+
     }
 
     @FXML
@@ -1244,8 +1246,7 @@ public class FXMLDocumentController implements Initializable {
         }
     }
     ///////////////////////////////////////////////////////////////////////////////
-    
-    
+
     /////////////////////////// ALBUM BACK BUTTON /////////////////////////////
     @FXML
     void albumsBackButtonAction(ActionEvent event) {
@@ -1259,8 +1260,7 @@ public class FXMLDocumentController implements Initializable {
         imagesScrollPane.setVisible(false);
     }
     ///////////////////////////////////////////////////////////////////////////
-    
-    
+
     ////////////////////////// DELETE ALBUM /////////////////////////////////
     @FXML
     void albumsDeleteAction(ActionEvent event) {
@@ -1277,8 +1277,7 @@ public class FXMLDocumentController implements Initializable {
 
     }
     ////////////////////////////////////////////////////////////////////////////
-    
-    
+
     ////////////////////// OPEN ALBUM OR IMAGE BUTTON  /////////////////////////
     @FXML
     void albumsOpenAction(ActionEvent event) {
@@ -1291,8 +1290,7 @@ public class FXMLDocumentController implements Initializable {
             } else {
                 //Ako nije selektovan ni jedan album//
             }
-        }
-        else{
+        } else {
             ////// Selektovana je slika //////
             String imageName = albumNameLabel.getText();
             if (!"".equals(imageName)) {
@@ -1304,8 +1302,7 @@ public class FXMLDocumentController implements Initializable {
         }
     }
     /////////////////////////////////////////////////////////////////////////////
-    
-    
+
     ////////////////////////// RENAME ALBUM OR IMAGE  //////////////////////////
     @FXML
     void albumsRenameAction(ActionEvent event) throws IOException {
@@ -1324,8 +1321,7 @@ public class FXMLDocumentController implements Initializable {
                 app_stage.initOwner(explorerBtn1.getScene().getWindow());
                 app_stage.show();
             }
-        }
-        else{
+        } else {
             // Selektovana je slika //
             selectedAlbum = type;
             Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLRenameAlbumForm.fxml"));
@@ -1337,7 +1333,7 @@ public class FXMLDocumentController implements Initializable {
             app_stage.show();
         }
     }
-    
+
     @FXML
     void renameAlbumPopUpButtonAction(ActionEvent event) {
         String newName = renameAlbumPopUpTextField.getText();
@@ -1349,20 +1345,17 @@ public class FXMLDocumentController implements Initializable {
             } else {
                 //Potrebno ponovo unijeti naziv albuma //
             }
+        } else if (!newName.equals("")) {
+            //String selectedImageName = albumNameLabel.getText();
+            virtualAlbumsController.renameAlbumOrImage(selectedAlbum, selectedImageName, newName);
+            app_stage = (Stage) renameAlbumPopUpButton.getScene().getWindow();
+            app_stage.close();
         } else {
-            if (!newName.equals("")) {
-                //String selectedImageName = albumNameLabel.getText();
-                virtualAlbumsController.renameAlbumOrImage(selectedAlbum, selectedImageName, newName);
-                app_stage = (Stage) renameAlbumPopUpButton.getScene().getWindow();
-                app_stage.close();
-            } else {
-                //Potrebno ponovo unijeti naziv albuma //
-            }
+            //Potrebno ponovo unijeti naziv albuma //
         }
     }
     ////////////////////////////////////////////////////////////////////////////
-    
-    
+
     //////////////////////// ALBUMS IMPORT BUTTON /////////////////////////////
     @FXML
     void albumsImportButtonAction(ActionEvent event) throws IOException {
@@ -1373,9 +1366,9 @@ public class FXMLDocumentController implements Initializable {
         app_stage.initModality(Modality.APPLICATION_MODAL);
         app_stage.initOwner(explorerBtn1.getScene().getWindow());
         app_stage.showAndWait();
-        
+
     }
-    
+
     @FXML
     void albumsImportPopUpBrowseButtonAction(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
@@ -1388,14 +1381,13 @@ public class FXMLDocumentController implements Initializable {
                 new FileChooser.ExtensionFilter("BMP", "*.bmp"),
                 new FileChooser.ExtensionFilter("PNG", "*.png"));
         choosenFiles = fileChooser.showOpenMultipleDialog(app_stage);
-        if(choosenFiles != null){
+        if (choosenFiles != null) {
             albumsImportPopUpChoosenNumLabel.setText("You choosen " + choosenFiles.size() + " images");
-        } 
-        else{
+        } else {
             albumsImportPopUpChoosenNumLabel.setText("You didnt choose any images");
         }
     }
-    
+
     @FXML
     void albumsImportPopUpAddToAlbumButtonAction(ActionEvent event) {
         String nameOfAlbum = (String) albumsImportPopUpChoiseBox.getValue();
@@ -1410,68 +1402,74 @@ public class FXMLDocumentController implements Initializable {
             app_stage = (Stage) albumsImportPopUpAddToAlbumButton.getScene().getWindow();
             app_stage.close();
         }
-        
+
     }
     ///////////////////////////////////////////////////////////////////////////
-    
+
     /* Explorer image panel hiding controlls */
-    @FXML private javafx.scene.control.ToggleButton explorerImagePaneToggleButton;
-    @FXML private javafx.scene.control.SplitPane explorerSplitPane;
+    @FXML
+    private javafx.scene.control.ToggleButton explorerImagePaneToggleButton;
+    @FXML
+    private javafx.scene.control.SplitPane explorerSplitPane;
     private double explorerDividerPosition;
-    @FXML private javafx.scene.layout.AnchorPane explorerSplitPaneRightAnchor;
+    @FXML
+    private javafx.scene.layout.AnchorPane explorerSplitPaneRightAnchor;
     private double explorerSplitPaneRightAnchorMinWidth;
 
     @FXML
-    private void explorerImagePaneToggleButtonAction(){
-        if (Math.abs(1.0 - (explorerSplitPane.getDividerPositions()[0])) > 0.01){
+    private void explorerImagePaneToggleButtonAction() {
+        if (Math.abs(1.0 - (explorerSplitPane.getDividerPositions()[0])) > 0.01) {
             explorerSplitPaneRightAnchorMinWidth = explorerSplitPaneRightAnchor.getMinWidth();
             explorerSplitPaneRightAnchor.setMinWidth(0);
             explorerDividerPosition = (explorerSplitPane.getDividerPositions())[0];
             explorerSplitPane.setDividerPositions(1);
-        }
-        else {
+        } else {
             explorerSplitPaneRightAnchor.setMinWidth(explorerSplitPaneRightAnchorMinWidth);
             explorerSplitPane.setDividerPositions(explorerDividerPosition);
         }
     }
-    
+
     /* Albums image panel hiding controlls */
-    @FXML private javafx.scene.control.ToggleButton albumsImagePaneToggleButton;
-    @FXML private javafx.scene.control.SplitPane albumsSplitPane;
+    @FXML
+    private javafx.scene.control.ToggleButton albumsImagePaneToggleButton;
+    @FXML
+    private javafx.scene.control.SplitPane albumsSplitPane;
     private double albumsDividerPosition;
-    @FXML private javafx.scene.layout.AnchorPane albumsSplitPaneRightAnchor;
+    @FXML
+    private javafx.scene.layout.AnchorPane albumsSplitPaneRightAnchor;
     private double albumsSplitPaneRightAnchorMinWidth;
 
     @FXML
-    private void albumsImagePaneToggleButtonAction(){
-        if (Math.abs(1.0 - (albumsSplitPane.getDividerPositions()[0])) > 0.01){
+    private void albumsImagePaneToggleButtonAction() {
+        if (Math.abs(1.0 - (albumsSplitPane.getDividerPositions()[0])) > 0.01) {
             albumsSplitPaneRightAnchorMinWidth = albumsSplitPaneRightAnchor.getMinWidth();
             albumsSplitPaneRightAnchor.setMinWidth(0);
             albumsDividerPosition = (albumsSplitPane.getDividerPositions())[0];
             albumsSplitPane.setDividerPositions(1);
-        }
-        else {
+        } else {
             albumsSplitPaneRightAnchor.setMinWidth(albumsSplitPaneRightAnchorMinWidth);
             albumsSplitPane.setDividerPositions(albumsDividerPosition);
         }
     }
-    
+
     /* Messages image panel hiding controlls */
-    @FXML private javafx.scene.control.ToggleButton messagesImagePaneToggleButton;
-    @FXML private javafx.scene.control.SplitPane messagesSplitPane;
+    @FXML
+    private javafx.scene.control.ToggleButton messagesImagePaneToggleButton;
+    @FXML
+    private javafx.scene.control.SplitPane messagesSplitPane;
     private double messagesDividerPosition;
-    @FXML private javafx.scene.layout.AnchorPane messagesSplitPaneRightAnchor;
+    @FXML
+    private javafx.scene.layout.AnchorPane messagesSplitPaneRightAnchor;
     private double messagesSplitPaneRightAnchorMinWidth;
 
     @FXML
-    private void messagesImagePaneToggleButtonAction(){
-        if (Math.abs(1.0 - (messagesSplitPane.getDividerPositions()[0])) > 0.01){
+    private void messagesImagePaneToggleButtonAction() {
+        if (Math.abs(1.0 - (messagesSplitPane.getDividerPositions()[0])) > 0.01) {
             messagesSplitPaneRightAnchorMinWidth = messagesSplitPaneRightAnchor.getMinWidth();
             messagesSplitPaneRightAnchor.setMinWidth(0);
             messagesDividerPosition = (messagesSplitPane.getDividerPositions())[0];
             messagesSplitPane.setDividerPositions(1);
-        }
-        else {
+        } else {
             messagesSplitPaneRightAnchor.setMinWidth(messagesSplitPaneRightAnchorMinWidth);
             messagesSplitPane.setDividerPositions(messagesDividerPosition);
         }
@@ -1480,18 +1478,18 @@ public class FXMLDocumentController implements Initializable {
     public Button getValidationScreenValidateButton() {
         return validationScreenValidateButton;
     }
-    
-    public static void closeValidationScreen(){
+
+    public static void closeValidationScreen() {
         //System.out.println("Close button: " + validationScreenValidateButton);
         //Mosaic.closeStage("validationScreen");
         //((Stage) tempButton.getScene().getWindow()).close();
     }
-    
-    public ListView getRequestListView(){
+
+    public ListView getRequestListView() {
         return screenshotRequestListView;
     }
-    
-    public void refreshRequestList(){
+
+    public void refreshRequestList() {
         Platform.runLater(() -> {
             ObservableList<ScreenshotMessage> tempList = FXCollections.observableArrayList();
             for (ScreenshotMessage m : screenshotMessageController.getScreenshotMessageList()) {
@@ -1512,18 +1510,18 @@ public class FXMLDocumentController implements Initializable {
             });
         });
     }
-    
-    
-    
-    /***************************** INITIALIZE  *******************************/
-    
+
+    /**
+     * *************************** INITIALIZE ******************************
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         System.out.println("Initialize " + numOfInitialize);
         numOfInitialize++;
-        
+
         if (isFirstTime) {
             System.out.println("FIRST SET");
+            Mosaic.setDocController(this);
             isFirstTime = false;
             fst = new FileSystemTree(explorerTreeView, explorerImgView, explorerPathTextField, explorerImageLabel);
             fst.start();
@@ -1533,7 +1531,7 @@ public class FXMLDocumentController implements Initializable {
             ScreenshotNumberTest test = new ScreenshotNumberTest();
             numOfScreenshotSent = test.getNumOfSent();
             numOfScreenshotReceive = test.getNumOfReceive();
-            
+
             screenshotMessageController = new ScreenshotMessageController();
             screenshotMessageController.deserializeScreenshotMessages();
             try {
@@ -1548,7 +1546,7 @@ public class FXMLDocumentController implements Initializable {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-            
+
             System.out.println("***********************************************************");
             ObservableList<ScreenshotMessage> tempListAccept = FXCollections.observableArrayList();
             ObservableList<ScreenshotMessage> tempListDecline = FXCollections.observableArrayList();
@@ -1570,7 +1568,7 @@ public class FXMLDocumentController implements Initializable {
             tempList.addAll(tempListAccept);
             tempList.addAll(tempListDecline);
             tempList.addAll(tempListWithoutDecision);
-            for(ScreenshotMessage ms: tempList){
+            for (ScreenshotMessage ms : tempList) {
                 System.out.println("ms: " + ms);
             }
             messagesListView.setItems(tempList);
@@ -1584,48 +1582,8 @@ public class FXMLDocumentController implements Initializable {
 
             });
             System.out.println("***********************************************************");
-            
+
         }
-        /*System.out.println("IS LOGIN END: " + isLoginEnd);
-        if(isFirstTime){
-            System.out.println("SECOND SET");
-            System.out.println("***********************************************************");
-            ObservableList<ScreenshotMessage> tempListAccept = FXCollections.observableArrayList();
-            ObservableList<ScreenshotMessage> tempListDecline = FXCollections.observableArrayList();
-            ObservableList<ScreenshotMessage> tempListWithoutDecision = FXCollections.observableArrayList();
-            for (ScreenshotMessage m : screenshotMessageController.getScreenshotMessageList()) {
-                System.out.println("M: " + m);
-                if (m.getIsAccepted() == 0) {
-                    System.out.println("accepted");
-                    tempListWithoutDecision.add(m);
-                } else if (m.getIsAccepted() == 1) {
-                    System.out.println("declined");
-                    tempListAccept.add(m);
-                } else if (m.getIsAccepted() == -1) {
-                    System.out.println("notsure");
-                    tempListDecline.add(m);
-                }
-            }
-            ObservableList<ScreenshotMessage> tempList = FXCollections.observableArrayList();
-            tempList.addAll(tempListAccept);
-            tempList.addAll(tempListDecline);
-            tempList.addAll(tempListWithoutDecision);
-            for(ScreenshotMessage ms: tempList){
-                System.out.println("ms: " + ms);
-            }
-            messagesListView.setItems(tempList);
-            messagesListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-                @Override
-                public void handle(MouseEvent event) {
-                    screenshotListViewSelectedItem = (ScreenshotMessage) messagesListView.getSelectionModel().getSelectedItem();
-                    System.out.println("Selected item: " + screenshotListViewSelectedItem);
-                }
-
-            });
-            System.out.println("***********************************************************");
-        }*/
-        //isLoginEnd = true;
         if (isFirstTime || isMainFormActive) {
             ObservableList<String> albumNames = virtualAlbumsController.getAllAlbumsName();
             try {
@@ -1642,12 +1600,12 @@ public class FXMLDocumentController implements Initializable {
                 if (screenshotPopUpChoiseBox != null && onlineUsers.size() != 0) {
                     screenshotPopUpChoiseBox.setItems(onlineUsers);
                 }
-                if(isRequestPopUpRun){
+                if (isRequestPopUpRun) {
                     System.out.println("\nINITIALIZE ADD MESSAGES TO LIST");
                     System.out.println("***********************************************************");
                     ObservableList<ScreenshotMessage> tempListForListView = FXCollections.observableArrayList();
-                    for(ScreenshotMessage m: screenshotMessageController.getScreenshotMessageList()){
-                        if(m.getIsAccepted() == 0 && m.getIsISentThisMessage() == false){
+                    for (ScreenshotMessage m : screenshotMessageController.getScreenshotMessageList()) {
+                        if (m.getIsAccepted() == 0 && m.getIsISentThisMessage() == false) {
                             System.out.println("Message: " + m.getSender() + " - " + m.getReceiver() + " - " + m.getSentTimeString());
                             tempListForListView.add(m);
                         }

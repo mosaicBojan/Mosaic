@@ -31,6 +31,9 @@
                                        <HBox.margin>
                                           <Insets right="10.0" />
                                        </HBox.margin>
+                                       <tooltip>
+                                          <Tooltip text="Home" />
+                                       </tooltip>
                                     </Button>
                                     <TreeView fx:id="explorerTreeView" layoutX="5.0" layoutY="52.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="42.0" />
                                  </children>
@@ -55,16 +58,25 @@
                                        <HBox.margin>
                                           <Insets right="5.0" />
                                        </HBox.margin>
+                                       <tooltip>
+                                          <Tooltip text="New Folder" />
+                                       </tooltip>
                                     </Button>
                                     <Button fx:id="explorerBtn2" layoutX="17.0" layoutY="15.0" mnemonicParsing="false" onAction="#explorerBtn2Action" prefHeight="32.0" prefWidth="32.0">
                                        <HBox.margin>
                                           <Insets right="5.0" />
                                        </HBox.margin>
+                                       <tooltip>
+                                          <Tooltip text="Delete" />
+                                       </tooltip>
                                     </Button>
                                     <Button fx:id="explorerBtn3" layoutX="54.0" layoutY="15.0" mnemonicParsing="false" onAction="#explorerBtn3Action" prefHeight="32.0" prefWidth="32.0">
                                        <HBox.margin>
                                           <Insets right="5.0" />
                                        </HBox.margin>
+                                       <tooltip>
+                                          <Tooltip text="Rename" />
+                                       </tooltip>
                                     </Button>
                                     <Separator maxHeight="32.0" orientation="VERTICAL" prefHeight="32.0">
                                        <HBox.margin>
@@ -75,21 +87,33 @@
                                        <HBox.margin>
                                           <Insets left="2.0" right="5.0" />
                                        </HBox.margin>
+                                       <tooltip>
+                                          <Tooltip text="Open" />
+                                       </tooltip>
                                     </Button>
                                     <Button fx:id="explorerBtn5" layoutX="134.0" layoutY="16.0" mnemonicParsing="false" onAction="#explorerBtn5Action" prefHeight="32.0" prefWidth="32.0">
                                        <HBox.margin>
                                           <Insets right="5.0" />
                                        </HBox.margin>
+                                       <tooltip>
+                                          <Tooltip text="Copy" />
+                                       </tooltip>
                                     </Button>
                                     <Button fx:id="explorerBtn6" layoutX="171.0" layoutY="16.0" mnemonicParsing="false" onAction="#explorerBtn6Action" prefHeight="32.0" prefWidth="32.0">
                                        <HBox.margin>
                                           <Insets right="5.0" />
                                        </HBox.margin>
+                                       <tooltip>
+                                          <Tooltip text="Move" />
+                                       </tooltip>
                                     </Button>
                                     <Button fx:id="explorerBtn7" layoutX="208.0" layoutY="16.0" mnemonicParsing="false" onAction="#explorerBtn7Action" prefHeight="32.0" prefWidth="32.0">
                                        <HBox.margin>
                                           <Insets right="5.0" />
                                        </HBox.margin>
+                                       <tooltip>
+                                          <Tooltip text="Add image to album" />
+                                       </tooltip>
                                     </Button>
                                     <Separator layoutX="128.0" layoutY="18.0" maxHeight="32.0" orientation="VERTICAL" prefHeight="32.0">
                                        <HBox.margin>
@@ -100,6 +124,9 @@
                                        <HBox.margin>
                                           <Insets left="2.0" right="5.0" />
                                        </HBox.margin>
+                                       <tooltip>
+                                          <Tooltip text="Fullscreen" />
+                                       </tooltip>
                                     </Button>
                                  </children>
                                  <padding>
@@ -108,7 +135,10 @@
                               </HBox>
                               <HBox alignment="CENTER_RIGHT" layoutX="961.0" layoutY="-29.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <ToggleButton fx:id="explorerImagePaneToggleButton" mnemonicParsing="false" onAction="#explorerImagePaneToggleButtonAction" prefHeight="32.0" prefWidth="32.0" />
+                                    <ToggleButton fx:id="explorerImagePaneToggleButton" mnemonicParsing="false" onAction="#explorerImagePaneToggleButtonAction" prefHeight="32.0" prefWidth="32.0">
+                                       <tooltip>
+                                          <Tooltip text="Toggle image pane" />
+                                       </tooltip></ToggleButton>
                                  </children>
                                  <padding>
                                     <Insets right="7.0" top="1.0" />
@@ -144,6 +174,9 @@
                                              <HBox.margin>
                                                 <Insets right="10.0" />
                                              </HBox.margin>
+                                             <tooltip>
+                                                <Tooltip text="Back" />
+                                             </tooltip>
                                           </Button>
                                           <Label fx:id="albumsNavigationLabel" text="Albums" />
                                        </children>
@@ -184,20 +217,32 @@
                                        <HBox.margin>
                                           <Insets right="5.0" />
                                        </HBox.margin>
+                                       <tooltip>
+                                          <Tooltip text="Import images to album" />
+                                       </tooltip>
                                     </Button>
                                     <Button fx:id="albumsNewAlbum" mnemonicParsing="false" onAction="#albumsNewAlbumButtonAction" prefHeight="32.0" prefWidth="32.0">
                                        <HBox.margin>
                                           <Insets right="5.0" />
                                        </HBox.margin>
+                                       <tooltip>
+                                          <Tooltip text="New album" />
+                                       </tooltip>
                                     </Button>
                                     <Button fx:id="albumsDelete" layoutX="17.0" layoutY="11.0" mnemonicParsing="false" onAction="#albumsDeleteAction" prefHeight="32.0" prefWidth="32.0">
                                        <HBox.margin>
                                           <Insets right="5.0" />
-                                       </HBox.margin></Button>
+                                       </HBox.margin>
+                                       <tooltip>
+                                          <Tooltip text="Delete" />
+                                       </tooltip></Button>
                                     <Button fx:id="albumsRename" layoutX="54.0" layoutY="11.0" mnemonicParsing="false" onAction="#albumsRenameAction" prefHeight="32.0" prefWidth="32.0">
                                        <HBox.margin>
                                           <Insets right="5.0" />
-                                       </HBox.margin></Button>
+                                       </HBox.margin>
+                                       <tooltip>
+                                          <Tooltip text="Rename" />
+                                       </tooltip></Button>
                                     <Separator maxHeight="32.0" orientation="VERTICAL" prefHeight="32.0">
                                        <HBox.margin>
                                           <Insets top="2.0" />
@@ -206,15 +251,24 @@
                                     <Button fx:id="albumsOpen" layoutX="86.0" layoutY="11.0" mnemonicParsing="false" onAction="#albumsOpenAction" prefHeight="32.0" prefWidth="32.0">
                                        <HBox.margin>
                                           <Insets left="2.0" right="5.0" />
-                                       </HBox.margin></Button>
+                                       </HBox.margin>
+                                       <tooltip>
+                                          <Tooltip text="Open" />
+                                       </tooltip></Button>
                                     <Button fx:id="albumsCopy" layoutX="124.0" layoutY="11.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
                                        <HBox.margin>
                                           <Insets right="5.0" />
-                                       </HBox.margin></Button>
+                                       </HBox.margin>
+                                       <tooltip>
+                                          <Tooltip text="Copy" />
+                                       </tooltip></Button>
                                     <Button fx:id="albumsMove" layoutX="156.0" layoutY="11.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
                                        <HBox.margin>
                                           <Insets right="5.0" />
-                                       </HBox.margin></Button>
+                                       </HBox.margin>
+                                       <tooltip>
+                                          <Tooltip text="Move" />
+                                       </tooltip></Button>
                                     <Separator layoutX="112.0" layoutY="13.0" maxHeight="32.0" orientation="VERTICAL" prefHeight="32.0">
                                        <HBox.margin>
                                           <Insets top="2.0" />
@@ -223,7 +277,10 @@
                                     <Button fx:id="albumsFullscreen" layoutX="178.0" layoutY="11.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
                                        <HBox.margin>
                                           <Insets left="2.0" right="5.0" />
-                                       </HBox.margin></Button>
+                                       </HBox.margin>
+                                       <tooltip>
+                                          <Tooltip text="Fullscreen" />
+                                       </tooltip></Button>
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER_RIGHT" layoutX="729.0" layoutY="-29.0" prefHeight="42.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -231,7 +288,10 @@
                                     <Insets right="7.0" top="1.0" />
                                  </padding>
                                  <children>
-                                    <ToggleButton fx:id="albumsImagePaneToggleButton" mnemonicParsing="false" onAction="#albumsImagePaneToggleButtonAction" prefHeight="32.0" prefWidth="32.0" />
+                                    <ToggleButton fx:id="albumsImagePaneToggleButton" mnemonicParsing="false" onAction="#albumsImagePaneToggleButtonAction" prefHeight="32.0" prefWidth="32.0">
+                                       <tooltip>
+                                          <Tooltip text="Toggle image pane" />
+                                       </tooltip></ToggleButton>
                                  </children>
                               </HBox>
                            </children>
@@ -300,7 +360,16 @@
                   <Insets right="10.0" />
                </padding>
                <children>
-                  <Button fx:id="logoutButton" layoutX="31.0" layoutY="17.0" maxHeight="32.0" maxWidth="100.0" mnemonicParsing="false" onAction="#logoutButtonAction" prefHeight="32.0" prefWidth="100.0" text="Logout" />
+                  <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/user.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="usernameLabel">
+                     <HBox.margin>
+                        <Insets left="10.0" right="10.0" />
+                     </HBox.margin>
+                  </Label>
                   <Separator maxHeight="32.0" orientation="VERTICAL" prefHeight="32.0">
                      <HBox.margin>
                         <Insets />
@@ -310,8 +379,14 @@
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
+                     <tooltip>
+                        <Tooltip text="Message received" />
+                     </tooltip>
                   </Button>
-                  <Button fx:id="sendScreenshotButton" maxHeight="32.0" maxWidth="32.0" mnemonicParsing="false" onAction="#sendScreenshotButtonAction" prefHeight="32.0" prefWidth="32.0" />
+                  <Button fx:id="sendScreenshotButton" maxHeight="32.0" maxWidth="32.0" mnemonicParsing="false" onAction="#sendScreenshotButtonAction" prefHeight="32.0" prefWidth="32.0">
+                     <tooltip>
+                        <Tooltip text="Send screenshot" />
+                     </tooltip></Button>
                </children>
             </HBox>
          </children>
@@ -320,16 +395,25 @@
          <children>
             <HBox alignment="TOP_RIGHT" prefHeight="32.0" prefWidth="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Button fx:id="applicationWindowMinimizeButton" maxHeight="20.0" maxWidth="32.0" minHeight="20.0" minWidth="32.0" mnemonicParsing="false" onAction="#applicationWindowMinimizeButtonAction" prefHeight="20.0" prefWidth="32.0" />
+                  <Button fx:id="applicationWindowMinimizeButton" maxHeight="20.0" maxWidth="32.0" minHeight="20.0" minWidth="32.0" mnemonicParsing="false" onAction="#applicationWindowMinimizeButtonAction" prefHeight="20.0" prefWidth="32.0">
+                     <tooltip>
+                        <Tooltip text="Minimize" />
+                     </tooltip></Button>
                   <ToggleButton fx:id="applicationWindowRestoreButton" maxHeight="20.0" maxWidth="32.0" minHeight="20.0" minWidth="32.0" mnemonicParsing="false" onAction="#applicationWindowRestoreButtonAction" prefHeight="20.0" prefWidth="32.0">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
+                     <tooltip>
+                        <Tooltip text="Restore window" />
+                     </tooltip>
                   </ToggleButton>
                   <Button fx:id="applicationWindowCloseButton" layoutX="145.0" layoutY="11.0" maxHeight="20.0" maxWidth="32.0" minHeight="20.0" minWidth="32.0" mnemonicParsing="false" onAction="#applicationWindowCloseButtonAction" prefHeight="20.0" prefWidth="32.0">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
+                     <tooltip>
+                        <Tooltip text="Close" />
+                     </tooltip>
                   </Button>
                </children>
                <padding>
