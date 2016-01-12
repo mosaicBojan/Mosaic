@@ -28,6 +28,8 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -296,6 +298,7 @@ public class FXMLDocumentController implements Initializable {
         System.out.println("numSent: " + numOfScreenshotSent + " -- numReceive: " + numOfScreenshotReceive);
         test.serializeScreenshotNumbers();
         screenshotMessageController.serializeScreenshotMessageList();
+        virtualAlbumsController.serializeAllAlbums();
         app_stage = (Stage) explorerBtn1.getScene().getWindow();
         app_stage.close();
         try {
@@ -388,8 +391,9 @@ public class FXMLDocumentController implements Initializable {
             }
         }
     }
-
     //////////////////////////////////////////////////////////////////////////////
+    
+    
     ////////////////////////  SEND SCREENSHOT MESSAGE  /////////////////////////
     @FXML
     void sendScreenshotButtonAction(ActionEvent event) {
@@ -623,6 +627,7 @@ public class FXMLDocumentController implements Initializable {
         ScreenshotNumberTest test = new ScreenshotNumberTest(numOfScreenshotSent, numOfScreenshotReceive);
         System.out.println("numSent: " + numOfScreenshotSent + " -- numReceive: " + numOfScreenshotReceive);
         test.serializeScreenshotNumbers();
+        virtualAlbumsController.serializeAllAlbums();
         screenshotMessageController.serializeScreenshotMessageList();
         app_stage = (Stage) explorerBtn1.getScene().getWindow();
         app_stage.close();
@@ -1046,31 +1051,11 @@ public class FXMLDocumentController implements Initializable {
                 copyFolder(srcFile, destFile);
             }
         } else {
-            InputStream in = null;
-            OutputStream out = null;
-
             try {
-                in = new FileInputStream(source);
-                out = new FileOutputStream(destination);
-
-                byte[] buffer = new byte[1024];
-
-                int length;
-                while ((length = in.read(buffer)) > 0) {
-                    out.write(buffer, 0, length);
-                }
-            } catch (Exception e) {
-                try {
-                    in.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-
-                try {
-                    out.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                System.out.println("This is image: " + source);
+                copyFile(source, destination);
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
         }
     }
@@ -1082,7 +1067,7 @@ public class FXMLDocumentController implements Initializable {
             input = new FileInputStream(source);
             output = new FileOutputStream(dest);
             byte[] buf = new byte[1024];
-            int bytesRead;
+            int bytesRead = 0;
             while ((bytesRead = input.read(buf)) > 0) {
                 output.write(buf, 0, bytesRead);
             }
@@ -1118,71 +1103,16 @@ public class FXMLDocumentController implements Initializable {
                 }
             }
         }
-        deleteFile(new File(selectedPath));
     }
 
-    public static void moveFolder(File source, File destination) {
-        if (source.isDirectory()) {
-            if (!destination.exists()) {
-                destination.mkdirs();
-            }
-
-            String files[] = source.list();
-
-            for (String file : files) {
-                File srcFile = new File(source, file);
-                File destFile = new File(destination, file);
-
-                moveFolder(srcFile, destFile);
-                //deleteFile(srcFile);
-            }
-        } else {
-            InputStream in = null;
-            OutputStream out = null;
-
-            try {
-                in = new FileInputStream(source);
-                out = new FileOutputStream(destination);
-
-                byte[] buffer = new byte[1024];
-
-                int length;
-                while ((length = in.read(buffer)) > 0) {
-                    out.write(buffer, 0, length);
-                }
-            } catch (Exception e) {
-                try {
-                    in.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-
-                try {
-                    out.close();
-                    //deleteFile(source);
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        }
+    public static void moveFolder(File source, File destination) throws IOException {
+        copyFolder(source, destination);
+        deleteFile(source);
     }
 
     private static void moveFile(File source, File dest) throws IOException {
-        InputStream input = null;
-        OutputStream output = null;
-        try {
-            input = new FileInputStream(source);
-            output = new FileOutputStream(dest);
-            byte[] buf = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = input.read(buf)) > 0) {
-                output.write(buf, 0, bytesRead);
-            }
-        } finally {
-            input.close();
-            output.close();
-            deleteFile(source);
-        }
+        copyFile(source, dest);
+        deleteFile(source);
     }
 
     // for OPEN acion //
@@ -1752,7 +1682,9 @@ public class FXMLDocumentController implements Initializable {
             virtualAlbumsController.setAlbumsMoveButton(albumsMove);
             virtualAlbumsController.setAlbumsFullscreenButton(albumsFullscreen);
             virtualAlbumsController.setAlbumsBackButton(albumsBackButton);
-            System.out.println("First time in...");
+            virtualAlbumsController.deserializeAllAlbums();
+            virtualAlbumsController.addAllAlbumsToAlbumsFlowPane();
+            
             ScreenshotNumberTest test = new ScreenshotNumberTest();
             numOfScreenshotSent = test.getNumOfSent();
             numOfScreenshotReceive = test.getNumOfReceive();

@@ -35,7 +35,7 @@ public class ScreenshotMessageController {
         if (files != null) {
             for (File f : files) {
                 ScreenshotMessage msg = null;
-                System.out.println("***" + f.getPath());
+                //System.out.println("***" + f.getPath());
                 try {
                     ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
                     msg = (ScreenshotMessage) ois.readObject();
@@ -57,7 +57,7 @@ public class ScreenshotMessageController {
             }
         }
         for (ScreenshotMessage msg : screenshotMessageList) {
-            System.out.println("Serialize message: " + msg.getPath());
+            //System.out.println("Serialize message: " + msg.getPath());
             msg.serializeScreenshotMessage();
         }
     }

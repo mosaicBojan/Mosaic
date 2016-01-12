@@ -2,7 +2,9 @@ package virtualalbums;
 
 import java.awt.Desktop;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -181,6 +183,15 @@ public class VirtualAlbumsController {
     }
     ///////////////////////////////////////////////////////////////////////////////
 
+    //////////////////////// ADD ALL ALBUMS TO FLOW PANE  /////////////////////////
+    public void addAllAlbumsToAlbumsFlowPane(){
+        for(VirtualAlbum va: virtualAlbumList){
+            this.addAlbumToAlbumsFlowPane(va);
+        }
+    }
+    //////////////////////////////////////////////////////////////////////////////
+    
+    
     ///////////////   SET IMAGES OF REQUIRED ALBUM TO FLOW PANE   //////////////
     public void setImagesToImagesFlowPane(VirtualAlbum album) {
 
@@ -321,17 +332,6 @@ public class VirtualAlbumsController {
             //ObservableList<Node> list = albumsFlowPane.getChildren();
             albumNameLabel.setText(newName);
             lastClickedButton.setText(newName);
-            //lastClickedButton.setText(newName);
-            //((Parent)lastClickedButton.getParent()).getChildren();
-            //Label selLabel = buttonNameLabelHashMap.get(imageOldName);
-            /*for (String name : buttonNameLabelHashMap.keySet()) {
-                if(name.equals(imageOldName)){
-                    name = newName;
-                    break;
-                }
-            }*/
-            //System.out.println("LABEL: " + selLabel);
-            //selLabel.setText(newName);
         }
     }
     ////////////////////////////////////////////////////////////////////////////
@@ -372,6 +372,39 @@ public class VirtualAlbumsController {
         return album;
     }
     ///////////////////////////////////////////////////////////////////////////
+    
+    
+    /////////////////////  SERIALIZE ALL ALBUMS  /////////////////////////////
+    public void serializeAllAlbums(){
+        System.out.println("ALBUMS SERIALIZATION");
+        for(VirtualAlbum va: virtualAlbumList){
+            System.out.println("---Album: " + va);
+            va.serializeVirtualAlbum();
+        }
+    }
+    //////////////////////////////////////////////////////////////////////////
+    
+    
+    //////////////////////// DESERIALIZE ALL ALBUMS  ///////////////////////////
+    public void deserializeAllAlbums(){
+        File folder = new File("VirtualAlbumsSerialize");
+        File[] files = folder.listFiles();
+        if (files != null) {
+            for (File f : files) {
+                VirtualAlbum album = null;
+                try {
+                    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
+                    album = (VirtualAlbum) ois.readObject();
+                    ois.close();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                virtualAlbumList.add(album);
+            }
+        }
+    }
+    ////////////////////////////////////////////////////////////////////////////
+    
 
     //////////////////    ALL GETERS    //////////////////
     public ArrayList<VirtualAlbum> getVirtualAlbumList() {

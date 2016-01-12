@@ -1,9 +1,13 @@
 package virtualalbums;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class VirtualAlbum {
+public class VirtualAlbum implements Serializable{
     private String name;
     private String description;
     private LocalDate creationTime;
@@ -33,6 +37,29 @@ public class VirtualAlbum {
         return image;
     }
     
+    public void serializeVirtualAlbum() {
+        System.out.println("SERIALIZE VIRTUAL ALBUM");
+        File folder = new File("VirtualAlbumsSerialize");
+        if (folder.exists() == false) {
+            folder.mkdir();
+        }
+        /*else{
+            File[] files = folder.listFiles();
+            for(File ff: files){
+                ff.delete();
+            }
+        }*/
+
+        File album = new File("VirtualAlbumsSerialize" + File.separator + name +  ".ser");
+        try {
+            album.createNewFile();
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(album));
+            oos.writeObject(this);
+            oos.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
     
     public String getName() {
         return name;

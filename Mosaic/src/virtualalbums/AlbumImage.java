@@ -1,8 +1,9 @@
 package virtualalbums;
 
 import java.io.File;
+import java.io.Serializable;
 
-public class AlbumImage {
+public class AlbumImage implements Serializable{
     private String name;
     private File path;
 
