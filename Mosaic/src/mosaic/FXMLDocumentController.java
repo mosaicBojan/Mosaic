@@ -105,8 +105,6 @@ public class FXMLDocumentController implements Initializable {
     private static int numOfInitialize = 1;
     private static String username = null;
 
-    
-    
     @FXML
     private TreeView explorerTreeView;
 
@@ -260,6 +258,24 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private ListView messagesListView;
 
+    @FXML
+    private Button explorerBtn3;
+
+    @FXML
+    private Button explorerBtn4;
+
+    @FXML
+    private Button explorerBtn7;
+
+    @FXML
+    private Button explorerBtn8;
+
+    @FXML
+    private Button explorerBtn5;
+
+    @FXML
+    private Button explorerBtn6;
+    
     public static void setIsLoginEnd() {
         isLoginEnd = true;
     }
@@ -626,10 +642,12 @@ public class FXMLDocumentController implements Initializable {
         boolean isOK = isValidKey(typedKey);
         if (isOK) {
             listener.setStage(app_stage);
+            listener.setValidationScreenWarningLabel(validationScreenWarningLabel);
             out.println("registration#" + typedKey);  //send key to server
+
         } else {
             System.out.println("Bad key");
-            validationScreenWarningLabel.setText("Invalid key.");
+            validationScreenWarningLabel.setText("Invalid activation key.");
         }
     }
 
@@ -647,14 +665,21 @@ public class FXMLDocumentController implements Initializable {
     }
 
     public void setWarningLabelText(String text) {
-        /*Platform.runLater(new Runnable() {
+        Platform.runLater(new Runnable() {
 
             @Override
             public void run() {
-                validationScreenWarningLabel.setText(text);
+                boolean test = true;
+                while (test) {
+                    System.out.println("Label");
+                    if (validationScreenWarningLabel != null) {
+                        validationScreenWarningLabel.setText(text);
+                        test = false;
+                    }
+                }
             }
-        });*/
-        validationScreenWarningLabel.setText(text);
+        });
+        //validationScreenWarningLabel.setText(text);
     }
     ////////////////////////////////////////////////////////////////////////////
 
@@ -678,12 +703,15 @@ public class FXMLDocumentController implements Initializable {
 
     ///////////////////////// LOGIN SCREEN LOGIN BUTTON ////////////////////////
     @FXML
+    private Label loginScreenUsernameLabel;
+
+    @FXML
     private Label usernameLabel;
 
-    public void setUsername(){
-        usernameLabel.setText(username);
+    public void setUsernameLabel() {
+        usernameLabel.setText(myUsername);
     }
-    
+
     @FXML
     void loginScreenLoginButtonAction(ActionEvent event) throws IOException {
         String typedUsername = loginScreenTextField.getText();
@@ -694,27 +722,13 @@ public class FXMLDocumentController implements Initializable {
                 myUsername = typedUsername;
                 listener.setMyUsername(myUsername);
                 listener.setStage(app_stage);
+                listener.setLoginScreenWarningLabel(loginScreenUsernameLabel);
                 out.println("login#" + typedUsername);  //send key to server
                 username = typedUsername;
-                //usernameLabel.setText(typedUsername);
-                /*Platform.runLater(new Runnable() {
 
-                            @Override
-                            public void run() {
-                                System.out.println("Username label: "  + usernameLabel);
-                                boolean test = true;
-                                while(test){
-                                    System.out.println("Username label: "  + usernameLabel);
-                                    if(usernameLabel != null){
-                                    usernameLabel.setText(typedUsername);
-                                    test = false;
-                                    }
-                                }
-                            }
-                        });*/
-                //isLoginEnd = true;
             } else {
                 System.out.println("Name must contains minimum 4 letters or numbers!");
+                loginScreenUsernameLabel.setText("Username must contain atleast 4 alphanumeric characters.");
                 //validationScreenWarningLabel.setText("Key must contains letters and numbers (16 chars)!");
             }
         }
@@ -761,6 +775,10 @@ public class FXMLDocumentController implements Initializable {
             Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLCreateNewFolderForm.fxml"));
             Scene create_folder_scene = new Scene(home_page_parent);
             app_stage = new Stage();
+            app_stage.initModality(Modality.APPLICATION_MODAL);
+            app_stage.setResizable(false);
+            app_stage.setTitle("Create new folder");
+            //app_stage.getIcons().clear();
             app_stage.setScene(create_folder_scene);
             app_stage.initModality(Modality.APPLICATION_MODAL);
             app_stage.initOwner(explorerBtn1.getScene().getWindow());
@@ -781,6 +799,14 @@ public class FXMLDocumentController implements Initializable {
         }
     }
 
+    @FXML
+    private Button cancelButton;
+
+    @FXML
+    void cancelButtonAction(ActionEvent event) throws IOException {
+        ((Stage) (cancelButton.getScene().getWindow())).close();
+    }
+
     private void createNewFolder(String folderName) {
         String path = selectedPath;
         path += File.separator;
@@ -797,14 +823,63 @@ public class FXMLDocumentController implements Initializable {
     }
     ////////////////////////////////////////////////////////////////////////////
 
+    @FXML private Label deleteDialogLabel;
+    
+    private static File fileToDelete;
+    
     // Brisanje fajlova i foldera //
     @FXML
-    void explorerBtn2Action(ActionEvent event) {
+    void explorerBtn2Action(ActionEvent event) throws IOException {
         if (!explorerPathTextField.getText().equals("")) {
-            File file = new File(explorerPathTextField.getText());
-            deleteFile(file);
+            fileToDelete = new File(explorerPathTextField.getText());
+            System.out.println(fileToDelete);
+            Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLDeleteDialog.fxml"));
+            Scene create_folder_scene = new Scene(home_page_parent);
+            app_stage = new Stage();
+            //app_stage.initModality(Modality.APPLICATION_MODAL);
+            app_stage.setResizable(false);
+            app_stage.setTitle("Delete " + explorerPathTextField.getText() + "?");
+            //app_stage.getIcons().clear();
+            app_stage.setScene(create_folder_scene);
+            app_stage.initModality(Modality.APPLICATION_MODAL);
+            app_stage.initOwner(explorerBtn1.getScene().getWindow());
+            app_stage.show();
+            
+            //deleteDialogLabel.setText("Are you sure you want to delete " + explorerPathTextField.getText() + "?");
+            
+            
+           // deleteFile(file);
         }
     }
+    
+    @FXML private Button deleteDialogNoButton;
+    @FXML private Button deleteDialogYesButton;
+    
+    @FXML
+    void deleteDialogYesButtonAction(){
+        deleteFile(fileToDelete);
+        ((Stage)(deleteDialogNoButton.getScene().getWindow())).close();
+    }
+    
+    @FXML private Button renameDialogCancelButton;
+    @FXML
+    void renameDialogCancelButtonAction(){
+        ((Stage)(renameDialogCancelButton.getScene().getWindow())).close();
+    }
+    
+    @FXML
+    void deleteDialogNoButtonAction(){
+        ((Stage)(deleteDialogNoButton.getScene().getWindow())).close();
+    }
+    
+    @FXML private Button dialogAddToAlbumCancelButton;
+    
+    @FXML
+    void dialogAddToAlbumCancelButtonAction(){
+        ((Stage)(dialogAddToAlbumCancelButton.getScene().getWindow())).close();
+    }
+    
+    
 
     public static void deleteFile(File file) {
         if (!file.isDirectory()) {
@@ -845,6 +920,8 @@ public class FXMLDocumentController implements Initializable {
             Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLRenameFileForm.fxml"));
             Scene create_folder_scene = new Scene(home_page_parent);
             app_stage = new Stage();
+            app_stage.setResizable(false);
+            app_stage.setTitle("Rename " + explorerPathTextField.getText());
             app_stage.setScene(create_folder_scene);
             app_stage.initModality(Modality.APPLICATION_MODAL);
             app_stage.initOwner(explorerBtn1.getScene().getWindow());
@@ -872,7 +949,32 @@ public class FXMLDocumentController implements Initializable {
     }
 
     public void renameFile(File oldFile, File newFile) {
-
+        String extension = null;
+        if(oldFile.getName().endsWith(".jpg")){
+            extension = ".jpg";
+        }
+        else if(oldFile.getName().endsWith(".JPG")){
+            extension = ".JPG";
+        }
+        else if(oldFile.getName().endsWith(".png")){
+            extension = ".png";
+        }
+        else if(oldFile.getName().endsWith(".PNG")){
+            extension = ".PNG";
+        }
+        else if(oldFile.getName().endsWith(".bnp")){
+            extension = ".bnp";
+        }
+        else if(oldFile.getName().endsWith(".BNP")){
+            extension = ".BNP";
+        }
+        else if(oldFile.getName().endsWith(".gif")){
+            extension = ".gif";
+        }
+        else if(oldFile.getName().endsWith(".GIF")){
+            extension = ".GIF";
+        }
+        
         try {
             if (newFile.exists()) {
                 throw new java.io.IOException("file exists");
@@ -882,11 +984,23 @@ public class FXMLDocumentController implements Initializable {
         }
 
         // Rename file (or directory)
-        boolean success = oldFile.renameTo(newFile);
-
+        boolean success = false;
+        File newFileWithExtension = null;
+        if(extension != null){
+            String newPath = newFile.getPath();
+            newPath += extension;
+            newFileWithExtension = new File(newPath);
+            System.out.println("Rename: " + newFileWithExtension);
+            success = oldFile.renameTo(newFileWithExtension);
+        } else {
+            success = oldFile.renameTo(newFile);
+            System.out.println("Rename: " + newFile);
+        }
         if (!success) {
             // File was not successfully renamed
             System.out.println("File was not successfully renamed!");
+        } else if (extension != null) {
+            fst.exchangeTwoNodes(oldFile, newFileWithExtension);
         } else {
             fst.exchangeTwoNodes(oldFile, newFile);
         }
@@ -902,15 +1016,17 @@ public class FXMLDocumentController implements Initializable {
             dirChooser.setTitle("Where you want to save file");
             dirChooser.setInitialDirectory(new File(File.separator));
             File choosenFolder = dirChooser.showDialog(app_stage);
-            System.out.println(choosenFolder.getPath());
-            if (new File(selectedPath).isDirectory()) {
-                File srcDir = new File(selectedPath);
-                File destDir = new File(choosenFolder.getPath() + File.separator + srcDir.getName());
-                copyFolder(srcDir, destDir);
-            } else {
-                File srcDir = new File(selectedPath);
-                File destDir = new File(choosenFolder.getPath() + File.separator + srcDir.getName());
-                copyFile(srcDir, destDir);
+            if (choosenFolder != null) {
+                System.out.println(choosenFolder.getPath());
+                if (new File(selectedPath).isDirectory()) {
+                    File srcDir = new File(selectedPath);
+                    File destDir = new File(choosenFolder.getPath() + File.separator + srcDir.getName());
+                    copyFolder(srcDir, destDir);
+                } else {
+                    File srcDir = new File(selectedPath);
+                    File destDir = new File(choosenFolder.getPath() + File.separator + srcDir.getName());
+                    copyFile(srcDir, destDir);
+                }
             }
         }
     }
@@ -1099,6 +1215,8 @@ public class FXMLDocumentController implements Initializable {
             Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLExplorerMoveToAlbum.fxml"));
             Scene create_folder_scene = new Scene(home_page_parent);
             app_stage = new Stage();
+            app_stage.setResizable(false);
+            app_stage.setTitle("Add to album");
             app_stage.setScene(create_folder_scene);
             app_stage.initModality(Modality.APPLICATION_MODAL);
             app_stage.initOwner(explorerBtn1.getScene().getWindow());
@@ -1204,11 +1322,22 @@ public class FXMLDocumentController implements Initializable {
      * **********************************
      */
     ///////////////////////  CREATE NEW VIRTUAL ALBUM  /////////////////////////
+    
+    @FXML private Button dialogNewAlbumCancelButton;
+    
+    @FXML
+    private void dialogNewAlbumCancelButtonAction(ActionEvent event){
+        app_stage = (Stage) dialogNewAlbumCancelButton.getScene().getWindow();
+        app_stage.close();
+    }
+    
     @FXML
     void albumsNewAlbumButtonAction(ActionEvent event) throws IOException {
         Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLNewAlbumForm.fxml"));
         Scene create_folder_scene = new Scene(home_page_parent);
         app_stage = new Stage();
+        app_stage.setResizable(false);
+        app_stage.setTitle("Create new album");
         app_stage.setScene(create_folder_scene);
         app_stage.initModality(Modality.APPLICATION_MODAL);
         app_stage.initOwner(explorerBtn1.getScene().getWindow());
@@ -1250,6 +1379,16 @@ public class FXMLDocumentController implements Initializable {
     /////////////////////////// ALBUM BACK BUTTON /////////////////////////////
     @FXML
     void albumsBackButtonAction(ActionEvent event) {
+        albumsImport.setDisable(false);
+        albumsNewAlbum.setDisable(false);
+        albumsDelete.setDisable(true);
+        albumsRename.setDisable(true);
+        albumsOpen.setDisable(true);
+        albumsCopy.setDisable(true);
+        albumsMove.setDisable(true);
+        albumsFullscreen.setDisable(true);
+        albumsBackButton.setDisable(true);
+        
         albumsNavigationLabel.setText("Albums");
         albumOrImageNameLabel.setText("Album name:");
         albumNameLabel.setText("");
@@ -1262,20 +1401,65 @@ public class FXMLDocumentController implements Initializable {
     ///////////////////////////////////////////////////////////////////////////
 
     ////////////////////////// DELETE ALBUM /////////////////////////////////
+    private static String albumName = null;
+    private static boolean isImage = false;
+    private static String albumN = null;
+    private static String imageN = null;
+    
     @FXML
-    void albumsDeleteAction(ActionEvent event) {
-        String albumName = albumNameLabel.getText();
+    void albumsDeleteAction(ActionEvent event) throws IOException {
+        albumName = albumNameLabel.getText();
         if (albumOrImageNameLabel.getText().equals("Album name:")) {
             // brisanje albuma //
-            virtualAlbumsController.removeVirtualAlbum(albumName);
+            Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLAlbumsDeleteDialog.fxml"));
+            Scene create_folder_scene = new Scene(home_page_parent);
+            app_stage = new Stage();
+            app_stage.setResizable(false);
+            app_stage.setTitle("Delete album");
+            app_stage.setScene(create_folder_scene);
+            app_stage.initModality(Modality.APPLICATION_MODAL);
+            app_stage.initOwner(explorerBtn1.getScene().getWindow());
+            app_stage.showAndWait();
+            
         } else {
             // brisanje slike iz albuma //
-            String albumN = albumsNavigationLabel.getText();
-            String imageN = albumNameLabel.getText();
-            virtualAlbumsController.removeImageFromAlbum(albumN, imageN);
+            isImage = true;
+            albumN = albumsNavigationLabel.getText();
+            imageN = albumNameLabel.getText();
+            Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLAlbumsDeleteDialog.fxml"));
+            Scene create_folder_scene = new Scene(home_page_parent);
+            app_stage = new Stage();
+            app_stage.setResizable(false);
+            app_stage.setTitle("Delete album");
+            app_stage.setScene(create_folder_scene);
+            app_stage.initModality(Modality.APPLICATION_MODAL);
+            app_stage.initOwner(explorerBtn1.getScene().getWindow());
+            app_stage.showAndWait();
+            
         }
 
     }
+    
+    @FXML private Button albumsDeleteDialogNoButton;
+    @FXML private Button albumsDeleteDialogYesButton;
+    
+    @FXML
+    void albumsDeleteDialogYesButtonAction(){
+        if(!isImage){
+            virtualAlbumsController.removeVirtualAlbum(albumName);
+        }
+        else{
+            virtualAlbumsController.removeImageFromAlbum(albumN, imageN);
+            isImage = false;
+        }
+        ((Stage)(albumsDeleteDialogNoButton.getScene().getWindow())).close();
+    }
+    
+    @FXML
+    void albumsDeleteDialogNoButtonAction(){
+        ((Stage)(albumsDeleteDialogNoButton.getScene().getWindow())).close();
+    }
+    
     ////////////////////////////////////////////////////////////////////////////
 
     ////////////////////// OPEN ALBUM OR IMAGE BUTTON  /////////////////////////
@@ -1357,11 +1541,21 @@ public class FXMLDocumentController implements Initializable {
     ////////////////////////////////////////////////////////////////////////////
 
     //////////////////////// ALBUMS IMPORT BUTTON /////////////////////////////
+    
+    @FXML private Button albumsImportPopUpCancelButton;
+    
+    @FXML
+    private void albumsImportPopUpCancelButtonAction(ActionEvent event){
+        ((Stage)(albumsImportPopUpCancelButton.getScene().getWindow())).close();
+    }
+    
     @FXML
     void albumsImportButtonAction(ActionEvent event) throws IOException {
         Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLAlbumsImportPopUpForm.fxml"));
         Scene create_folder_scene = new Scene(home_page_parent);
         app_stage = new Stage();
+        app_stage.setResizable(false);
+        app_stage.setTitle("Create new folder");
         app_stage.setScene(create_folder_scene);
         app_stage.initModality(Modality.APPLICATION_MODAL);
         app_stage.initOwner(explorerBtn1.getScene().getWindow());
@@ -1382,16 +1576,16 @@ public class FXMLDocumentController implements Initializable {
                 new FileChooser.ExtensionFilter("PNG", "*.png"));
         choosenFiles = fileChooser.showOpenMultipleDialog(app_stage);
         if (choosenFiles != null) {
-            albumsImportPopUpChoosenNumLabel.setText("You choosen " + choosenFiles.size() + " images");
+            albumsImportPopUpChoosenNumLabel.setText(choosenFiles.size() + " images to import.");
         } else {
-            albumsImportPopUpChoosenNumLabel.setText("You didnt choose any images");
+            albumsImportPopUpChoosenNumLabel.setText("0 images to import.");
         }
     }
 
     @FXML
     void albumsImportPopUpAddToAlbumButtonAction(ActionEvent event) {
         String nameOfAlbum = (String) albumsImportPopUpChoiseBox.getValue();
-        if (nameOfAlbum != null && !"".equals(nameOfAlbum)) {
+        if (nameOfAlbum != null && !"".equals(nameOfAlbum) && choosenFiles != null) {
             System.out.println("Choosen value: " + nameOfAlbum);
             for (File f : choosenFiles) {
                 AlbumImage image = new AlbumImage(f.getName(), f);
@@ -1510,6 +1704,20 @@ public class FXMLDocumentController implements Initializable {
             });
         });
     }
+    
+    @FXML
+    private Button albumsImport;
+    @FXML
+    private Button albumsNewAlbum;
+
+    @FXML
+    private Button albumsDelete;
+    @FXML private Button albumsRename;
+    @FXML private Button albumsOpen;
+    @FXML private Button albumsCopy;
+    @FXML private Button albumsMove;
+    @FXML private Button albumsFullscreen;
+    @FXML private Button albumsBackButton;
 
     /**
      * *************************** INITIALIZE ******************************
@@ -1523,10 +1731,27 @@ public class FXMLDocumentController implements Initializable {
             System.out.println("FIRST SET");
             Mosaic.setDocController(this);
             isFirstTime = false;
-            fst = new FileSystemTree(explorerTreeView, explorerImgView, explorerPathTextField, explorerImageLabel);
+            fst = new FileSystemTree(explorerTreeView, explorerImgView, explorerPathTextField, explorerImageLabel, explorerBtn1);
             fst.start();
+            fst.setExplorerCreateNewFolderButton(explorerBtn1);
+            fst.setExplorerDeleteButton(explorerBtn2);
+            fst.setExplorerRenameButton(explorerBtn3);
+            fst.setExplorerOpenButton(explorerBtn4);
+            fst.setExplorerCopyButton(explorerBtn5);
+            fst.setExplorerMoveButton(explorerBtn6);
+            fst.setExplorerAddImageToAlbumButton(explorerBtn7);
+            fst.setExplorerFullscreenButton(explorerBtn8);
             virtualAlbumsController = new VirtualAlbumsController(albumsNavigationLabel, albumNameLabel, albumDescriptionLabel,
                     albumOrImageNameLabel, descriptionTempLabel, albumsFlowPane, imagesFlowPane, albumsScrollPane, imagesScrollPane);
+            virtualAlbumsController.setAlbumsImportButton(albumsImport);
+            virtualAlbumsController.setAlbumsCreateAlbumButton(albumsNewAlbum);
+            virtualAlbumsController.setAlbumsDeleteButton(albumsDelete);
+            virtualAlbumsController.setAlbumsRenameButton(albumsRename);
+            virtualAlbumsController.setAlbumsOpenButton(albumsOpen);
+            virtualAlbumsController.setAlbumsCopyButton(albumsCopy);
+            virtualAlbumsController.setAlbumsMoveButton(albumsMove);
+            virtualAlbumsController.setAlbumsFullscreenButton(albumsFullscreen);
+            virtualAlbumsController.setAlbumsBackButton(albumsBackButton);
             System.out.println("First time in...");
             ScreenshotNumberTest test = new ScreenshotNumberTest();
             numOfScreenshotSent = test.getNumOfSent();
@@ -1582,6 +1807,26 @@ public class FXMLDocumentController implements Initializable {
 
             });
             System.out.println("***********************************************************");
+
+            /*Disabling menu buttons*/
+            explorerBtn1.setDisable(true);
+            explorerBtn2.setDisable(true);
+            explorerBtn3.setDisable(true);
+            explorerBtn4.setDisable(true);
+            explorerBtn5.setDisable(true);
+            explorerBtn6.setDisable(true);
+            explorerBtn7.setDisable(true);
+            explorerBtn8.setDisable(true);
+            
+            albumsImport.setDisable(false);
+            albumsNewAlbum.setDisable(false);
+            albumsDelete.setDisable(true);
+            albumsRename.setDisable(true);
+            albumsOpen.setDisable(true);
+            albumsCopy.setDisable(true);
+            albumsMove.setDisable(true);
+            albumsFullscreen.setDisable(true);
+            albumsBackButton.setDisable(true);
 
         }
         if (isFirstTime || isMainFormActive) {

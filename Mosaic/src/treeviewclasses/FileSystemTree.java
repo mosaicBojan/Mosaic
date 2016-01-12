@@ -12,6 +12,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.CacheHint;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
@@ -41,21 +42,63 @@ public class FileSystemTree extends Thread {
     private Label explorerImageLabel;
     private boolean rootAlreadySet = false;
     private int numOfRootDirs = 0;
-    private  double originalImageHeight = 0;
+    private double originalImageHeight = 0;
     private double originalImageWidth = 0;
     private double imageStackPaneWidth = 0;
     private double imageStackPaneHeight = 0;
     private double resizedImageHeight = 0;
     private double resizedImageWidth = 0;
 
+    private Button explorerCreateNewFolderButton;
+    private Button explorerDeleteButton;
+    private Button explorerRenameButton;
+    private Button explorerOpenButton;
+    private Button explorerCopyButton;
+    private Button explorerMoveButton;
+    private Button explorerAddImageToAlbumButton;
+    private Button explorerFullscreenButton;
+
+    public void setExplorerCreateNewFolderButton(Button explorerCreateNewFolderButton) {
+        this.explorerCreateNewFolderButton = explorerCreateNewFolderButton;
+    }
+
+    public void setExplorerDeleteButton(Button explorerDeleteButton) {
+        this.explorerDeleteButton = explorerDeleteButton;
+    }
+
+    public void setExplorerRenameButton(Button explorerRenameButton) {
+        this.explorerRenameButton = explorerRenameButton;
+    }
+
+    public void setExplorerOpenButton(Button explorerOpenButton) {
+        this.explorerOpenButton = explorerOpenButton;
+    }
+
+    public void setExplorerCopyButton(Button explorerCopyButton) {
+        this.explorerCopyButton = explorerCopyButton;
+    }
+
+    public void setExplorerMoveButton(Button explorerMoveButton) {
+        this.explorerMoveButton = explorerMoveButton;
+    }
+
+    public void setExplorerAddImageToAlbumButton(Button explorerAddImageToAlbumButton) {
+        this.explorerAddImageToAlbumButton = explorerAddImageToAlbumButton;
+    }
+
+    public void setExplorerFullscreenButton(Button explorerFullscreenButton) {
+        this.explorerFullscreenButton = explorerFullscreenButton;
+    }
+
     public FileSystemTree() {
     }
 
-    public FileSystemTree(TreeView treeView, ImageView imageView, TextField explorerPathTextField, Label explorerImageLabel) {
+    public FileSystemTree(TreeView treeView, ImageView imageView, TextField explorerPathTextField, Label explorerImageLabel, Button createNewFolderButton) {
         this.treeView = treeView;
         this.imageView = imageView;
         this.explorerPathTextField = explorerPathTextField;
         this.explorerImageLabel = explorerImageLabel;
+        this.explorerCreateNewFolderButton = createNewFolderButton;
     }
 
     public void run() {
@@ -120,18 +163,16 @@ public class FileSystemTree extends Thread {
                             ImageView iv = new ImageView();
                             iv.setImage(myCompImage);
                             this.setGraphic(iv);
+                        } else if (this.getTreeItem().isExpanded() == false) {
+                            Image myCompImage = new Image("icons/explorerTreeViewIcons/treeFolderClosed.png");
+                            ImageView iv = new ImageView();
+                            iv.setImage(myCompImage);
+                            this.setGraphic(iv);
                         } else {
-                            if (this.getTreeItem().isExpanded() == false) {
-                                Image myCompImage = new Image("icons/explorerTreeViewIcons/treeFolderClosed.png");
-                                ImageView iv = new ImageView();
-                                iv.setImage(myCompImage);
-                                this.setGraphic(iv);
-                            } else {
-                                Image myCompImage = new Image("icons/explorerTreeViewIcons/treeFolderOpen.png");
-                                ImageView iv = new ImageView();
-                                iv.setImage(myCompImage);
-                                this.setGraphic(iv);
-                            }
+                            Image myCompImage = new Image("icons/explorerTreeViewIcons/treeFolderOpen.png");
+                            ImageView iv = new ImageView();
+                            iv.setImage(myCompImage);
+                            this.setGraphic(iv);
                         }
                     }
 
@@ -156,145 +197,167 @@ public class FileSystemTree extends Thread {
                             checkIsDirAndAddTempNode();                     //pozivanje metode koja dodaje temp root
                         }
                         rootNodes = nodes;                                  //Zamjena nodova u rootNodes listi
-                    } else {                                                //else predstavlja da nije selektovan rootNode
-                        //  U slucaju da se kllikne na bilo koji drugi fajl   //
-                        if (selectedItem.getPathWithoutHost().toLowerCase().endsWith(".jpg") || selectedItem.getPathWithoutHost().toLowerCase().endsWith(".png")) {
-                            //Ovdje se definise koje akcije ce se izvrsiti ako je selektovani fajl slika
-                            imageView.setVisible(true);
-                            
-                            imageView.setCache(true);
-                            imageView.setCacheHint(CacheHint.SPEED);
-                            
-                            //imageView.setFitHeight(0);
-                            //imageView.setFitHeight(0);
-                            
-                            explorerImageLabel.setVisible(false);
-                            Image image = new Image(new File(selectedItem.getPathWithoutHost()).toURI().toString());
-                            if ( image.getHeight() > 1600 || image.getWidth() > 1600 ){
-                                image = new Image(new File(selectedItem.getPathWithoutHost()).toURI().toString(), 1600, 1600, true, true);
+
+                        /* Disabling buttons */
+                        explorerCreateNewFolderButton.setDisable(true);
+                        explorerDeleteButton.setDisable(true);
+                        explorerRenameButton.setDisable(true);
+                        explorerOpenButton.setDisable(true);
+                        explorerCopyButton.setDisable(true);
+                        explorerMoveButton.setDisable(true);
+                        explorerAddImageToAlbumButton.setDisable(true);
+                        explorerFullscreenButton.setDisable(true);
+
+                    } else //else predstavlja da nije selektovan rootNode
+                    //  U slucaju da se kllikne na bilo koji drugi fajl   //
+                    if (selectedItem.getPathWithoutHost().toLowerCase().endsWith(".jpg") || selectedItem.getPathWithoutHost().toLowerCase().endsWith(".png")) {
+                        //Ovdje se definise koje akcije ce se izvrsiti ako je selektovani fajl slika
+
+                        /* Disabling buttons */
+                        explorerCreateNewFolderButton.setDisable(true);
+                        explorerDeleteButton.setDisable(false);
+                        explorerRenameButton.setDisable(false);
+                        explorerOpenButton.setDisable(false);
+                        explorerCopyButton.setDisable(false);
+                        explorerMoveButton.setDisable(false);
+                        explorerAddImageToAlbumButton.setDisable(false);
+                        explorerFullscreenButton.setDisable(false);
+
+                        imageView.setVisible(true);
+
+                        imageView.setCache(true);
+                        imageView.setCacheHint(CacheHint.SPEED);
+
+                        //imageView.setFitHeight(0);
+                        //imageView.setFitHeight(0);
+                        explorerImageLabel.setVisible(false);
+                        Image image = new Image(new File(selectedItem.getPathWithoutHost()).toURI().toString());
+                        if (image.getHeight() > 1600 || image.getWidth() > 1600) {
+                            image = new Image(new File(selectedItem.getPathWithoutHost()).toURI().toString(), 1600, 1600, true, true);
+                        }
+                        originalImageHeight = image.getHeight();
+                        originalImageWidth = image.getWidth();
+
+                        imageStackPaneWidth = ((StackPane) (imageView.getParent())).getWidth();
+                        imageStackPaneHeight = ((StackPane) (imageView.getParent())).getHeight();
+
+                        //((StackPane)(imageView.getParent())).setStyle("-fx-background-color: red;");
+                        if (originalImageWidth / imageStackPaneWidth > originalImageHeight / imageStackPaneHeight) {
+                            if (image.getWidth() < imageStackPaneWidth) {
+                                //System.out.println("FIT PO SIRINI SLIKE: " + image.getWidth());
+                                imageView.setFitWidth(image.getWidth());
+                            } else {
+                                //System.out.println("FIT PO SIRINI PANELA: " + imageStackPaneWidth);
+                                imageView.setFitWidth(imageStackPaneWidth);
                             }
-                            originalImageHeight = image.getHeight();
-                            originalImageWidth = image.getWidth();
-                            
-                            
-                            
-                            imageStackPaneWidth = ((StackPane)(imageView.getParent())).getWidth();
-                            imageStackPaneHeight = ((StackPane)(imageView.getParent())).getHeight();
-                            
-                            //((StackPane)(imageView.getParent())).setStyle("-fx-background-color: red;");
-                            
-                           
-                            
-                            
-                            if ( originalImageWidth/imageStackPaneWidth > originalImageHeight/imageStackPaneHeight ) {
-                                if (image.getWidth() < imageStackPaneWidth){
-                                    //System.out.println("FIT PO SIRINI SLIKE: " + image.getWidth());
-                                    imageView.setFitWidth(image.getWidth());
-                                }
-                                else {
-                                    //System.out.println("FIT PO SIRINI PANELA: " + imageStackPaneWidth);
-                                    imageView.setFitWidth(imageStackPaneWidth);
-                                }
-                            }
-                            else {
-                                if (image.getHeight() < imageStackPaneHeight){
-                                    //System.out.println("FIT PO DUZINI SLIKE: " + image.getHeight());
-                                    imageView.setFitHeight(image.getHeight());
-                                }
-                                else {
-                                    //System.out.println("FIT PO DUZINI PANELA: " + imageStackPaneHeight);
-                                    imageView.setFitHeight(imageStackPaneHeight);
-                                }
-                            }
-                            imageView.setImage(image);
+                        } else if (image.getHeight() < imageStackPaneHeight) {
+                            //System.out.println("FIT PO DUZINI SLIKE: " + image.getHeight());
+                            imageView.setFitHeight(image.getHeight());
                         } else {
-                            // Ovdje se definise koje akcije ce se izvrsiti ako je selektovan folder //
-                            Image img = imageView.getImage();
-                            if (img != null) {
-                                //ovdje se definisu akcije koje ce skloniti sliku kada se klikne na folder
-                                imageView.setVisible(false);
-                                explorerImageLabel.setVisible(true);
+                            //System.out.println("FIT PO DUZINI PANELA: " + imageStackPaneHeight);
+                            imageView.setFitHeight(imageStackPaneHeight);
+                        }
+                        imageView.setImage(image);
+                    } else {
+                        // Ovdje se definise koje akcije ce se izvrsiti ako je selektovan folder //
+                        
+                        /* Disabling buttons */
+                        explorerCreateNewFolderButton.setDisable(false);
+                        explorerDeleteButton.setDisable(false);
+                        explorerRenameButton.setDisable(false);
+                        explorerOpenButton.setDisable(true);
+                        explorerCopyButton.setDisable(false);
+                        explorerMoveButton.setDisable(false);
+                        explorerAddImageToAlbumButton.setDisable(true);
+                        explorerFullscreenButton.setDisable(true);
+                        
+                        Image img = imageView.getImage();
+                        if (img != null) {
+                            //ovdje se definisu akcije koje ce skloniti sliku kada se klikne na folder
+                            imageView.setVisible(false);
+                            explorerImageLabel.setVisible(true);
+                        }
+                        ListOfFiles lof = new ListOfFiles();
+                        File[] selectedItemFiles = null;    // U ovaj niz ce se upisati svi fajlovi koji budu pronadjeni u sljedecim instrukcijama
+                        selectedItemFiles = new File(selectedItem.getPathWithoutHost() + File.separator).listFiles(new FilenameFilter() {
+                            public boolean accept(File dir, String name) {
+                                return (name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".png")
+                                        || new File(dir.toString() + File.separator + name).isDirectory())
+                                        & !(new File(dir.toString() + File.separator + name).isHidden());
                             }
-                            ListOfFiles lof = new ListOfFiles();
-                            File[] selectedItemFiles = null;    // U ovaj niz ce se upisati svi fajlovi koji budu pronadjeni u sljedecim instrukcijama
-                            selectedItemFiles = new File(selectedItem.getPathWithoutHost() + File.separator).listFiles(new FilenameFilter() {
-                                public boolean accept(File dir, String name) {
-                                    return (name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".png")
-                                            || new File(dir.toString() + File.separator + name).isDirectory())
-                                            & !(new File(dir.toString() + File.separator + name).isHidden());
+                        });
+                        NodeOfTree currentlyTempNode = null;      //U ovaj Node se upisuje tempNode koji se nalazi na selektovanoj putanji
+                        try {
+                            for (NodeOfTree n : alltempNodes) {
+                                if (n.getPathWithoutHost().equals(selectedItem.getPathWithoutHost() + File.separator + "temp_node_speed_up_tree_view")) {
+                                    currentlyTempNode = n;                      //Trenutni temp node se prebacuje u currentlyTempNode
+                                    alltempNodes.remove(currentlyTempNode);     //Uklanjanje tog noda iz allTempNode liste
+                                    break;
                                 }
-                            });
-                            NodeOfTree currentlyTempNode = null;      //U ovaj Node se upisuje tempNode koji se nalazi na selektovanoj putanji
-                            try {
-                                for (NodeOfTree n : alltempNodes) {
-                                    if (n.getPathWithoutHost().equals(selectedItem.getPathWithoutHost() + File.separator + "temp_node_speed_up_tree_view")) {
-                                        currentlyTempNode = n;                      //Trenutni temp node se prebacuje u currentlyTempNode
-                                        alltempNodes.remove(currentlyTempNode);     //Uklanjanje tog noda iz allTempNode liste
-                                        break;
-                                    }
-                                }
-                            } catch (NullPointerException ex) {
-                                System.out.println("Nema temp_node_speed_up_tree_view nodova!");
                             }
+                        } catch (NullPointerException ex) {
+                            System.out.println("Nema temp_node_speed_up_tree_view nodova!");
+                        }
 
-                            if (currentlyTempNode != null) {
-                                selectedItem.getChildren().remove(currentlyTempNode);   //Uklanjanje temp noda iz treeView-a
-                            }
+                        if (currentlyTempNode != null) {
+                            selectedItem.getChildren().remove(currentlyTempNode);   //Uklanjanje temp noda iz treeView-a
+                        }
 
-                            if (selectedItemFiles != null) {    //U ovom bloku koda se obradjuju akcije ako folder ima podfajlova
-                                for (File file : selectedItemFiles) {
-                                    //Ovdje se definise koje akcije ce se izvrsiti ako je selektovan folder koji nije prazan
-                                    lof.getListOfFiles().add(new NodeOfTree(new File(hostName + File.separator + file.getPath() + File.separator)));   //Kreiraj djecu selektovanog node-a
-                                }
-                                ListOfFiles listFromHash = null;    //Potrebno je pronaci odgovarajucu listu iz hash mape
-                                listFromHash = hashNodeListOfFiles.get(selectedItem);   //Lista se upisuje u listFromHash
-                                if (listFromHash != null) {
-                                    //Ovdje se definisu akcije ako je selektovana putanja vec u hash mapi
-                                    selectedItem.getChildren().removeAll(listFromHash.getListOfFiles());    //Obrisi sve nodove iz treeView-a
-                                    selectedItem.getChildren().addAll(lof.getListOfFiles());                //Dodaj nove nodove, koji su gore upisani u lof
-                                    hashNodeListOfFiles.remove(selectedItem);                               //Brisanje starog noda iz hash mape
-                                    hashNodeListOfFiles.put(selectedItem, lof);                             //Postavljanje novog noda u hash mapu
-                                    for (NodeOfTree node : lof.getListOfFiles()) {                                //Ponovo postavi temp nodove ako je folder
-                                        tempRootNode = node;
-                                        checkIsDirAndAddTempNode();
-                                    }
-                                } else {
-                                    //Ovdje se definisu akcije ako selektovana putanja nije u hash mapi
-                                    selectedItem.getChildren().addAll(lof.getListOfFiles());                //Dodavanje novih nodova u treeView
-                                    hashNodeListOfFiles.put(selectedItem, lof);                             //Dodavanje novih nodova u hash map
-                                    for (NodeOfTree node : lof.getListOfFiles()) {                                //Ponovo postavi temp nodove
-                                        tempRootNode = node;                                                //Jedina razlika od gore napisanog koda je sto se ne brise nista
-                                        //System.out.println("Temp: " + tempRootNode);
-                                        checkIsDirAndAddTempNode();
-                                    }
+                        if (selectedItemFiles != null) {    //U ovom bloku koda se obradjuju akcije ako folder ima podfajlova
+                            for (File file : selectedItemFiles) {
+                                //Ovdje se definise koje akcije ce se izvrsiti ako je selektovan folder koji nije prazan
+                                lof.getListOfFiles().add(new NodeOfTree(new File(hostName + File.separator + file.getPath() + File.separator)));   //Kreiraj djecu selektovanog node-a
+                            }
+                            ListOfFiles listFromHash = null;    //Potrebno je pronaci odgovarajucu listu iz hash mape
+                            listFromHash = hashNodeListOfFiles.get(selectedItem);   //Lista se upisuje u listFromHash
+                            if (listFromHash != null) {
+                                //Ovdje se definisu akcije ako je selektovana putanja vec u hash mapi
+                                selectedItem.getChildren().removeAll(listFromHash.getListOfFiles());    //Obrisi sve nodove iz treeView-a
+                                selectedItem.getChildren().addAll(lof.getListOfFiles());                //Dodaj nove nodove, koji su gore upisani u lof
+                                hashNodeListOfFiles.remove(selectedItem);                               //Brisanje starog noda iz hash mape
+                                hashNodeListOfFiles.put(selectedItem, lof);                             //Postavljanje novog noda u hash mapu
+                                for (NodeOfTree node : lof.getListOfFiles()) {                                //Ponovo postavi temp nodove ako je folder
+                                    tempRootNode = node;
+                                    checkIsDirAndAddTempNode();
                                 }
                             } else {
-                                //Napisati sta ako je fajl prazan
-                                System.out.println("Folder je prazan");
+                                //Ovdje se definisu akcije ako selektovana putanja nije u hash mapi
+                                selectedItem.getChildren().addAll(lof.getListOfFiles());                //Dodavanje novih nodova u treeView
+                                hashNodeListOfFiles.put(selectedItem, lof);                             //Dodavanje novih nodova u hash map
+                                for (NodeOfTree node : lof.getListOfFiles()) {                                //Ponovo postavi temp nodove
+                                    tempRootNode = node;                                                //Jedina razlika od gore napisanog koda je sto se ne brise nista
+                                    //System.out.println("Temp: " + tempRootNode);
+                                    checkIsDirAndAddTempNode();
+                                }
                             }
+                        } else {
+                            //Napisati sta ako je fajl prazan
+                            System.out.println("Folder je prazan");
                         }
                     }
-                    
-                    ((AnchorPane)(imageView.getParent().getParent())).widthProperty().addListener(new ChangeListener<Number>() {
-                                @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldStackPaneWidth, Number newStackPaneWidth) {
-                                    imageStackPaneWidth = newStackPaneWidth.doubleValue();
-                                    if ( originalImageWidth >= newStackPaneWidth.doubleValue() & resizedImageHeight <= imageStackPaneHeight) {
-                                        imageView.setFitWidth(newStackPaneWidth.doubleValue() - 40);
-                                        resizedImageWidth = newStackPaneWidth.doubleValue() - 20;
-                                        resizedImageHeight = originalHeight/(originalImageWidth/(newStackPaneWidth.doubleValue() - 20));
-                                    }
-                                }
-                            });
-                    ((AnchorPane)(imageView.getParent().getParent())).heightProperty().addListener(new ChangeListener<Number>() {
-                                @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldStackPaneHeight, Number newStackPaneHeight) {
-                                    imageStackPaneHeight = newStackPaneHeight.doubleValue();
-                                    if ( originalImageHeight >= newStackPaneHeight.doubleValue()  & resizedImageWidth <= imageStackPaneWidth) {
-                                        imageView.setFitHeight(newStackPaneHeight.doubleValue() - 40);
-                                        resizedImageHeight = newStackPaneHeight.doubleValue() - 20;
-                                        resizedImageWidth = originalWidth/(originalImageHeight/(newStackPaneHeight.doubleValue() - 20));
-                                    }
-                                }
-                            });
+
+                    ((AnchorPane) (imageView.getParent().getParent())).widthProperty().addListener(new ChangeListener<Number>() {
+                        @Override
+                        public void changed(ObservableValue<? extends Number> observableValue, Number oldStackPaneWidth, Number newStackPaneWidth) {
+                            imageStackPaneWidth = newStackPaneWidth.doubleValue();
+                            if (originalImageWidth >= newStackPaneWidth.doubleValue() & resizedImageHeight <= imageStackPaneHeight) {
+                                imageView.setFitWidth(newStackPaneWidth.doubleValue() - 40);
+                                resizedImageWidth = newStackPaneWidth.doubleValue() - 20;
+                                resizedImageHeight = originalHeight / (originalImageWidth / (newStackPaneWidth.doubleValue() - 20));
+                            }
+                        }
+                    });
+                    ((AnchorPane) (imageView.getParent().getParent())).heightProperty().addListener(new ChangeListener<Number>() {
+                        @Override
+                        public void changed(ObservableValue<? extends Number> observableValue, Number oldStackPaneHeight, Number newStackPaneHeight) {
+                            imageStackPaneHeight = newStackPaneHeight.doubleValue();
+                            if (originalImageHeight >= newStackPaneHeight.doubleValue() & resizedImageWidth <= imageStackPaneWidth) {
+                                imageView.setFitHeight(newStackPaneHeight.doubleValue() - 40);
+                                resizedImageHeight = newStackPaneHeight.doubleValue() - 20;
+                                resizedImageWidth = originalWidth / (originalImageHeight / (newStackPaneHeight.doubleValue() - 20));
+                            }
+                        }
+                    });
                     if (selectedItem.isExpanded()) {          //Ovaj kod omogucava da se otvaraju tree item-i na klik
                         selectedItem.setExpanded(false);
                     } else {

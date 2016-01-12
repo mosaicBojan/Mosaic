@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="150.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mosaic.FXMLDocumentController">
+   <children>
+      <HBox layoutX="256.0" layoutY="105.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
+         <children>
+            <Button fx:id="albumsDeleteDialogYesButton" layoutX="176.0" layoutY="107.0" mnemonicParsing="false" onAction="#albumsDeleteDialogYesButtonAction" text="Yes" />
+            <Button fx:id="albumsDeleteDialogNoButton" layoutX="257.0" layoutY="91.0" mnemonicParsing="false" onAction="#albumsDeleteDialogNoButtonAction" text="No">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" layoutX="45.0" layoutY="54.0" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="50.0">
+         <children>
+            <ImageView fitHeight="32.0" fitWidth="32.0" layoutX="45.0" layoutY="59.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/warningSign.png" />
+               </image>
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin>
+            </ImageView>
+            <Label fx:id="deleteDialogLabel" layoutX="238.0" layoutY="54.0" text="Are you sure you want to delete selected item?" />
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

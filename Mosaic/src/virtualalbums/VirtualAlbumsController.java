@@ -41,6 +41,54 @@ public class VirtualAlbumsController {
     private ScrollPane imagesScrollPane;
     private HashMap<String, Label> buttonNameLabelHashMap = new HashMap<>();
 
+    private Button albumsImportButton;
+    private Button albumsCreateAlbumButton;
+    private Button albumsDeleteButton;
+    private Button albumsRenameButton;
+    private Button albumsOpenButton;
+    private Button albumsCopyButton;
+    private Button albumsMoveButton;
+    private Button albumsFullscreenButton;
+    private Button albumsBackButton;
+
+    public void setAlbumsBackButton(Button albumsBackButton) {
+        this.albumsBackButton = albumsBackButton;
+    }
+    
+    
+
+    public void setAlbumsImportButton(Button albumsImportButton) {
+        this.albumsImportButton = albumsImportButton;
+    }
+
+    public void setAlbumsCreateAlbumButton(Button albumsCreateAlbumButton) {
+        this.albumsCreateAlbumButton = albumsCreateAlbumButton;
+    }
+
+    public void setAlbumsDeleteButton(Button albumsDeleteButton) {
+        this.albumsDeleteButton = albumsDeleteButton;
+    }
+
+    public void setAlbumsRenameButton(Button albumsRenameButton) {
+        this.albumsRenameButton = albumsRenameButton;
+    }
+
+    public void setAlbumsOpenButton(Button albumsOpenButton) {
+        this.albumsOpenButton = albumsOpenButton;
+    }
+
+    public void setAlbumsCopyButton(Button albumsCopyButton) {
+        this.albumsCopyButton = albumsCopyButton;
+    }
+
+    public void setAlbumsMoveButton(Button albumsMoveButton) {
+        this.albumsMoveButton = albumsMoveButton;
+    }
+
+    public void setAlbumsFullscreenButton(Button albumsFullscreenButton) {
+        this.albumsFullscreenButton = albumsFullscreenButton;
+    }
+
     // KONSTRUKTOR //
     public VirtualAlbumsController(Label albumsNavigationLabel,
             Label albumNameLabel, Label albumDescriptionLabel, Label albumOrImageNameLabel, Label descriptionTempLabel,
@@ -82,6 +130,18 @@ public class VirtualAlbumsController {
                     if (event.getClickCount() == 2) {
                         /////// Double click //////
                         System.out.println("Double clicked");
+                        
+                        /* DISABLING BUTTONS */
+                        albumsImportButton.setDisable(false);
+                        albumsCreateAlbumButton.setDisable(false);
+                        albumsDeleteButton.setDisable(true);
+                        albumsRenameButton.setDisable(true);
+                        albumsOpenButton.setDisable(true);
+                        albumsCopyButton.setDisable(true);
+                        albumsMoveButton.setDisable(true);
+                        albumsFullscreenButton.setDisable(true);
+                        albumsBackButton.setDisable(false);
+                        
                         albumOrImageNameLabel.setText("Image name:");
                         albumNameLabel.setText("");
                         albumDescriptionLabel.setText("");
@@ -93,6 +153,16 @@ public class VirtualAlbumsController {
                         imagesScrollPane.setVisible(true);
                         setImagesToImagesFlowPane(album);
                     } else if (event.getClickCount() == 1) {
+                        /* DISABLING BUTTONS */
+                        albumsImportButton.setDisable(false);
+                        albumsCreateAlbumButton.setDisable(false);
+                        albumsDeleteButton.setDisable(false);
+                        albumsRenameButton.setDisable(false);
+                        albumsOpenButton.setDisable(false);
+                        albumsCopyButton.setDisable(false);
+                        albumsMoveButton.setDisable(false);
+                        albumsFullscreenButton.setDisable(true);
+
                         //////// Single click  ////////
                         // setting single click highlight
                         lastClickedButton = button;
@@ -110,8 +180,7 @@ public class VirtualAlbumsController {
         albumsFlowPane.getChildren().add(button);
     }
     ///////////////////////////////////////////////////////////////////////////////
-    
-    
+
     ///////////////   SET IMAGES OF REQUIRED ALBUM TO FLOW PANE   //////////////
     public void setImagesToImagesFlowPane(VirtualAlbum album) {
 
@@ -135,7 +204,7 @@ public class VirtualAlbumsController {
             vBox.setAlignment(Pos.CENTER);
             vBox.getChildren().add(button);
             vBox.getChildren().add(buttonNameLabel);*/
-            
+
             Image iconImage = new Image(new File(image.getPath().getPath()).toURI().toString(), 72, 72, true, true, true);
             ImageView iv = new ImageView(iconImage);
             //iv.setFitHeight(72);
@@ -157,6 +226,15 @@ public class VirtualAlbumsController {
                             }
 
                         } else if (event.getClickCount() == 1) {
+                             /* DISABLING BUTTONS */
+                            albumsImportButton.setDisable(false);
+                            albumsCreateAlbumButton.setDisable(false);
+                            albumsDeleteButton.setDisable(false);
+                            albumsRenameButton.setDisable(false);
+                            albumsOpenButton.setDisable(false);
+                            albumsCopyButton.setDisable(false);
+                            albumsMoveButton.setDisable(false);
+                            albumsFullscreenButton.setDisable(false);
                             // setting single click highlight
                             lastClickedButton = button;
                             // end highlight
@@ -173,8 +251,7 @@ public class VirtualAlbumsController {
         imagesFlowPane.requestFocus();      //first image selected patch
     }
     ///////////////////////////////////////////////////////////////////////////////
-    
-    
+
     /////////////////////////  REMOVE VIRTUAL ALBUM  //////////////////////////
     public void removeVirtualAlbum(String name) {
         System.out.println("Remove album: " + name);
@@ -186,8 +263,7 @@ public class VirtualAlbumsController {
         }
     }
     ///////////////////////////////////////////////////////////////////////////
-    
-    
+
     /////////////////////////  REMOVE IMAGE FROM ALBUM  /////////////////////////
     public void removeImageFromAlbum(String album, String image) {
         VirtualAlbum virtualAlbum = getAlbumForString(album);
@@ -199,8 +275,7 @@ public class VirtualAlbumsController {
         setImagesToImagesFlowPane(virtualAlbum);
     }
     ////////////////////////////////////////////////////////////////////////////
-    
-    
+
     /////////////////////////  OPEN ALBUM OR IMAGE  ////////////////////////////
     public void openAlbumOrImage(String albumName, String imageName) {
         if (imageName == null) {
@@ -228,8 +303,7 @@ public class VirtualAlbumsController {
         }
     }
     ////////////////////////////////////////////////////////////////////////////
-    
-    
+
     ////////////////////////// RENAME ALBUM OR IMAGE ///////////////////////////
     public void renameAlbumOrImage(String oldName, String imageOldName, String newName) {
         if (imageOldName == null) {
@@ -239,8 +313,7 @@ public class VirtualAlbumsController {
             //ObservableList<Node> list = albumsFlowPane.getChildren();
             albumNameLabel.setText(newName);
             lastClickedButton.setText(newName);
-        }
-        else{
+        } else {
             // rename image //
             VirtualAlbum va = getAlbumForString(oldName);
             AlbumImage im = va.getImageFromAlbumForString(imageOldName);
@@ -262,8 +335,7 @@ public class VirtualAlbumsController {
         }
     }
     ////////////////////////////////////////////////////////////////////////////
-    
-    
+
     ///////////////////////  IS ALBUM NAME VALID  //////////////////////////////
     public boolean isAlbumNameValid(String name) {
         boolean isOK = true;
@@ -276,8 +348,6 @@ public class VirtualAlbumsController {
     }
 
     ////////////////////////////////////////////////////////////////////////////
-    
-    
     ///////////////////  GET LIST OF ALBUMS NAME (STRING)  /////////////////////
     public ObservableList<String> getAllAlbumsName() {
         ObservableList<String> list = FXCollections.observableArrayList();
@@ -289,7 +359,6 @@ public class VirtualAlbumsController {
     }
     ////////////////////////////////////////////////////////////////////////////
 
-    
     /////////////// GET REQUIRED ALBUM FROM VIRTUAL ALBUM LIST /////////
     public VirtualAlbum getAlbumForString(String name) {
         VirtualAlbum album = null;
@@ -303,8 +372,7 @@ public class VirtualAlbumsController {
         return album;
     }
     ///////////////////////////////////////////////////////////////////////////
-    
-    
+
     //////////////////    ALL GETERS    //////////////////
     public ArrayList<VirtualAlbum> getVirtualAlbumList() {
         return virtualAlbumList;

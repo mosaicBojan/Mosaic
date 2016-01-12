@@ -144,6 +144,7 @@ public class Mosaic extends Application {
                 app_stage_2.showAndWait();
                 if (!FXMLDocumentController.getIsLoginQuit()) {
                     stage.show();
+                    docController.setUsernameLabel();
                 } else {
                     stage.close();
                 }
@@ -177,7 +178,7 @@ public class Mosaic extends Application {
             app_stage.showAndWait();
             if (!FXMLDocumentController.getIsLoginQuit()) {
                 stage.show();
-                docController.setUsername();
+                docController.setUsernameLabel();
             } else {
                 stage.close();
             }

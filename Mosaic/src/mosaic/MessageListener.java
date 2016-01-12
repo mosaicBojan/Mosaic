@@ -20,6 +20,7 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -41,6 +42,8 @@ public class MessageListener extends Thread{
     private Socket mySocket;
     private ScreenshotMessage screenshotListViewSelectedItem;
     private ListView list;
+    private Label validationScreenWarningLabel;
+    private Label loginScreenWarningLabel;
     
     public MessageListener(FXMLDocumentController docController, PrintWriter out, BufferedReader in, ObservableList<String> onlineUsers,
             ScreenshotMessageController screenshotMessageController, String myUsername, Socket mySocket, ScreenshotMessage screenshotListViewSelectedItem){
@@ -57,6 +60,14 @@ public class MessageListener extends Thread{
 
     public void setList(ListView list) {
         this.list = list;
+    }
+    
+    public void setValidationScreenWarningLabel(Label validationScreenWarningLabel){
+        this.validationScreenWarningLabel = validationScreenWarningLabel;
+    }
+
+    public void setLoginScreenWarningLabel(Label loginScreenWarningLabel) {
+        this.loginScreenWarningLabel = loginScreenWarningLabel;
     }
     
     
@@ -91,7 +102,7 @@ public class MessageListener extends Thread{
 
                             @Override
                             public void run() {
-                                docController.setWarningLabelText("Invalid key.");
+                                validationScreenWarningLabel.setText("Invalid activation key.");
                             }
                         });
                     }
@@ -110,6 +121,13 @@ public class MessageListener extends Thread{
                     }
                     else{
                         System.out.println("Neuspjesna prijava");
+                        Platform.runLater(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                loginScreenWarningLabel.setText("Username already taken.");
+                            }
+                        });
                     }
                 }
                 else if("screenshot".equals(typeOfMsg.split("#")[0])){
@@ -258,33 +276,6 @@ public class MessageListener extends Thread{
                     System.out.println("********************************************************\n");
                     System.out.println("SCREENSHOT ACCEPTED END!");
                     
-                    
-                    /*Platform.runLater(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            docController.refreshRequestList();
-                        }
-                    });*/
-                    
-                    /*ObservableList<ScreenshotMessage> tempList = FXCollections.observableArrayList();
-                    for(ScreenshotMessage m: screenshotMessageController.getScreenshotMessageList()){
-                        if(m.getIsAccepted() == 0 && m.getIsISentThisMessage() == false){
-                            System.out.println("Message: " + m.getSender() + " - " + m.getReceiver() + " - " + m.getSentTimeString());
-                            tempList.add(m);
-                        }
-                    }*/
-                    /*list.setItems(tempList);
-                    list.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-                        @Override
-                        public void handle(MouseEvent event) {
-                            ListView list = docController.getRequestListView();
-                            screenshotListViewSelectedItem = (ScreenshotMessage) list.getSelectionModel().getSelectedItem();
-                            System.out.println("Selected item: " + screenshotListViewSelectedItem);
-                        }
-
-                    });*/
                     
                 }
                 else if("QUIT".equals(typeOfMsg.split("#")[0])){

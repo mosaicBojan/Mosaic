@@ -1,17 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="200.0" prefWidth="535.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mosaic.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="200.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mosaic.FXMLDocumentController">
    <children>
-      <ChoiceBox fx:id="albumsImportPopUpChoiseBox" layoutX="169.0" layoutY="33.0" prefHeight="25.0" prefWidth="338.0" />
-      <Label layoutX="14.0" layoutY="37.0" text="Choose destination album:" />
-      <Button fx:id="albumsImportPopUpBrowseButton" layoutX="381.0" layoutY="76.0" mnemonicParsing="false" onAction="#albumsImportPopUpBrowseButtonAction" prefHeight="25.0" prefWidth="126.0" text="Browse" />
-      <Button fx:id="albumsImportPopUpAddToAlbumButton" layoutX="381.0" layoutY="142.0" mnemonicParsing="false" onAction="#albumsImportPopUpAddToAlbumButtonAction" prefHeight="25.0" prefWidth="126.0" text="Add to album" />
-      <Label fx:id="albumsImportPopUpChoosenNumLabel" layoutX="169.0" layoutY="80.0" prefHeight="17.0" prefWidth="199.0" textFill="#2f00eb" />
+      <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="33.0" AnchorPane.rightAnchor="40.0">
+         <children>
+            <Label layoutX="14.0" layoutY="37.0" text="Choose destination album:">
+               <HBox.margin>
+                  <Insets right="20.0" />
+               </HBox.margin>
+            </Label>
+            <ChoiceBox fx:id="albumsImportPopUpChoiseBox" layoutX="169.0" layoutY="33.0" prefHeight="25.0" prefWidth="338.0" />
+         </children>
+      </HBox>
+      <VBox alignment="TOP_RIGHT" layoutX="381.0" layoutY="76.0" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="40.0">
+         <children>
+            <Button fx:id="albumsImportPopUpBrowseButton" layoutX="381.0" layoutY="76.0" mnemonicParsing="false" onAction="#albumsImportPopUpBrowseButtonAction" prefHeight="25.0" prefWidth="126.0" text="Browse" AnchorPane.rightAnchor="93.0">
+               <VBox.margin>
+                  <Insets bottom="40.0" />
+               </VBox.margin>
+            </Button>
+            <HBox>
+               <children>
+                  <Button fx:id="albumsImportPopUpAddToAlbumButton" layoutX="381.0" layoutY="142.0" mnemonicParsing="false" onAction="#albumsImportPopUpAddToAlbumButtonAction" prefHeight="25.0" prefWidth="126.0" text="Add to album" />
+                  <Button fx:id="albumsImportPopUpCancelButton" mnemonicParsing="false" onAction="#albumsImportPopUpCancelButtonAction" text="Cancel">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <Label fx:id="albumsImportPopUpChoosenNumLabel" layoutX="220.0" layoutY="90.0" prefHeight="17.0" prefWidth="199.0" AnchorPane.bottomAnchor="95.0" AnchorPane.rightAnchor="180.0" />
    </children>
 </AnchorPane>
