@@ -1459,6 +1459,8 @@ public class FXMLDocumentController implements Initializable {
                 Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLRenameAlbumForm.fxml"));
                 Scene create_folder_scene = new Scene(home_page_parent);
                 app_stage = new Stage();
+                app_stage.setResizable(false);
+                app_stage.setTitle("Rename album");
                 app_stage.setScene(create_folder_scene);
                 app_stage.initModality(Modality.APPLICATION_MODAL);
                 app_stage.initOwner(explorerBtn1.getScene().getWindow());
@@ -1470,6 +1472,8 @@ public class FXMLDocumentController implements Initializable {
             Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLRenameAlbumForm.fxml"));
             Scene create_folder_scene = new Scene(home_page_parent);
             app_stage = new Stage();
+            app_stage.setResizable(false);
+            app_stage.setTitle("Rename album");
             app_stage.setScene(create_folder_scene);
             app_stage.initModality(Modality.APPLICATION_MODAL);
             app_stage.initOwner(explorerBtn1.getScene().getWindow());
@@ -1496,6 +1500,13 @@ public class FXMLDocumentController implements Initializable {
         } else {
             //Potrebno ponovo unijeti naziv albuma //
         }
+    }
+    
+    @FXML Button renameAlbumPopUpCancelButton;
+    
+    @FXML
+    private void renameAlbumPopUpCancelButtonAction(ActionEvent event) {
+        ((Stage)(renameAlbumPopUpCancelButton.getScene().getWindow())).close();
     }
     ////////////////////////////////////////////////////////////////////////////
 
@@ -1630,6 +1641,93 @@ public class FXMLDocumentController implements Initializable {
     void albumsCopyDialogCancelButtonAction(ActionEvent event) {
         ((Stage)(albumsCopyDialogCancelButton.getScene().getWindow())).close();
     }
+    
+    @FXML
+    private void albumsFullscreenAction(ActionEvent event) {
+        String type = albumNameLabel.getText();
+        System.out.println(type);
+        //selectedPath = fst.getSelectedPath();
+        if (type != null && new File(type).isFile()) {
+            final Stage dialog = new Stage();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.initOwner(explorerBtn1.getScene().getWindow());
+            HBox dialogHbox = new HBox(20);
+            dialogHbox.setAlignment(Pos.CENTER);
+            Image image = new Image("file:\\" + type.toString());
+            ImageView iv = new ImageView();
+
+            dialogHbox.getChildren().add(iv);
+
+            Screen screen = Screen.getPrimary();
+            Rectangle2D bounds = screen.getVisualBounds();
+            dialog.setX(bounds.getMinX());
+            dialog.setY(bounds.getMinY());
+            dialog.setWidth(bounds.getWidth());
+            dialog.setHeight(bounds.getHeight());
+
+            if (image.getHeight() > bounds.getHeight() || image.getWidth() > bounds.getWidth()) {
+                image = new Image(("file:\\" + type.toString()), bounds.getWidth(), bounds.getHeight(), true, true);
+            }
+
+            iv.setImage(image);
+
+            if (image.getWidth() / bounds.getWidth() > image.getHeight() / bounds.getHeight()) {
+                if (image.getWidth() < bounds.getWidth()) {
+                    iv.setFitWidth(image.getWidth());
+                } else {
+                    iv.setFitWidth(bounds.getWidth());
+                }
+            } else if (image.getHeight() < bounds.getHeight()) {
+                iv.setFitHeight(image.getHeight());
+            } else {
+                iv.setFitHeight(bounds.getHeight());
+            }
+
+            Scene dialogScene = new Scene(dialogHbox, image.getWidth(), image.getHeight());
+            dialog.setTitle(type);
+            dialog.getIcons().add(new Image("icons/explorerTreeViewIcons/imagePlaceholder.png"));
+            dialog.setResizable(false);
+            dialog.setScene(dialogScene);
+            dialog.show();
+            System.out.println("file:\\" + type.toString());
+            System.out.println("image.getWidth(): " + image.getWidth());
+            System.out.println("image.getHeight(): " + image.getHeight());
+
+        } else {
+            //System.out.println("Please select a file to preview.");
+            final Stage dialog = new Stage();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.initOwner(explorerBtn1.getScene().getWindow());
+            HBox dialogHbox = new HBox(20);
+            dialogHbox.setAlignment(Pos.CENTER);
+            Image image = new Image("icons/warningSign.png");
+            ImageView iv = new ImageView();
+            iv.setImage(image);
+            dialogHbox.getChildren().add(iv);
+            dialogHbox.getChildren().add(new Text("Please select an image to open in fullscreen."));
+            Scene dialogScene = new Scene(dialogHbox, 400, 100);
+            dialog.setTitle("Select an image!");
+            dialog.getIcons().add(image);
+            dialog.setResizable(false);
+            dialog.setScene(dialogScene);
+            dialog.show();
+        }
+        
+        /*Disabling buttons after previewing the image */
+        albumsImport.setDisable(false);
+        albumsNewAlbum.setDisable(false);
+        albumsDelete.setDisable(true);
+        albumsRename.setDisable(true);
+        albumsOpen.setDisable(true);
+        albumsCopy.setDisable(true);
+        albumsMove.setDisable(true);
+        albumsFullscreen.setDisable(true);
+        albumsBackButton.setDisable(false);
+        albumNameLabel.setText("");
+    }
+    
+    
+    
     ////////////////////////////////////////////////////////////////////////////
     
     
@@ -1819,7 +1917,9 @@ public class FXMLDocumentController implements Initializable {
             ObservableList<ScreenshotMessage> tempListAccept = FXCollections.observableArrayList();
             //ObservableList<ScreenshotMessage> tempListDecline = FXCollections.observableArrayList();
             //ObservableList<ScreenshotMessage> tempListWithoutDecision = FXCollections.observableArrayList();
+            //if (screenshotMessageController.getScreenshotMessageList() != null ){
             for (ScreenshotMessage m : screenshotMessageController.getScreenshotMessageList()) {
+                //if (null != m){
                 System.out.println("M: " + m);
                 //if (m.getIsAccepted() == 0) {
                     //System.out.println("accepted");
@@ -1831,7 +1931,8 @@ public class FXMLDocumentController implements Initializable {
                     System.out.println("notsure");
                     tempListDecline.add(m);
                 }*/
-            }
+                //}
+            }//}
             ObservableList<ScreenshotMessage> tempList = FXCollections.observableArrayList();
             tempList.addAll(tempListAccept);
             //tempList.addAll(tempListDecline);

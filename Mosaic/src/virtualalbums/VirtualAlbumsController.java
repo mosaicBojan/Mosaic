@@ -244,7 +244,9 @@ public class VirtualAlbumsController {
             buttonNameLabel.setMaxWidth(100);
             buttonNameLabel.setMaxHeight(50);*/
             button.setPrefWidth(100);
-            button.setPrefHeight(125);
+            button.setPrefHeight(150);
+            button.setWrapText(true);
+            button.setAlignment(Pos.CENTER);
             button.setContentDisplay(ContentDisplay.TOP);
             button.setText(image.getName());
             /*VBox vBox = new VBox();
@@ -297,6 +299,8 @@ public class VirtualAlbumsController {
 
                             albumsImageView.setCache(true);
                             albumsImageView.setCacheHint(CacheHint.SPEED);
+                            
+                            albumNameLabel.setText(image.getPath().getPath());
 
                             Image albumImage = new Image(new File(image.getPath().getPath()).toURI().toString());
                             if (albumImage.getHeight() > 1700 || albumImage.getWidth() > 1700) {
