@@ -189,7 +189,7 @@ public class MessageListener extends Thread{
                     long duzina = Long.parseLong(in.readLine());
                     System.out.println("DUZINA FROM SERVER: " + duzina);
                     int kontrolnaDuzina = 0, flag = 0;
-                    byte[] buffer = new byte[2 * 1024 * 40];
+                    byte[] buffer = new byte[50 * 1024];
                     String fileName = randomGeneratorString() + ".jpg";
                     File folder = new File("ReceivedScreenshotMessages");
                     if(!folder.exists()){

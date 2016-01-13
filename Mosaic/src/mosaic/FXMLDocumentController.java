@@ -61,6 +61,7 @@ import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
+import messages.MessageController;
 import screenshots.ScreenshotMessage;
 import screenshots.ScreenshotMessageController;
 import screenshots.ScreenshotNumberTest;
@@ -106,6 +107,7 @@ public class FXMLDocumentController implements Initializable {
     private static boolean isLoginEnd = false;
     private static int numOfInitialize = 1;
     private static String username = null;
+    private static MessageController messageController;
 
     @FXML
     private TreeView explorerTreeView;
@@ -278,6 +280,8 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Button explorerBtn6;
     
+    @FXML private ImageView albumsImageView;
+    
     public static void setIsLoginEnd() {
         isLoginEnd = true;
     }
@@ -298,7 +302,7 @@ public class FXMLDocumentController implements Initializable {
         System.out.println("numSent: " + numOfScreenshotSent + " -- numReceive: " + numOfScreenshotReceive);
         test.serializeScreenshotNumbers();
         screenshotMessageController.serializeScreenshotMessageList();
-        virtualAlbumsController.serializeAllAlbums();
+        virtualAlbumsController.serializeAllAlbums(); 
         app_stage = (Stage) explorerBtn1.getScene().getWindow();
         app_stage.close();
         try {
@@ -470,7 +474,7 @@ public class FXMLDocumentController implements Initializable {
                 System.out.println("\nSENDING DUZINA TO SERVER...");
                 out.println(duzina);
                 System.out.println("SENT: " + duzina);
-                byte[] buffer = new byte[2 * 1024 * 40];
+                byte[] buffer = new byte[2 * 1024];
                 InputStream fajl = new FileInputStream(screenshotMessage.getPath());
                 int length = 0;
                 OutputStream os = mySocket.getOutputStream();
@@ -511,7 +515,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     void newScreenshotReceivedAction(ActionEvent event) throws IOException {
         isRequestPopUpRun = true;
-
+        messageController.setMessagesListView(messagesListView);
         System.out.println("Received Button Clicked!");
         Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLScreenshotRequestPopUpForm.fxml"));
         Scene create_folder_scene = new Scene(home_page_parent);
@@ -531,6 +535,8 @@ public class FXMLDocumentController implements Initializable {
 
     }
 
+    private ScreenshotMessage tabScreenshotListViewSelectedItem;
+    
     @FXML
     void screenshotRequestAcceptButtonAction(ActionEvent event) {
         System.out.println("\nACEEPT BUTTON CLICKED");
@@ -567,6 +573,27 @@ public class FXMLDocumentController implements Initializable {
             }
 
         });
+        
+        messageController.setTabScreenshotListViewSelectedItem(tabScreenshotListViewSelectedItem);
+        messageController.addMessagesToListView();
+        /*ObservableList<ScreenshotMessage> tempList2 = FXCollections.observableArrayList();
+        for (ScreenshotMessage m : screenshotMessageController.getScreenshotMessageList()) {
+            if (m.getIsAccepted() == 1) {
+                System.out.println("Message: " + m.getSender() + " - " + m.getReceiver() + " - " + m.getSentTimeString());
+                tempList.add(m);
+            }
+        }
+        System.out.println("zzzzzzzzzzzzzzz");
+        messagesListView.setItems(tempList2);
+        messagesListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+            @Override
+            public void handle(MouseEvent event) {
+                tabScreenshotListViewSelectedItem = (ScreenshotMessage) messagesListView.getSelectionModel().getSelectedItem();
+                System.out.println("Selected item: " + tabScreenshotListViewSelectedItem);
+            }
+
+        });*/
     }
 
     @FXML
@@ -1318,6 +1345,7 @@ public class FXMLDocumentController implements Initializable {
         albumsMove.setDisable(true);
         albumsFullscreen.setDisable(true);
         albumsBackButton.setDisable(true);
+        albumsImageView.setVisible(false);
         
         albumsNavigationLabel.setText("Albums");
         albumOrImageNameLabel.setText("Album name:");
@@ -1327,6 +1355,7 @@ public class FXMLDocumentController implements Initializable {
         albumsScrollPane.setVisible(true);
         imagesFlowPane.setVisible(false);
         imagesScrollPane.setVisible(false);
+        albumsFlowPane.requestFocus();
     }
     ///////////////////////////////////////////////////////////////////////////
 
@@ -1530,6 +1559,81 @@ public class FXMLDocumentController implements Initializable {
     }
     ///////////////////////////////////////////////////////////////////////////
 
+    
+    //////////////////////////  COPY VIRTUAL ALBUMS  ///////////////////////////
+    @FXML private Button albumsCopyAction;
+    
+    private static VirtualAlbum albumToCopy = null;
+    
+    @FXML
+    private void albumsCopyAction(ActionEvent event) throws IOException{
+        String type = albumsNavigationLabel.getText();
+        if ("Albums".equals(type)) {
+            ///// Selektovan je album //////
+            String tempAlbum = albumNameLabel.getText();
+            System.out.println("ALBUM: " + tempAlbum);
+            albumToCopy = virtualAlbumsController.getAlbumForString(tempAlbum);
+            System.out.println("ALBUM OBJECT: " + albumToCopy);
+            Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLAlbumsCopyDialog.fxml"));
+            Scene create_folder_scene = new Scene(home_page_parent);
+            app_stage = new Stage();
+            app_stage.setResizable(false);
+            app_stage.setTitle("Copy album");
+            app_stage.setScene(create_folder_scene);
+            app_stage.initModality(Modality.APPLICATION_MODAL);
+            app_stage.initOwner(explorerBtn1.getScene().getWindow());
+            app_stage.showAndWait();
+        } else {
+            ////// Selektovana je slika //////
+            
+        }
+    }
+    
+    @FXML
+    private Button albumsCopyDialogCancelButton;
+
+    @FXML
+    private Button albumsCopyDialogCopyButton;
+
+    @FXML
+    private TextField albumsCopyDialogTextField;
+
+    @FXML
+    void albumsCopyDialogCopyButtonAction(ActionEvent event) {
+        String albumName = albumsCopyDialogTextField.getText();
+        System.out.println("NEW ALBUM NAME: " + albumName);
+
+        if (virtualAlbumsController.getVirtualAlbumList().size() != 0) {
+            boolean isValidName = virtualAlbumsController.isAlbumNameValid(albumName);
+            if (!isValidName) {
+                //Ako ime vec postoji//
+            } else {
+                VirtualAlbum album = new VirtualAlbum(albumToCopy);
+                album.setName(albumName);
+                virtualAlbumsController.addVirtualAlbum(album);
+                virtualAlbumsController.addAlbumToAlbumsFlowPane(album);
+                app_stage = (Stage) albumsCopyDialogCancelButton.getScene().getWindow();
+                app_stage.close();
+            }
+        } else {
+            VirtualAlbum album = new VirtualAlbum(albumToCopy);
+            album.setName(albumName);
+            virtualAlbumsController.addVirtualAlbum(album);
+            virtualAlbumsController.addAlbumToAlbumsFlowPane(album);
+
+            app_stage = (Stage) albumsCopyDialogCancelButton.getScene().getWindow();
+            app_stage.close();
+        }
+    }
+
+    @FXML
+    void albumsCopyDialogCancelButtonAction(ActionEvent event) {
+        ((Stage)(albumsCopyDialogCancelButton.getScene().getWindow())).close();
+    }
+    ////////////////////////////////////////////////////////////////////////////
+    
+    
+    
     /* Explorer image panel hiding controlls */
     @FXML
     private javafx.scene.control.ToggleButton explorerImagePaneToggleButton;
@@ -1648,6 +1752,9 @@ public class FXMLDocumentController implements Initializable {
     @FXML private Button albumsMove;
     @FXML private Button albumsFullscreen;
     @FXML private Button albumsBackButton;
+    
+    @FXML private Label albumsDateCreatedLabel;
+    @FXML private Label albumsDateLabel;
 
     /**
      * *************************** INITIALIZE ******************************
@@ -1672,7 +1779,8 @@ public class FXMLDocumentController implements Initializable {
             fst.setExplorerAddImageToAlbumButton(explorerBtn7);
             fst.setExplorerFullscreenButton(explorerBtn8);
             virtualAlbumsController = new VirtualAlbumsController(albumsNavigationLabel, albumNameLabel, albumDescriptionLabel,
-                    albumOrImageNameLabel, descriptionTempLabel, albumsFlowPane, imagesFlowPane, albumsScrollPane, imagesScrollPane);
+                    albumOrImageNameLabel, descriptionTempLabel, albumsFlowPane, imagesFlowPane, albumsScrollPane, imagesScrollPane, 
+                    albumsDateCreatedLabel, albumsDateLabel, albumsImageView);
             virtualAlbumsController.setAlbumsImportButton(albumsImport);
             virtualAlbumsController.setAlbumsCreateAlbumButton(albumsNewAlbum);
             virtualAlbumsController.setAlbumsDeleteButton(albumsDelete);
@@ -1691,6 +1799,9 @@ public class FXMLDocumentController implements Initializable {
 
             screenshotMessageController = new ScreenshotMessageController();
             screenshotMessageController.deserializeScreenshotMessages();
+            
+            messageController = new MessageController();
+            messageController.setScreenshotMessageController(screenshotMessageController);
             try {
                 InetAddress addr = InetAddress.getByName("127.0.0.1");
                 mySocket = new Socket(addr, 9000);
@@ -1706,25 +1817,25 @@ public class FXMLDocumentController implements Initializable {
 
             System.out.println("***********************************************************");
             ObservableList<ScreenshotMessage> tempListAccept = FXCollections.observableArrayList();
-            ObservableList<ScreenshotMessage> tempListDecline = FXCollections.observableArrayList();
-            ObservableList<ScreenshotMessage> tempListWithoutDecision = FXCollections.observableArrayList();
+            //ObservableList<ScreenshotMessage> tempListDecline = FXCollections.observableArrayList();
+            //ObservableList<ScreenshotMessage> tempListWithoutDecision = FXCollections.observableArrayList();
             for (ScreenshotMessage m : screenshotMessageController.getScreenshotMessageList()) {
                 System.out.println("M: " + m);
-                if (m.getIsAccepted() == 0) {
-                    System.out.println("accepted");
-                    tempListWithoutDecision.add(m);
-                } else if (m.getIsAccepted() == 1) {
+                //if (m.getIsAccepted() == 0) {
+                    //System.out.println("accepted");
+                    //tempListWithoutDecision.add(m);
+                /*} else */if (m.getIsAccepted() == 1) {
                     System.out.println("declined");
                     tempListAccept.add(m);
-                } else if (m.getIsAccepted() == -1) {
+                } /*else if (m.getIsAccepted() == -1) {
                     System.out.println("notsure");
                     tempListDecline.add(m);
-                }
+                }*/
             }
             ObservableList<ScreenshotMessage> tempList = FXCollections.observableArrayList();
             tempList.addAll(tempListAccept);
-            tempList.addAll(tempListDecline);
-            tempList.addAll(tempListWithoutDecision);
+            //tempList.addAll(tempListDecline);
+            //tempList.addAll(tempListWithoutDecision);
             for (ScreenshotMessage ms : tempList) {
                 System.out.println("ms: " + ms);
             }
@@ -1759,6 +1870,15 @@ public class FXMLDocumentController implements Initializable {
             albumsMove.setDisable(true);
             albumsFullscreen.setDisable(true);
             albumsBackButton.setDisable(true);
+            
+            /* removing album labels when you enter the album */
+            albumNameLabel.setVisible(false);
+            albumOrImageNameLabel.setVisible(false);
+            albumDescriptionLabel.setVisible(false);
+            descriptionTempLabel.setVisible(false);
+            albumsDateCreatedLabel.setVisible(false);
+            albumsDateLabel.setVisible(false);
+            
 
         }
         if (isFirstTime || isMainFormActive) {

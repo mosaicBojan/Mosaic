@@ -9,11 +9,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.CacheHint;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
@@ -22,7 +26,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public class VirtualAlbumsController {
@@ -37,12 +43,22 @@ public class VirtualAlbumsController {
     private Label albumDescriptionLabel;
     private Label albumOrImageNameLabel;
     private Label descriptionTempLabel;
+    private Label albumsDateLabel;
+    private Label albumsDateCreatedLabel;
     private FlowPane albumsFlowPane;
     private FlowPane imagesFlowPane;
     private ScrollPane albumsScrollPane;
     private ScrollPane imagesScrollPane;
     private HashMap<String, Label> buttonNameLabelHashMap = new HashMap<>();
-
+    
+    private ImageView albumsImageView;
+    private double originalImageHeight = 0;
+    private double originalImageWidth = 0;
+    private double albumsStackPaneWidth = 0;
+    private double albumsStackPaneHeight = 0;
+    private double resizedImageHeight = 0;
+    private double resizedImageWidth = 0;
+    
     private Button albumsImportButton;
     private Button albumsCreateAlbumButton;
     private Button albumsDeleteButton;
@@ -94,7 +110,8 @@ public class VirtualAlbumsController {
     // KONSTRUKTOR //
     public VirtualAlbumsController(Label albumsNavigationLabel,
             Label albumNameLabel, Label albumDescriptionLabel, Label albumOrImageNameLabel, Label descriptionTempLabel,
-            FlowPane albumsFlowPane, FlowPane imagesFlowPane, ScrollPane albumsScrollPane, ScrollPane imagesScrollPane) {
+            FlowPane albumsFlowPane, FlowPane imagesFlowPane, ScrollPane albumsScrollPane, ScrollPane imagesScrollPane, Label albumsDateCreatedLabel, Label albumsDateLabel,
+            ImageView albumsImageView) {
         virtualAlbumList = new ArrayList<>();
         this.albumsNavigationLabel = albumsNavigationLabel;
         this.albumNameLabel = albumNameLabel;
@@ -107,6 +124,9 @@ public class VirtualAlbumsController {
         this.imagesScrollPane = imagesScrollPane;
         this.imagesScrollPane.setVisible(false);
         this.imagesFlowPane.setVisible(false);
+        this.albumsDateCreatedLabel = albumsDateCreatedLabel;
+        this.albumsDateLabel = albumsDateLabel;
+        this.albumsImageView = albumsImageView;
     }
 
     ///////////////////   ADD VIRTUAL ALBUM    /////////////////////
@@ -144,6 +164,14 @@ public class VirtualAlbumsController {
                         albumsFullscreenButton.setDisable(true);
                         albumsBackButton.setDisable(false);
                         
+                        /* removing album labels when you enter the album */
+                        albumNameLabel.setVisible(false);
+                        albumOrImageNameLabel.setVisible(false);
+                        albumDescriptionLabel.setVisible(false);
+                        descriptionTempLabel.setVisible(false);
+                        albumsDateCreatedLabel.setVisible(false);
+                        albumsDateLabel.setVisible(false);
+                        
                         albumOrImageNameLabel.setText("Image name:");
                         albumNameLabel.setText("");
                         albumDescriptionLabel.setText("");
@@ -164,6 +192,14 @@ public class VirtualAlbumsController {
                         albumsCopyButton.setDisable(false);
                         albumsMoveButton.setDisable(false);
                         albumsFullscreenButton.setDisable(true);
+                        
+                        /* enabling album labels if they were disabled */
+                        albumNameLabel.setVisible(true);
+                        albumOrImageNameLabel.setVisible(true);
+                        albumDescriptionLabel.setVisible(true);
+                        descriptionTempLabel.setVisible(true);
+                        albumsDateCreatedLabel.setVisible(true);
+                        albumsDateLabel.setVisible(true);
 
                         //////// Single click  ////////
                         // setting single click highlight
@@ -246,12 +282,79 @@ public class VirtualAlbumsController {
                             albumsCopyButton.setDisable(false);
                             albumsMoveButton.setDisable(false);
                             albumsFullscreenButton.setDisable(false);
+                            
+                            /* disabling album description labels */
+                            /* enabling album labels if they were disabled */
+                            albumNameLabel.setVisible(false);
+                            albumOrImageNameLabel.setVisible(false);
+                            albumDescriptionLabel.setVisible(false);
+                            descriptionTempLabel.setVisible(false);
+                            albumsDateCreatedLabel.setVisible(false);
+                            albumsDateLabel.setVisible(false);
+                            
+                            /* PREVIEWING SELECTED IMAGE */
+                            albumsImageView.setVisible(true);
+
+                            albumsImageView.setCache(true);
+                            albumsImageView.setCacheHint(CacheHint.SPEED);
+
+                            Image albumImage = new Image(new File(image.getPath().getPath()).toURI().toString());
+                            if (albumImage.getHeight() > 1700 || albumImage.getWidth() > 1700) {
+                                albumImage = new Image(new File(image.getPath().getPath()).toURI().toString(), 1700, 1700, true, true);
+                            }
+                            originalImageHeight = albumImage.getHeight();
+                            originalImageWidth = albumImage.getWidth();
+
+                            albumsStackPaneWidth = ((StackPane) (albumsImageView.getParent())).getWidth();
+                            albumsStackPaneHeight = ((StackPane) (albumsImageView.getParent())).getHeight();
+
+                            //((StackPane)(imageView.getParent())).setStyle("-fx-background-color: red;");
+                            if (originalImageWidth / albumsStackPaneWidth > originalImageHeight / albumsStackPaneHeight) {
+                                if (albumImage.getWidth() < albumsStackPaneWidth) {
+                                    //System.out.println("FIT PO SIRINI SLIKE: " + image.getWidth());
+                                    albumsImageView.setFitWidth(albumImage.getWidth());
+                                } else {
+                                    //System.out.println("FIT PO SIRINI PANELA: " + imageStackPaneWidth);
+                                    albumsImageView.setFitWidth(albumsStackPaneWidth);
+                                }
+                            } else if (albumImage.getHeight() < albumsStackPaneHeight) {
+                                //System.out.println("FIT PO DUZINI SLIKE: " + image.getHeight());
+                                albumsImageView.setFitHeight(albumImage.getHeight());
+                            } else {
+                                //System.out.println("FIT PO DUZINI PANELA: " + imageStackPaneHeight);
+                                albumsImageView.setFitHeight(albumsStackPaneHeight);
+                            }
+                            albumsImageView.setImage(albumImage);
+                            
+                            
                             // setting single click highlight
-                            lastClickedButton = button;
+                            //lastClickedButton = button;
                             // end highlight
-                            albumNameLabel.setText(image.getName());
+                            //albumNameLabel.setText(image.getName());
                         }
                     }
+                    ((AnchorPane) (albumsImageView.getParent().getParent())).widthProperty().addListener(new ChangeListener<Number>() {
+                        @Override
+                        public void changed(ObservableValue<? extends Number> observableValue, Number oldStackPaneWidth, Number newStackPaneWidth) {
+                            albumsStackPaneWidth = newStackPaneWidth.doubleValue();
+                            if (originalImageWidth >= newStackPaneWidth.doubleValue() & resizedImageHeight <= albumsStackPaneHeight) {
+                                albumsImageView.setFitWidth(newStackPaneWidth.doubleValue() - 40);
+                                resizedImageWidth = newStackPaneWidth.doubleValue() - 20;
+                                resizedImageHeight = 0 / (originalImageWidth / (newStackPaneWidth.doubleValue() - 20));
+                            }
+                        }
+                    });
+                    ((AnchorPane) (albumsImageView.getParent().getParent())).heightProperty().addListener(new ChangeListener<Number>() {
+                        @Override
+                        public void changed(ObservableValue<? extends Number> observableValue, Number oldStackPaneHeight, Number newStackPaneHeight) {
+                            albumsStackPaneHeight = newStackPaneHeight.doubleValue();
+                            if (originalImageHeight >= newStackPaneHeight.doubleValue() & resizedImageWidth <= albumsStackPaneWidth) {
+                                albumsImageView.setFitHeight(newStackPaneHeight.doubleValue() - 40);
+                                resizedImageHeight = newStackPaneHeight.doubleValue() - 20;
+                                resizedImageWidth = 0 / (originalImageHeight / (newStackPaneHeight.doubleValue() - 20));
+                            }
+                        }
+                    });
                 }
             });
             imagesFlowPane.setPadding(new Insets(10, 5, 5, 10));
@@ -376,9 +479,15 @@ public class VirtualAlbumsController {
     
     /////////////////////  SERIALIZE ALL ALBUMS  /////////////////////////////
     public void serializeAllAlbums(){
+        File folder = new File("VirtualAlbumsSerialize");
+        if (folder.exists()) {
+            File[] files = folder.listFiles();
+            for (File ff : files) {
+                ff.delete();
+            }
+        }
         System.out.println("ALBUMS SERIALIZATION");
         for(VirtualAlbum va: virtualAlbumList){
-            System.out.println("---Album: " + va);
             va.serializeVirtualAlbum();
         }
     }
@@ -406,6 +515,8 @@ public class VirtualAlbumsController {
     ////////////////////////////////////////////////////////////////////////////
     
 
+  
+    
     //////////////////    ALL GETERS    //////////////////
     public ArrayList<VirtualAlbum> getVirtualAlbumList() {
         return virtualAlbumList;

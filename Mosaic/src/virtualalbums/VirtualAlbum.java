@@ -24,6 +24,14 @@ public class VirtualAlbum implements Serializable{
         this.description = description;
     }
 
+    public VirtualAlbum(VirtualAlbum album){
+        this.name = album.getName();
+        this.description = album.getDescription();
+        this.creationTime = album.getCreationTime();
+        this.images = (ArrayList<AlbumImage>) album.getImages().clone();
+       
+    }
+    
     //////////////  RETURN REQUIRED IMAGE FROM ALBUM  ////////////////
     public AlbumImage getImageFromAlbumForString(String imageName){
         AlbumImage image = null;
@@ -38,17 +46,11 @@ public class VirtualAlbum implements Serializable{
     }
     
     public void serializeVirtualAlbum() {
-        System.out.println("SERIALIZE VIRTUAL ALBUM");
         File folder = new File("VirtualAlbumsSerialize");
         if (folder.exists() == false) {
             folder.mkdir();
         }
-        /*else{
-            File[] files = folder.listFiles();
-            for(File ff: files){
-                ff.delete();
-            }
-        }*/
+        
 
         File album = new File("VirtualAlbumsSerialize" + File.separator + name +  ".ser");
         try {

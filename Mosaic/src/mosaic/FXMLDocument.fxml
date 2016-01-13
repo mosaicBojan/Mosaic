@@ -194,12 +194,33 @@
                                  </children></AnchorPane>
                             <AnchorPane fx:id="albumsSplitPaneRightAnchor" minWidth="300.0" SplitPane.resizableWithParent="false">
                                  <children>
-                                    <ImageView fitHeight="477.0" fitWidth="286.0" layoutX="7.0" pickOnBounds="true" preserveRatio="true" />
-                                    <Label fx:id="albumOrImageNameLabel" layoutX="14.0" layoutY="506.0" text="Album name:" />
-                                    <Label fx:id="descriptionTempLabel" layoutX="14.0" layoutY="534.0" text="Description:" />
-                                    <Separator layoutY="488.0" prefHeight="2.0" prefWidth="294.0" />
-                                    <Label fx:id="albumNameLabel" layoutX="96.0" layoutY="506.0" prefHeight="17.0" prefWidth="191.0" />
-                                    <Label fx:id="albumDescriptionLabel" layoutX="96.0" layoutY="534.0" prefHeight="17.0" prefWidth="184.0" />
+                                    <VBox layoutX="20.0" layoutY="14.0" spacing="5.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                       <children>
+                                          <HBox layoutX="20.0" layoutY="14.0" spacing="10.0" AnchorPane.leftAnchor="20.0">
+                                             <children>
+                                                <Label fx:id="albumOrImageNameLabel" layoutX="20.0" layoutY="14.0" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Album name:" />
+                                                <Label fx:id="albumNameLabel" layoutX="102.0" layoutY="14.0" wrapText="true" />
+                                             </children>
+                                          </HBox>
+                                          <HBox layoutX="27.0" layoutY="50.0" spacing="10.0">
+                                             <children>
+                                                <Label fx:id="descriptionTempLabel" layoutX="27.0" layoutY="50.0" maxWidth="100.0" minWidth="100.0" text="Description:" />
+                                                <Label fx:id="albumDescriptionLabel" layoutX="109.0" layoutY="50.0" wrapText="true" />
+                                             </children>
+                                          </HBox>
+                                          <HBox spacing="10.0">
+                                             <children>
+                                                <Label fx:id="albumsDateCreatedLabel" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Date created:" />
+                                                <Label fx:id="albumsDateLabel" wrapText="true" />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </VBox>
+                                    <StackPane AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                       <children>
+                                          <ImageView fx:id="albumsImageView" pickOnBounds="true" preserveRatio="true" />
+                                       </children>
+                                    </StackPane>
                                  </children></AnchorPane>
                           </items>
                         </SplitPane>
@@ -255,7 +276,7 @@
                                        <tooltip>
                                           <Tooltip text="Open" />
                                        </tooltip></Button>
-                                    <Button fx:id="albumsCopy" layoutX="124.0" layoutY="11.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+                                    <Button fx:id="albumsCopy" layoutX="124.0" layoutY="11.0" mnemonicParsing="false" onAction="#albumsCopyAction" prefHeight="32.0" prefWidth="32.0">
                                        <HBox.margin>
                                           <Insets right="5.0" />
                                        </HBox.margin>
@@ -355,7 +376,7 @@
       </TabPane>
       <AnchorPane maxHeight="55.0" maxWidth="200.0" prefHeight="55.0" prefWidth="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="33.0">
          <children>
-            <HBox alignment="CENTER_RIGHT" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <HBox alignment="CENTER_RIGHT" layoutX="42.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="-6.0" AnchorPane.topAnchor="0.0">
                <padding>
                   <Insets right="10.0" />
                </padding>

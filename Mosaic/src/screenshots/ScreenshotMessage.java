@@ -13,7 +13,7 @@ import java.util.Random;
  *
  * @author Asus
  */
-public class ScreenshotMessage implements Serializable {
+public class ScreenshotMessage implements Serializable, Comparable<ScreenshotMessage> {
 
     private String sender;
     private String receiver;
@@ -136,5 +136,10 @@ public class ScreenshotMessage implements Serializable {
             retStr += rand.nextInt(9);
         }
         return retStr;
+    }
+    
+    @Override
+    public int compareTo(ScreenshotMessage screenshotMessage){
+        return screenshotMessage.getSentTimeString().compareTo(sentTimeString);
     }
 }

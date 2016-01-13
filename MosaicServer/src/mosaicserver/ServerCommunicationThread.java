@@ -159,7 +159,7 @@ public class ServerCommunicationThread extends Thread {
                                 System.out.println("Primljeno: " + duz);
                                 int duzina = Integer.parseInt(duz);
                                 int kontrolnaDuzina = 0, flag = 0;
-                                byte[] buffer = new byte[2 * 1024 * 40];
+                                byte[] buffer = new byte[2 * 1024];
                                 String fileName = randomGeneratorString() + ".jpg";
                                 OutputStream fajl = new FileOutputStream("TransferedScreenshots" + File.separator + fileName);
                                 InputStream is = socket.getInputStream();
@@ -244,15 +244,17 @@ public class ServerCommunicationThread extends Thread {
                         System.out.println("\nSENDING DUZINA TO SECOND CLIENT");
                         out.println(duzina);
                         System.out.println("SENT: " + duzina);
-                        byte[] buffer = new byte[2 * 1024 * 40];
+                        byte[] buffer = new byte[50 * 1024];
                         InputStream fajl = new FileInputStream(picFile);
                         int length = 0;
                         OutputStream os = socket.getOutputStream();
                         System.out.println("\nSENDING IMAGE TO SECOND CLIENT...");
                         System.out.println("*****************************************************");
                         while ((length = fajl.read(buffer)) > 0) {
+                            System.out.println("Length: " + length);
+                            System.out.println("duzina: " + duzina);
                             os.write(buffer, 0, length);
-                            System.out.println("Preostalo jos " + (duzina - length));
+                            System.out.println("Preostalo jos " + (duzina -=  length));
                         }
                         System.out.println("Slanje drugom klijentu zavrseno...");
                         fajl.close();
