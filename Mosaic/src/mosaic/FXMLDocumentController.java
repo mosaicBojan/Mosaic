@@ -474,7 +474,7 @@ public class FXMLDocumentController implements Initializable {
                 System.out.println("\nSENDING DUZINA TO SERVER...");
                 out.println(duzina);
                 System.out.println("SENT: " + duzina);
-                byte[] buffer = new byte[2 * 1024];
+                /*byte[] buffer = new byte[2 * 1024];
                 InputStream fajl = new FileInputStream(screenshotMessage.getPath());
                 int length = 0;
                 OutputStream os = mySocket.getOutputStream();
@@ -483,9 +483,29 @@ public class FXMLDocumentController implements Initializable {
                 while ((length = fajl.read(buffer)) > 0) {
                     os.write(buffer, 0, length);
                     System.out.println("Preostalo jos " + (duzina - length));
+                }*/
+                
+                System.out.println("Opening new socket: ");
+                Socket imageSocket = new Socket("localhost", 6066);
+                
+                byte[] buffer = new byte[2 * 1024];
+                InputStream fajl = new FileInputStream(screenshotMessage.getPath());
+                int length = 0;
+                OutputStream os = imageSocket.getOutputStream();
+                System.out.println("SENDING IMAGE TO SERVER...");
+                System.out.println("**************************************************");
+                while ((length = fajl.read(buffer)) > 0) {
+                    os.write(buffer, 0, length);
+                    System.out.println("Preostalo jos " + (duzina - length));
                 }
-                System.out.println("Slanje zavrseno...");
+                System.out.println("Closing streams and socket.");
+                os.close();
                 fajl.close();
+                imageSocket.close();
+                System.out.println("Closing streams and socket done.");
+                
+                System.out.println("Slanje zavrseno...");
+                //fajl.close();
                 System.out.println("***************************************************");
             }
 
