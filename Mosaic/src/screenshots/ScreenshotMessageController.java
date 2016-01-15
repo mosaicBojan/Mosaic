@@ -28,6 +28,10 @@ public class ScreenshotMessageController {
         }
         System.out.println("********************************************************");
     }
+    
+    public void removeScreenshotMessage(ScreenshotMessage message){
+        screenshotMessageList.remove(message);
+    }
 
     public void deserializeScreenshotMessages() {
         File folder = new File("ScreenshotMessagesSerialization");

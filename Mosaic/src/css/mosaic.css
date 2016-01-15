@@ -887,6 +887,34 @@
 #messagesListView {
     -fx-font-family: Consolas, Lucida Console, Palatino, monospace;
 }
+
+/* open button */
+#messagesOpenButton {
+    -fx-graphic: url('../icons/open.png');
+}
+#messagesOpenButton:hover {
+    -fx-graphic: url('../icons/openHover.png');
+}
+#messagesOpenButton:pressed {
+    -fx-background-color: #f0f0f0;
+}
+#messagesOpenButtonTooltip {
+    -fx-background-color: #2b84c2;
+}
+
+/* delete button */
+#messagesDeleteButton {
+    -fx-graphic: url('../icons/delete.png');
+}
+#messagesDeleteButton:hover {
+    -fx-graphic: url('../icons/deleteHover.png');
+}
+#messagesDeleteButton:pressed {
+    -fx-background-color: #f0f0f0;
+}
+#messagesDeleteButtonTooltip {
+    -fx-background-color: #2b84c2;
+}
 /*
 *
 * END MESSSAGES TAB
@@ -903,54 +931,55 @@
 #validationScreenAnchorPane {
     -fx-border-width: 2;
     -fx-border-color: #a6a6a6;
-    -fx-background-image: url('../icons/validationScreenBackground.png');
+    -fx-background-image: url('../icons/validationBackground.png');
 }
 #validationScreenValidateButton {
-    -fx-background-color: #cccccc;
-    -fx-text-fill: #494949;
+    -fx-background-color: #f2f2f2;
+    -fx-text-fill: #7b7b7b;
     -fx-border-width: 1;
-    -fx-border-color: #7d7d7d;
+    -fx-border-color: #a6a6a6;
 }
 #validationScreenValidateButton:hover {
-    -fx-background-color: #d9d9d9;
+    -fx-background-color: #e6e6e6;
 }
 
 #validationScreenQuitButton {
-    -fx-background-color: #cccccc;
-    -fx-text-fill: #494949;
+    -fx-background-color: #f2f2f2;
+    -fx-text-fill: #7b7b7b;
     -fx-border-width: 1;
-    -fx-border-color: #7d7d7d;
+    -fx-border-color: #a6a6a6;
 }
 #validationScreenQuitButton:hover {
-    -fx-background-color: #d9d9d9;
+    -fx-background-color: #e6e6e6;
 }
 
 #loginScreenAnchorPane {
     -fx-border-width: 2;
     -fx-border-color: #a6a6a6;
-    /*-fx-background-image: url('../icons/loginScreenBackground.png');*/
-    -fx-background-color: #cccccc;
+    -fx-background-image: url('../icons/loginBackground.png');
+    /*-fx-background-color: #cccccc;*/
 }
 
 #loginScreenLoginButton {
-    -fx-background-color: #cccccc;
-    -fx-text-fill: #666666;
+    -fx-background-color: #f2f2f2;
+    -fx-text-fill: #7b7b7b;
     -fx-border-width: 1;
     -fx-border-color: #a6a6a6;
 }
 #loginScreenLoginButton:hover {
-    -fx-background-color: #d9d9d9;
+    -fx-background-color: #e6e6e6;
 }
 
 #loginScreenQuitButton {
-    -fx-background-color: #cccccc;
-    -fx-text-fill: #666666;
+    /*-fx-background-color: #cccccc;*/
+    -fx-text-fill: #7b7b7b;
     /*-fx-border-width: 1;*/
     /*-fx-border-color: #a6a6a6;*/
 }
 #loginScreenQuitButton:hover {
     -fx-cursor: hand;
-    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    /*-fx-text-fill: white;*/
     /*-fx-background-color: #d9d9d9;*/
 }
 .label {
@@ -958,26 +987,26 @@
 }
 
 #validationScreenWarningLabel {
-    -fx-text-fill: #494949;
-    -fx-font-size: 16px;
+    -fx-text-fill: #7b7b7b;
+    -fx-font-size: 18px;
 }
 
 #validationWelcomeLabel {
-    -fx-text-fill: #494949;
+    -fx-text-fill: #7b7b7b;
     -fx-font-size: 30px;
 }
 
 #validationKeyLabel {
-    -fx-text-fill: #494949;
-    -fx-font-size: 16px;
+    -fx-text-fill: #7b7b7b;
+    -fx-font-size: 18px;
 }
 
 #loginScreenUsernameLabel {
-    -fx-text-fill: #494949;
-    -fx-font-size: 16px;
+    -fx-text-fill: #7b7b7b;
+    -fx-font-size: 18px;
 }
 
 #loginScreenHelloLabel {
-    -fx-text-fill: #494949;
-    -fx-font-size: 20px;
+    -fx-text-fill: #7b7b7b;
+    -fx-font-size: 24px;
 }

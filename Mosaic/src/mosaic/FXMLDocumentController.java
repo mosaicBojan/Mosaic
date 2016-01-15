@@ -1871,6 +1871,27 @@ public class FXMLDocumentController implements Initializable {
         });
     }
     
+    /****************************************************************
+     *  MESSAGES TAB
+    *****************************************************************/
+    
+    @FXML private Button messagesOpenButton;
+    
+    @FXML
+    private void messagesOpenButtonAction(ActionEvent event) throws IOException{
+        if ( null != screenshotListViewSelectedItem ){
+            Desktop.getDesktop().open(screenshotListViewSelectedItem.getPath());
+        }
+    }
+    
+    @FXML private Button messagesDeleteButton;
+    
+    @FXML private void messagesDeleteButtonAction(ActionEvent event) throws IOException {
+        screenshotMessageController.removeScreenshotMessage((ScreenshotMessage) messagesListView.getSelectionModel().getSelectedItem());        
+    }
+    
+    
+    
     @FXML
     private Button albumsImport;
     @FXML

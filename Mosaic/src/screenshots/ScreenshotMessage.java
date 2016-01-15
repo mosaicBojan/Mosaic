@@ -130,7 +130,7 @@ public class ScreenshotMessage implements Serializable, Comparable<ScreenshotMes
 
     @Override
     public String toString(){
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");    
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm:ss");    
         return String.format("%-30s%-30s%s", ("from: " + sender), ("to: " + receiver), (sdf.format(new Date(Long.parseLong(sentTimeString)))));
     }
     
