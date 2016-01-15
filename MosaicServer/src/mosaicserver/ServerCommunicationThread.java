@@ -277,7 +277,7 @@ public class ServerCommunicationThread extends Thread {
                         System.out.println("\nSENDING DUZINA TO SECOND CLIENT");
                         out.println(duzina);
                         System.out.println("SENT: " + duzina);
-                        byte[] buffer = new byte[50 * 1024];
+                        /*byte[] buffer = new byte[50 * 1024];
                         InputStream fajl = new FileInputStream(picFile);
                         int length = 0;
                         OutputStream os = socket.getOutputStream();
@@ -288,9 +288,31 @@ public class ServerCommunicationThread extends Thread {
                             System.out.println("duzina: " + duzina);
                             os.write(buffer, 0, length);
                             System.out.println("Preostalo jos " + (duzina -=  length));
+                        }*/
+                        
+                        System.out.println("Opening new socket: ");
+                        Socket imageSocket = new Socket("localhost", 6066);
+
+                        byte[] buffer = new byte[2 * 1024];
+                        InputStream fajl = new FileInputStream(picFile);
+                        int length = 0;
+                        OutputStream os = imageSocket.getOutputStream();
+                        System.out.println("SENDING IMAGE TO SECOND CLIENT...");
+                        System.out.println("**************************************************");
+                        while ((length = fajl.read(buffer)) > 0) {
+                            System.out.println("Length: " + length);
+                            System.out.println("duzina: " + duzina);
+                            os.write(buffer, 0, length);
+                            System.out.println("Preostalo jos " + (duzina -= length));
                         }
-                        System.out.println("Slanje drugom klijentu zavrseno...");
+                        System.out.println("Closing streams and socket.");
+                        os.close();
                         fajl.close();
+                        imageSocket.close();
+                        System.out.println("Closing streams and socket done.");
+                        
+                        System.out.println("Slanje drugom klijentu zavrseno...");
+                        //fajl.close();
                         System.out.println("*****************************************************");
                         
                         System.out.println("\nKREIRANJE SOURCE USER-a  I OTVARANJE STREAM-a");

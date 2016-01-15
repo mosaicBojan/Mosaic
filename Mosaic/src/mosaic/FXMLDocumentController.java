@@ -496,7 +496,7 @@ public class FXMLDocumentController implements Initializable {
                 System.out.println("**************************************************");
                 while ((length = fajl.read(buffer)) > 0) {
                     os.write(buffer, 0, length);
-                    System.out.println("Preostalo jos " + (duzina - length));
+                    System.out.println("Preostalo jos " + (duzina -= length));
                 }
                 System.out.println("Closing streams and socket.");
                 os.close();
