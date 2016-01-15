@@ -7,6 +7,7 @@ import java.net.UnknownHostException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.HashMap;
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -165,7 +166,7 @@ public class FileSystemTree extends Thread {
                             this.setGraphic(iv);
                         } else if (this.getTreeItem().isExpanded() == false) {
                             Image myCompImage = new Image("icons/explorerTreeViewIcons/treeFolderClosed.png");
-                            ImageView iv = new ImageView();
+                            ImageView iv = new ImageView();                          
                             iv.setImage(myCompImage);
                             this.setGraphic(iv);
                         } else {
@@ -333,6 +334,12 @@ public class FileSystemTree extends Thread {
                         } else {
                             //Napisati sta ako je fajl prazan
                             System.out.println("Folder je prazan");
+                            /*Image myCompImage = new Image("icons/explorerTreeViewIcons/treeFolderOpen.png");
+                            ImageView iv = new ImageView();
+                            iv.setImage(myCompImage);
+                            selectedItem.getGraphic();
+                            selectedItem.setGraphic(iv);*/
+                            //selectedItem.setExpanded(true);
                         }
                     }
 

@@ -396,6 +396,8 @@ public class VirtualAlbumsController {
 
     /////////////////////////  OPEN ALBUM OR IMAGE  ////////////////////////////
     public void openAlbumOrImage(String albumName, String imageName) {
+        System.out.println("albumName: " + albumName);
+        System.out.println("imageName: " + imageName);
         if (imageName == null) {
             // Selektovan je album //
             albumOrImageNameLabel.setText("Image name:");
@@ -414,7 +416,7 @@ public class VirtualAlbumsController {
             VirtualAlbum va = getAlbumForString(albumName);
             AlbumImage image = va.getImageFromAlbumForString(imageName);
             try {
-                Desktop.getDesktop().open(image.getPath());
+                Desktop.getDesktop().open(new File(imageName));
             } catch (IOException ex) {
                 Logger.getLogger(VirtualAlbumsController.class.getName()).log(Level.SEVERE, null, ex);
             }

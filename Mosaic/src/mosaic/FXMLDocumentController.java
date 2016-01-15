@@ -54,6 +54,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
@@ -850,6 +851,7 @@ public class FXMLDocumentController implements Initializable {
             app_stage.initOwner(explorerBtn1.getScene().getWindow());
             app_stage.showAndWait();
         }
+        disableExplorerButtons();
     }
 
     @FXML
@@ -916,6 +918,7 @@ public class FXMLDocumentController implements Initializable {
             
            // deleteFile(file);
         }
+        disableExplorerButtons();
     }
     
     @FXML private Button deleteDialogNoButton;
@@ -993,6 +996,7 @@ public class FXMLDocumentController implements Initializable {
             app_stage.initOwner(explorerBtn1.getScene().getWindow());
             app_stage.showAndWait();
         }
+        disableExplorerButtons();
     }
 
     @FXML
@@ -1012,6 +1016,7 @@ public class FXMLDocumentController implements Initializable {
             System.out.println("New file: " + tempPath);
             renameFile(new File(selectedPath), new File(tempPath));
         }
+        disableExplorerButtons();
     }
 
     public void renameFile(File oldFile, File newFile) {
@@ -1095,6 +1100,7 @@ public class FXMLDocumentController implements Initializable {
                 }
             }
         }
+        disableExplorerButtons();
     }
 
     public static void copyFolder(File source, File destination) {
@@ -1164,6 +1170,7 @@ public class FXMLDocumentController implements Initializable {
                 }
             }
         }
+        disableExplorerButtons();
     }
 
     public static void moveFolder(File source, File destination) throws IOException {
@@ -1193,6 +1200,7 @@ public class FXMLDocumentController implements Initializable {
                 }
             }
         }
+        disableExplorerButtons();
     }
 
     ///////////////////  ADD IMAGE TO ALBUM FROM EXPLORER  //////////////////////
@@ -1213,7 +1221,7 @@ public class FXMLDocumentController implements Initializable {
             app_stage.initOwner(explorerBtn1.getScene().getWindow());
             app_stage.show();
         }
-
+        disableExplorerButtons();
     }
 
     @FXML
@@ -1300,6 +1308,7 @@ public class FXMLDocumentController implements Initializable {
             dialog.setScene(dialogScene);
             dialog.show();
         }
+        disableExplorerButtons();
     }
 
     @FXML
@@ -1333,7 +1342,7 @@ public class FXMLDocumentController implements Initializable {
         app_stage.initModality(Modality.APPLICATION_MODAL);
         app_stage.initOwner(explorerBtn1.getScene().getWindow());
         app_stage.showAndWait();
-
+        disableAlbumsButtons();
     }
 
     @FXML
@@ -1430,7 +1439,7 @@ public class FXMLDocumentController implements Initializable {
             app_stage.showAndWait();
             
         }
-
+        disableAlbumsButtons();
     }
     
     @FXML private Button albumsDeleteDialogNoButton;
@@ -1477,6 +1486,7 @@ public class FXMLDocumentController implements Initializable {
                 //Ako nije selektovana ni jedna slika//
             }
         }
+        disableAlbumsButtons();
     }
     /////////////////////////////////////////////////////////////////////////////
 
@@ -1513,6 +1523,7 @@ public class FXMLDocumentController implements Initializable {
             app_stage.initOwner(explorerBtn1.getScene().getWindow());
             app_stage.show();
         }
+        disableAlbumsButtons();
     }
 
     @FXML
@@ -1564,7 +1575,7 @@ public class FXMLDocumentController implements Initializable {
         app_stage.initModality(Modality.APPLICATION_MODAL);
         app_stage.initOwner(explorerBtn1.getScene().getWindow());
         app_stage.showAndWait();
-
+        disableAlbumsButtons();
     }
 
     @FXML
@@ -1632,6 +1643,7 @@ public class FXMLDocumentController implements Initializable {
             ////// Selektovana je slika //////
             
         }
+        disableAlbumsButtons();
     }
     
     @FXML
@@ -1747,16 +1759,7 @@ public class FXMLDocumentController implements Initializable {
             dialog.show();
         }
         
-        /*Disabling buttons after previewing the image */
-        albumsImport.setDisable(false);
-        albumsNewAlbum.setDisable(false);
-        albumsDelete.setDisable(true);
-        albumsRename.setDisable(true);
-        albumsOpen.setDisable(true);
-        albumsCopy.setDisable(true);
-        albumsMove.setDisable(true);
-        albumsFullscreen.setDisable(true);
-        albumsBackButton.setDisable(false);
+        disableAlbumsButtons();
         albumNameLabel.setText("");
     }
     
@@ -1882,12 +1885,14 @@ public class FXMLDocumentController implements Initializable {
         if ( null != screenshotListViewSelectedItem ){
             Desktop.getDesktop().open(screenshotListViewSelectedItem.getPath());
         }
+        disableMessagesButtons();
     }
     
     @FXML private Button messagesDeleteButton;
     
     @FXML private void messagesDeleteButtonAction(ActionEvent event) throws IOException {
-        screenshotMessageController.removeScreenshotMessage((ScreenshotMessage) messagesListView.getSelectionModel().getSelectedItem());        
+        screenshotMessageController.removeScreenshotMessage((ScreenshotMessage) messagesListView.getSelectionModel().getSelectedItem()); 
+        disableMessagesButtons();
     }
     
     
@@ -1909,6 +1914,57 @@ public class FXMLDocumentController implements Initializable {
     @FXML private Label albumsDateCreatedLabel;
     @FXML private Label albumsDateLabel;
 
+    
+    private void disableExplorerButtons(){
+        /*Disabling menu buttons*/
+        explorerBtn1.setDisable(true);
+        explorerBtn2.setDisable(true);
+        explorerBtn3.setDisable(true);
+        explorerBtn4.setDisable(true);
+        explorerBtn5.setDisable(true);
+        explorerBtn6.setDisable(true);
+        explorerBtn7.setDisable(true);
+        explorerBtn8.setDisable(true);
+        explorerTreeView.requestFocus();
+    }
+    
+    private void disableAlbumsButtons(){
+        albumsImport.setDisable(false);
+        albumsNewAlbum.setDisable(false);
+        albumsDelete.setDisable(true);
+        albumsRename.setDisable(true);
+        albumsOpen.setDisable(true);
+        albumsCopy.setDisable(true);
+        albumsMove.setDisable(true);
+        albumsFullscreen.setDisable(true);
+        //albumsBackButton.setDisable(true);
+        albumsFlowPane.requestFocus();
+    }
+    
+    private void disableMessagesButtons(){
+        messagesOpenButton.setDisable(true);
+        messagesDeleteButton.setDisable(true);
+        messagesListView.requestFocus();
+    }
+    
+    @FXML
+    private void explorerSelectionChanged(){
+        System.out.println("explorerSelectionChanged()");
+        disableExplorerButtons();
+    }
+    
+    @FXML
+    private void albumsSelectionChanged(){
+        System.out.println("albumsSelectionChanged()");
+        disableAlbumsButtons();
+    }
+    
+    @FXML
+    private void messagesSelectionChanged(){
+        System.out.println("messagesSelectionChanged()");
+        disableMessagesButtons();
+    }
+    
     /**
      * *************************** INITIALIZE ******************************
      */
@@ -1995,11 +2051,55 @@ public class FXMLDocumentController implements Initializable {
             for (ScreenshotMessage ms : tempList) {
                 System.out.println("ms: " + ms);
             }
+            /* IMAGEVIEW CLICK EVENTS */
+            messagesImageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+                        if (mouseEvent.getClickCount() == 2) {
+                            try {
+                                messagesOpenButtonAction(new ActionEvent());
+                                disableMessagesButtons();
+                            } catch (IOException ex) {
+                                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    }
+                }
+            });
+            explorerImgView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+                        if (mouseEvent.getClickCount() == 2) {
+                            explorerBtn4Action(new ActionEvent());
+                            disableExplorerButtons();
+                        }
+                    }
+                }
+            });
+            albumsImageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+                        if (mouseEvent.getClickCount() == 2) {
+                            albumsOpenAction(new ActionEvent());
+                            disableAlbumsButtons();
+                            albumsBackButton.setDisable(false);
+                        }
+                    }
+                }
+            });
+            
+            
+            
             messagesListView.setItems(tempList);
             messagesListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
                 @Override
                 public void handle(MouseEvent event) {
+                    messagesOpenButton.setDisable(false);
+                    messagesDeleteButton.setDisable(false);
                     screenshotListViewSelectedItem = (ScreenshotMessage) messagesListView.getSelectionModel().getSelectedItem();
                     System.out.println("Selected item: " + screenshotListViewSelectedItem);
                     messagesImageView.setVisible(true);
