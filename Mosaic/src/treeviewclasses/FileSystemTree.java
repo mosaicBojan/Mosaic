@@ -238,8 +238,8 @@ public class FileSystemTree extends Thread {
                         originalImageHeight = image.getHeight();
                         originalImageWidth = image.getWidth();
 
-                        imageStackPaneWidth = ((StackPane) (imageView.getParent())).getWidth();
-                        imageStackPaneHeight = ((StackPane) (imageView.getParent())).getHeight();
+                        imageStackPaneWidth = ((StackPane) (imageView.getParent())).getWidth() - 20;
+                        imageStackPaneHeight = ((StackPane) (imageView.getParent())).getHeight() - 20;
 
                         //((StackPane)(imageView.getParent())).setStyle("-fx-background-color: red;");
                         if (originalImageWidth / imageStackPaneWidth > originalImageHeight / imageStackPaneHeight) {

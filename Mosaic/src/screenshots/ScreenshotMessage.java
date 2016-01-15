@@ -6,7 +6,10 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Random;
 
 /**
@@ -125,8 +128,10 @@ public class ScreenshotMessage implements Serializable, Comparable<ScreenshotMes
         }
     }
 
+    @Override
     public String toString(){
-        return sender + " --> " + receiver + "  :  " + sentTimeString; 
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");    
+        return String.format("%-30s%-30s%s", ("from: " + sender), ("to: " + receiver), (sdf.format(new Date(Long.parseLong(sentTimeString)))));
     }
     
     public String randomGeneratorString(){

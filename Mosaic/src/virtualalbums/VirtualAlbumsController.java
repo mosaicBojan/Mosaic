@@ -309,8 +309,8 @@ public class VirtualAlbumsController {
                             originalImageHeight = albumImage.getHeight();
                             originalImageWidth = albumImage.getWidth();
 
-                            albumsStackPaneWidth = ((StackPane) (albumsImageView.getParent())).getWidth();
-                            albumsStackPaneHeight = ((StackPane) (albumsImageView.getParent())).getHeight();
+                            albumsStackPaneWidth = ((StackPane) (albumsImageView.getParent())).getWidth() - 20;
+                            albumsStackPaneHeight = ((StackPane) (albumsImageView.getParent())).getHeight() - 20;
 
                             //((StackPane)(imageView.getParent())).setStyle("-fx-background-color: red;");
                             if (originalImageWidth / albumsStackPaneWidth > originalImageHeight / albumsStackPaneHeight) {

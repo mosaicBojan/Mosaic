@@ -884,6 +884,9 @@
     -fx-graphic: url('../icons/imagePanelToggleOff.png');
 }
 
+#messagesListView {
+    -fx-font-family: Consolas, Lucida Console, Palatino, monospace;
+}
 /*
 *
 * END MESSSAGES TAB

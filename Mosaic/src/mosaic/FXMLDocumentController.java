@@ -31,6 +31,8 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -40,6 +42,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.CacheHint;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -52,8 +55,10 @@ import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -108,6 +113,13 @@ public class FXMLDocumentController implements Initializable {
     private static int numOfInitialize = 1;
     private static String username = null;
     private static MessageController messageController;
+    
+    private double messagesOriginalImageHeight = 0;
+    private double messagesOriginalImageWidth = 0;
+    private double messagesImageStackPaneWidth = 0;
+    private double messagesImageStackPaneHeight = 0;
+    private double messagesResizedImageWidth = 0;
+    private double messagesResizedImageHeight = 0;
 
     @FXML
     private TreeView explorerTreeView;
@@ -556,6 +568,8 @@ public class FXMLDocumentController implements Initializable {
     }
 
     private ScreenshotMessage tabScreenshotListViewSelectedItem;
+    @FXML private ImageView messagesImageView;
+    @FXML private Label messagesPreviewLabel;
     
     @FXML
     void screenshotRequestAcceptButtonAction(ActionEvent event) {
@@ -1967,9 +1981,67 @@ public class FXMLDocumentController implements Initializable {
                 public void handle(MouseEvent event) {
                     screenshotListViewSelectedItem = (ScreenshotMessage) messagesListView.getSelectionModel().getSelectedItem();
                     System.out.println("Selected item: " + screenshotListViewSelectedItem);
-                }
+                    messagesImageView.setVisible(true);
 
+                    messagesImageView.setCache(true);
+                    messagesImageView.setCacheHint(CacheHint.SPEED);
+
+                    messagesPreviewLabel.setVisible(false);
+                    Image image = new Image("file:\\" + screenshotListViewSelectedItem.getPath().getAbsoluteFile());
+                    //System.out.println("file:\\" + screenshotListViewSelectedItem.getPath().getAbsoluteFile());
+                    if (image.getHeight() > 1600 || image.getWidth() > 1600) {
+                        image = new Image("file:\\" + screenshotListViewSelectedItem.getPath().getAbsoluteFile(), 1600, 1600, true, true);
+                    }
+                    messagesOriginalImageHeight = image.getHeight();
+                    messagesOriginalImageWidth = image.getWidth();
+
+                    messagesImageStackPaneWidth = ((StackPane) (messagesImageView.getParent())).getWidth() - 20;
+                    messagesImageStackPaneHeight = ((StackPane) (messagesImageView.getParent())).getHeight() - 20;
+
+                    //((StackPane)(imageView.getParent())).setStyle("-fx-background-color: red;");
+                    if (messagesOriginalImageWidth / messagesImageStackPaneWidth > messagesOriginalImageHeight / messagesImageStackPaneHeight) {
+                        if (image.getWidth() < messagesImageStackPaneWidth) {
+                            //System.out.println("FIT PO SIRINI SLIKE: " + image.getWidth());
+                            messagesImageView.setFitWidth(image.getWidth());
+                        } else {
+                            //System.out.println("FIT PO SIRINI PANELA: " + imageStackPaneWidth);
+                            messagesImageView.setFitWidth(messagesImageStackPaneWidth);
+                        }
+                    } else if (image.getHeight() < messagesImageStackPaneHeight) {
+                        //System.out.println("FIT PO DUZINI SLIKE: " + image.getHeight());
+                        messagesImageView.setFitHeight(image.getHeight());
+                    } else {
+                        //System.out.println("FIT PO DUZINI PANELA: " + imageStackPaneHeight);
+                        messagesImageView.setFitHeight(messagesImageStackPaneHeight);
+                    }
+                    messagesImageView.setImage(image);
+                    System.out.println("Setting image to imageView done.");
+                }
             });
+            
+            ((AnchorPane) (messagesImageView.getParent().getParent())).widthProperty().addListener(new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observableValue, Number oldStackPaneWidth, Number newStackPaneWidth) {
+                    messagesImageStackPaneWidth = newStackPaneWidth.doubleValue();
+                    if (messagesOriginalImageWidth >= newStackPaneWidth.doubleValue() & messagesResizedImageHeight <= messagesImageStackPaneHeight) {
+                        messagesImageView.setFitWidth(newStackPaneWidth.doubleValue() - 40);
+                        messagesResizedImageWidth = newStackPaneWidth.doubleValue() - 20;
+                        messagesResizedImageHeight = 0 / (messagesOriginalImageWidth / (newStackPaneWidth.doubleValue() - 20));
+                    }
+                }
+            });
+            ((AnchorPane) (messagesImageView.getParent().getParent())).heightProperty().addListener(new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observableValue, Number oldStackPaneHeight, Number newStackPaneHeight) {
+                    messagesImageStackPaneHeight = newStackPaneHeight.doubleValue();
+                    if (messagesOriginalImageHeight >= newStackPaneHeight.doubleValue() & messagesResizedImageWidth <= messagesImageStackPaneWidth) {
+                        messagesImageView.setFitHeight(newStackPaneHeight.doubleValue() - 40);
+                        messagesResizedImageHeight = newStackPaneHeight.doubleValue() - 20;
+                        messagesResizedImageWidth = 0 / (messagesOriginalImageHeight / (newStackPaneHeight.doubleValue() - 20));
+                    }
+                }
+            });
+            
             System.out.println("***********************************************************");
 
             /*Disabling menu buttons*/
@@ -2035,6 +2107,7 @@ public class FXMLDocumentController implements Initializable {
                         public void handle(MouseEvent event) {
                             screenshotListViewSelectedItem = (ScreenshotMessage) screenshotRequestListView.getSelectionModel().getSelectedItem();
                             System.out.println("Selected item: " + screenshotListViewSelectedItem);
+                            
                         }
 
                     });
