@@ -164,17 +164,19 @@ public class FileSystemTree extends Thread {
                             ImageView iv = new ImageView();
                             iv.setImage(myCompImage);
                             this.setGraphic(iv);
-                        } else if (this.getTreeItem().isExpanded() == false) {
-                            Image myCompImage = new Image("icons/explorerTreeViewIcons/treeFolderClosed.png");
-                            ImageView iv = new ImageView();                          
-                            iv.setImage(myCompImage);
-                            this.setGraphic(iv);
                         } else {
+                            Image myCompImage = new Image("icons/explorerTreeViewIcons/treeFolderClosed.png");
+                            ImageView iv = new ImageView();
+                            iv.imageProperty().bind(Bindings.when(this.getTreeItem().expandedProperty()).then(new Image("icons/explorerTreeViewIcons/treeFolderOpen.png")).otherwise(new Image("icons/explorerTreeViewIcons/treeFolderClosed.png")));
+                            //iv.setImage(myCompImage);
+                            this.setGraphic(iv);
+                        }/* else {
                             Image myCompImage = new Image("icons/explorerTreeViewIcons/treeFolderOpen.png");
                             ImageView iv = new ImageView();
-                            iv.setImage(myCompImage);
+                            iv.imageProperty().bind(Bindings.when(this.getTreeItem().expandedProperty()).then(new Image("icons/explorerTreeViewIcons/treeFolderClosed.png")).otherwise(new Image("icons/explorerTreeViewIcons/treeFolderOpen.png")));
+                            //iv.setImage(myCompImage);
                             this.setGraphic(iv);
-                        }
+                        }*/
                     }
 
                 }
