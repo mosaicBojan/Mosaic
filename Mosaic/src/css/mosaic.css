@@ -633,7 +633,7 @@
     -fx-background-radius: 0;
     -fx-background-insets: 0;
     -fx-border-width: 1px;
-    -fx-border-color: none;
+    -fx-border-color: white;
     -fx-background-color: none;
     -fx-graphic: url('../icons/album.png');
 }
@@ -665,13 +665,15 @@
 }*/
 
 /* albums tab main content images selected styles */
-/*.imageNotSelected {
+.imageNotSelected {
+    -fx-padding: 10 5 5 5;
     -fx-background-radius: 0;
     -fx-background-insets: 0;
     -fx-border-width: 1px;
-    -fx-border-color: none;
-}*/
+    -fx-border-color: white;
+}
 .imageNotSelected:focused {
+    -fx-background-padding: 5 5 5 5;
     -fx-background-radius: 0;
     -fx-background-insets: 0;
     -fx-border-width: 1px;
@@ -687,6 +689,13 @@
 }*/
 
 .imageSelected {
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-border-width: 1px;
+    -fx-border-color: #3399ff;
+    -fx-background-color: #e5f2ff;
+}
+.imageSelected:focused {
     -fx-background-radius: 0;
     -fx-background-insets: 0;
     -fx-border-width: 1px;

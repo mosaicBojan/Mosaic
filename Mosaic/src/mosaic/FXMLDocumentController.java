@@ -2272,6 +2272,7 @@ public class FXMLDocumentController implements Initializable {
                             albumsOpenAction(new ActionEvent());
                             disableAlbumsButtons();
                             albumsBackButton.setDisable(false);
+                            imagesFlowPane.requestFocus();
                         }
                     }
                 }
