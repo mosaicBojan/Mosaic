@@ -7,23 +7,24 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="173.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mosaic.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="180.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mosaic.FXMLDocumentController">
    <children>
-      <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="41.0" AnchorPane.bottomAnchor="90.0" AnchorPane.rightAnchor="40.0">
+      <HBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="41.0" AnchorPane.bottomAnchor="100.0" AnchorPane.rightAnchor="40.0">
          <children>
-            <Label layoutX="14.0" layoutY="45.0" text="Type new album name:">
+            <Label layoutX="14.0" layoutY="45.0" text="Type new name:">
                <HBox.margin>
                   <Insets right="20.0" />
                </HBox.margin>
             </Label>
-            <TextField fx:id="renameAlbumPopUpTextField" layoutX="156.0" layoutY="41.0" prefWidth="250.0" />
+            <TextField fx:id="renameAlbumPopUpTextField" layoutX="156.0" layoutY="41.0" prefHeight="31.0" prefWidth="300.0" />
          </children>
       </HBox>
-      <HBox spacing="10.0" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="40.0">
+      <HBox spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="40.0">
          <children>
             <Button fx:id="renameAlbumPopUpButton" layoutX="322.0" layoutY="87.0" mnemonicParsing="false" onAction="#renameAlbumPopUpButtonAction" prefWidth="100.0" text="Rename" AnchorPane.bottomAnchor="40.0" AnchorPane.rightAnchor="40.0" />
             <Button fx:id="renameAlbumPopUpCancelButton" mnemonicParsing="false" onAction="#renameAlbumPopUpCancelButtonAction" text="Cancel" />
          </children>
       </HBox>
+      <Label fx:id="renameDialogWarningLabel" layoutX="159.0" layoutY="90.0" AnchorPane.bottomAnchor="70.0" AnchorPane.rightAnchor="40.0" />
    </children>
 </AnchorPane>

@@ -32,10 +32,22 @@ public class VirtualAlbum implements Serializable{
        
     }
     
+    public boolean isImageNameValid(String imageName){
+        boolean retVal = true;
+        for(AlbumImage im: images){
+            if(im.getName().equals(imageName)){
+                retVal = false;
+                break;
+            }
+        }
+        return retVal;
+    }
     //////////////  RETURN REQUIRED IMAGE FROM ALBUM  ////////////////
     public AlbumImage getImageFromAlbumForString(String imageName){
+        System.out.println("FIND: " + imageName);
         AlbumImage image = null;
         for(AlbumImage i: images){
+            System.out.println("TEMP: " + i.getName());
             if(i.getName().equals(imageName)){
                 image = i;
                 break;

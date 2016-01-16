@@ -159,7 +159,7 @@ public class FileSystemTree extends Thread {
                             ImageView iv = new ImageView();
                             iv.setImage(myCompImage);
                             this.setGraphic(iv);
-                        } else if (value.endsWith(".jpg") || value.endsWith(".png")) {
+                        } else if (value.endsWith(".jpg") || value.endsWith(".png") || value.endsWith(".JPG") || value.endsWith(".PNG") || value.endsWith(".bmp") || value.endsWith(".BMP") || value.endsWith(".gif") || value.endsWith(".GIF") || value.endsWith(".jpeg") || value.endsWith(".JPEG")) {
                             Image myCompImage = new Image("icons/explorerTreeViewIcons/imagePlaceholder.png");
                             ImageView iv = new ImageView();
                             iv.setImage(myCompImage);
@@ -213,7 +213,11 @@ public class FileSystemTree extends Thread {
 
                     } else //else predstavlja da nije selektovan rootNode
                     //  U slucaju da se kllikne na bilo koji drugi fajl   //
-                    if (selectedItem.getPathWithoutHost().toLowerCase().endsWith(".jpg") || selectedItem.getPathWithoutHost().toLowerCase().endsWith(".png")) {
+                    if (selectedItem.getPathWithoutHost().toLowerCase().endsWith(".jpg")
+                        || selectedItem.getPathWithoutHost().toLowerCase().endsWith(".png")
+                        || selectedItem.getPathWithoutHost().toLowerCase().endsWith(".gif")
+                        || selectedItem.getPathWithoutHost().toLowerCase().endsWith(".bmp")
+                        || selectedItem.getPathWithoutHost().toLowerCase().endsWith(".jpeg")) {
                         //Ovdje se definise koje akcije ce se izvrsiti ako je selektovani fajl slika
 
                         /* Disabling buttons */
@@ -284,7 +288,7 @@ public class FileSystemTree extends Thread {
                         File[] selectedItemFiles = null;    // U ovaj niz ce se upisati svi fajlovi koji budu pronadjeni u sljedecim instrukcijama
                         selectedItemFiles = new File(selectedItem.getPathWithoutHost() + File.separator).listFiles(new FilenameFilter() {
                             public boolean accept(File dir, String name) {
-                                return (name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".png")
+                                return (name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpeg") || name.toLowerCase().endsWith(".bmp") || name.toLowerCase().endsWith(".gif")
                                         || new File(dir.toString() + File.separator + name).isDirectory())
                                         & !(new File(dir.toString() + File.separator + name).isHidden());
                             }

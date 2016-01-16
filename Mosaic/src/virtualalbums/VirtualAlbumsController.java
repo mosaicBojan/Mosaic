@@ -22,6 +22,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -143,6 +144,7 @@ public class VirtualAlbumsController {
         button.wrapTextProperty().setValue(true);
         button.setPrefWidth(150);
         button.setPrefHeight(60);
+        button.setTooltip(new Tooltip(album.getName()));
         button.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 
             @Override
@@ -233,34 +235,20 @@ public class VirtualAlbumsController {
 
         VirtualAlbum va = getAlbumForString(album.getName());
         imagesFlowPane.getChildren().clear();
-        //int numOfImages = va.getImages().size();
-        //int tempCount = 1;
         for (AlbumImage image : va.getImages()) {
-            //Button button = new Button();
             Button button = new Button();
             button.getStyleClass().add("imageNotSelected");
-            /*Label buttonNameLabel = new Label(image.getName());
-            buttonNameLabel.setWrapText(true);
-            buttonNameLabel.setMaxWidth(100);
-            buttonNameLabel.setMaxHeight(50);*/
             button.setPrefWidth(100);
-            button.setPrefHeight(150);
+            button.setPrefHeight(130);
             button.setWrapText(true);
-            button.setAlignment(Pos.CENTER);
+            button.setTooltip(new Tooltip(image.getName()));
+            button.setAlignment(Pos.TOP_CENTER);
             button.setContentDisplay(ContentDisplay.TOP);
             button.setText(image.getName());
-            /*VBox vBox = new VBox();
-            vBox.setAlignment(Pos.CENTER);
-            vBox.getChildren().add(button);
-            vBox.getChildren().add(buttonNameLabel);*/
 
             Image iconImage = new Image(new File(image.getPath().getPath()).toURI().toString(), 72, 72, true, true, true);
             ImageView iv = new ImageView(iconImage);
-            //iv.setFitHeight(72);
-            //iv.setFitWidth(72);
             button.setGraphic(iv);
-            //buttonNameLabelHashMap.put(image.getName(), buttonNameLabel);
-            //button.setGraphic(new ImageView(new Image("icons/move.png")));
             button.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 
                 @Override
@@ -270,6 +258,17 @@ public class VirtualAlbumsController {
                             System.out.println("Double clicked");
                             try {
                                 Desktop.getDesktop().open(image.getPath());
+                                /* DISABLING BUTTONS */
+                                albumsImportButton.setDisable(false);
+                                albumsCreateAlbumButton.setDisable(false);
+                                albumsDeleteButton.setDisable(true);
+                                albumsRenameButton.setDisable(true);
+                                albumsOpenButton.setDisable(true);
+                                albumsCopyButton.setDisable(true);
+                                albumsMoveButton.setDisable(true);
+                                albumsFullscreenButton.setDisable(true);
+                                albumsBackButton.setDisable(false);
+                                imagesFlowPane.requestFocus();
                             } catch (IOException ex) {
                                 ex.printStackTrace();
                             }
@@ -300,7 +299,7 @@ public class VirtualAlbumsController {
                             albumsImageView.setCache(true);
                             albumsImageView.setCacheHint(CacheHint.SPEED);
                             
-                            albumNameLabel.setText(image.getPath().getPath());
+                            albumNameLabel.setText(image.getName());
 
                             Image albumImage = new Image(new File(image.getPath().getPath()).toURI().toString());
                             if (albumImage.getHeight() > 1700 || albumImage.getWidth() > 1700) {
@@ -385,12 +384,20 @@ public class VirtualAlbumsController {
     /////////////////////////  REMOVE IMAGE FROM ALBUM  /////////////////////////
     public void removeImageFromAlbum(String album, String image) {
         VirtualAlbum virtualAlbum = getAlbumForString(album);
+        System.out.println("Before");
+        for(AlbumImage al: virtualAlbum.getImages()){
+            System.out.println("*****" + al.getName());
+        }
         virtualAlbum.deleteImage(image);
         /*for (String name : buttonNameLabelHashMap.keySet()) {
             buttonNameLabelHashMap.remove(name);
         }*/
         imagesFlowPane.getChildren().clear();
         setImagesToImagesFlowPane(virtualAlbum);
+        System.out.println("After");
+        for(AlbumImage al: virtualAlbum.getImages()){
+            System.out.println("*****" + al.getName());
+        }
     }
     ////////////////////////////////////////////////////////////////////////////
 
@@ -425,24 +432,40 @@ public class VirtualAlbumsController {
     ////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////// RENAME ALBUM OR IMAGE ///////////////////////////
-    public void renameAlbumOrImage(String oldName, String imageOldName, String newName) {
+    
+    public boolean renameAlbumOrImage(String oldName, String imageOldName, String newName) {
         if (imageOldName == null) {
             // rename album //
+            for(VirtualAlbum album: virtualAlbumList){
+                if(album.getName().equals(newName)){
+                    return false;
+                }
+            }
             VirtualAlbum va = getAlbumForString(oldName);
             va.setName(newName);
-            //ObservableList<Node> list = albumsFlowPane.getChildren();
             albumNameLabel.setText(newName);
             lastClickedButton.setText(newName);
+            return true;
         } else {
             // rename image //
             VirtualAlbum va = getAlbumForString(oldName);
             AlbumImage im = va.getImageFromAlbumForString(imageOldName);
-            im.setName(newName);
-            //ObservableList<Node> list = albumsFlowPane.getChildren();
+            
+            for(AlbumImage img: va.getImages()){
+                System.out.println(img.getName() + " --- " + newName + im.getExtensionOfImage() );
+                System.out.println("img.getName().equals(newName) " + img.getName().equals(newName + im.getExtensionOfImage()));
+                if(img.getName().equals(newName + im.getExtensionOfImage())){
+                    return false;
+                }
+            }
+            im.setName(newName + im.getExtensionOfImage());
+            System.out.println("DOSAOOOOO");
             albumNameLabel.setText(newName);
-            lastClickedButton.setText(newName);
+            setImagesToImagesFlowPane(va);
+            return true;
         }
     }
+   
     ////////////////////////////////////////////////////////////////////////////
 
     ///////////////////////  IS ALBUM NAME VALID  //////////////////////////////

@@ -11,6 +11,11 @@ public class AlbumImage implements Serializable{
         this.name = name;
         this.path = path;
     }
+    
+    public AlbumImage(AlbumImage album){
+        this.name = album.name;
+        this.path = album.getPath();
+    }
 
     public String getName() {
         return name;
@@ -28,5 +33,19 @@ public class AlbumImage implements Serializable{
         this.path = path;
     }
     
+    public String getNameWithoutExtension(){
+        String retStr = "";
+        int index = name.lastIndexOf(".");
+        retStr = name.substring(0, index);
+        
+        return retStr;
+    }
     
+    public String getExtensionOfImage(){
+        String retStr = "";
+        int index = name.lastIndexOf(".");
+        retStr = name.substring(index);
+        
+        return retStr;
+    }
 }

@@ -83,8 +83,9 @@ public class Mosaic extends Application {
         });
 
         // setting min stage dimensions
-        stage.setMinHeight(700);
+        stage.setMinHeight(1100);
         stage.setMinWidth(600);
+        
 
         stage.setScene(scene);
         stage.show();

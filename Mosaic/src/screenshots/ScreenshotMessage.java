@@ -130,8 +130,18 @@ public class ScreenshotMessage implements Serializable, Comparable<ScreenshotMes
 
     @Override
     public String toString(){
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm:ss");    
-        return String.format("%-30s%-30s%s", ("from: " + sender), ("to: " + receiver), (sdf.format(new Date(Long.parseLong(sentTimeString)))));
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm:ss");
+        String status;
+        if ( 0 == isAccepted ){
+            status = "Pending";
+        }
+        else if ( 1 == isAccepted ){
+            status = "Accepted";
+        }
+        else {
+            status = "Declined";
+        }
+        return String.format("%-25s%-25s%-25s%-18s", ("from: " + sender), ("to: " + receiver), (sdf.format(new Date(Long.parseLong(sentTimeString)))), ("status: " + status));
     }
     
     public String randomGeneratorString(){

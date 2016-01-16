@@ -25,6 +25,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import messages.MessageController;
 import screenshots.ScreenshotMessage;
 import screenshots.ScreenshotMessageController;
 
@@ -45,6 +46,7 @@ public class MessageListener extends Thread{
     private ListView list;
     private Label validationScreenWarningLabel;
     private Label loginScreenWarningLabel;
+    private MessageController messageController;
     
     public MessageListener(FXMLDocumentController docController, PrintWriter out, BufferedReader in, ObservableList<String> onlineUsers,
             ScreenshotMessageController screenshotMessageController, String myUsername, Socket mySocket, ScreenshotMessage screenshotListViewSelectedItem){
@@ -59,6 +61,12 @@ public class MessageListener extends Thread{
         this.screenshotListViewSelectedItem = screenshotListViewSelectedItem;
     }
 
+    public void setMessageController(MessageController messageController) {
+        this.messageController = messageController;
+    }
+
+    
+    
     public void setList(ListView list) {
         this.list = list;
     }
@@ -283,6 +291,7 @@ public class MessageListener extends Thread{
                         }
                     }
                     msg.setIsAccepted(-1);
+                    messageController.addMessagesToListView();
                     System.out.println("*************************************************");
                 }
                 else if("screenshotAccepted".equals(typeOfMsg.split("#")[0])){
@@ -299,6 +308,7 @@ public class MessageListener extends Thread{
                         }
                     }
                     msg.setIsAccepted(1);
+                    messageController.addMessagesToListView();
                     System.out.println("\nSCREENSHOT MESSAGE ATRIBUTES:");
                     System.out.println("********************************************************");
                     System.out.println("Sender*: " + msg.getSender());
