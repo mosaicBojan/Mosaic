@@ -15,6 +15,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import messages.MessageController;
 
 /**
  *
@@ -34,6 +35,7 @@ public class Mosaic extends Application {
     public static void setDocController(FXMLDocumentController doc){
         docController = doc;
     }
+
     
     @Override
     public void start(Stage stage) throws Exception {

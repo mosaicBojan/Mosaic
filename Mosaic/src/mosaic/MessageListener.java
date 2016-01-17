@@ -44,9 +44,11 @@ public class MessageListener extends Thread{
     private Socket mySocket;
     private ScreenshotMessage screenshotListViewSelectedItem;
     private ListView list;
+    private ListView messagesListView;
     private Label validationScreenWarningLabel;
     private Label loginScreenWarningLabel;
     private MessageController messageController;
+    
     
     public MessageListener(FXMLDocumentController docController, PrintWriter out, BufferedReader in, ObservableList<String> onlineUsers,
             ScreenshotMessageController screenshotMessageController, String myUsername, Socket mySocket, ScreenshotMessage screenshotListViewSelectedItem){
@@ -63,6 +65,10 @@ public class MessageListener extends Thread{
 
     public void setMessageController(MessageController messageController) {
         this.messageController = messageController;
+    }
+
+    public void setMessagesListView(ListView messagesListView) {
+        this.messagesListView = messagesListView;
     }
 
     
@@ -172,6 +178,7 @@ public class MessageListener extends Thread{
                     receiveMsg.setSender(sender);
                     receiveMsg.setSentTimeString(date);
                     receiveMsg.setReceiver(myUsername);
+                    messageController.setMessagesListView(list);
                     System.out.println("Sender*: " + receiveMsg.getSender());
                     System.out.println("Receiver*: " + receiveMsg.getReceiver());
                     System.out.println("Is I sent*: " + receiveMsg.getIsISentThisMessage());
@@ -184,6 +191,8 @@ public class MessageListener extends Thread{
                         @Override
                         public void run() {
                             docController.setEnableButton();
+                            messageController.setMessagesListView(list);
+                            messageController.addMessagesToListView();
                         }
                     });
                     
@@ -308,7 +317,7 @@ public class MessageListener extends Thread{
                         }
                     }
                     msg.setIsAccepted(1);
-                    messageController.addMessagesToListView();
+                    
                     System.out.println("\nSCREENSHOT MESSAGE ATRIBUTES:");
                     System.out.println("********************************************************");
                     System.out.println("Sender*: " + msg.getSender());
@@ -318,7 +327,7 @@ public class MessageListener extends Thread{
                     System.out.println("Is accepted: " + msg.getIsAccepted());
                     System.out.println("********************************************************\n");
                     System.out.println("SCREENSHOT ACCEPTED END!");
-                    
+                    messageController.addMessagesToListView();
                     
                 }
                 else if("QUIT".equals(typeOfMsg.split("#")[0])){

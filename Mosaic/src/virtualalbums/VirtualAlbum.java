@@ -11,24 +11,31 @@ public class VirtualAlbum implements Serializable{
     private String name;
     private String description;
     private LocalDate creationTime;
+    private String creationTimeInMillis;
     private ArrayList<AlbumImage> images;
 
     public VirtualAlbum(String name) {
         images = new ArrayList<AlbumImage>();
         this.name = name;
+        this.creationTimeInMillis = Long.toString(System.currentTimeMillis());
     }
 
     public VirtualAlbum(String name, String description) {
         images = new ArrayList<AlbumImage>();
         this.name = name;
         this.description = description;
+        this.creationTimeInMillis = Long.toString(System.currentTimeMillis());
     }
 
     public VirtualAlbum(VirtualAlbum album){
         this.name = album.getName();
         this.description = album.getDescription();
         this.creationTime = album.getCreationTime();
-        this.images = (ArrayList<AlbumImage>) album.getImages().clone();
+        this.creationTimeInMillis = album.getCreationTimeInMillis();
+        this.images = new ArrayList<AlbumImage>();
+        for ( AlbumImage img : album.images ){
+            this.images.add(new AlbumImage(img));
+        }
        
     }
     
@@ -106,6 +113,12 @@ public class VirtualAlbum implements Serializable{
     public void setImages(ArrayList<AlbumImage> images) {
         this.images = images;
     }
+
+    public String getCreationTimeInMillis() {
+        return creationTimeInMillis;
+    }
+    
+    
    
     ////////// ADD IMAGE TO this ALBUM ////////
     public void addImage(AlbumImage image){

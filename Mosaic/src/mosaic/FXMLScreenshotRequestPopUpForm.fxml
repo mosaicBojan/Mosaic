@@ -6,16 +6,19 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="266.0" prefWidth="452.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="mosaic.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="300.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mosaic.FXMLDocumentController">
    <children>
-      <ScrollPane layoutX="22.0" layoutY="14.0" prefViewportHeight="233.0" prefViewportWidth="321.0">
+      <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="22.0" layoutY="14.0" prefViewportHeight="233.0" prefViewportWidth="321.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="140.0" AnchorPane.topAnchor="10.0">
          <content>
-            <ListView fx:id="screenshotRequestListView" layoutX="22.0" layoutY="14.0" prefHeight="233.0" prefWidth="321.0" />
+            <ListView fx:id="screenshotRequestListView" layoutX="22.0" layoutY="14.0" />
          </content>
       </ScrollPane>
-      <Button fx:id="screenshotRequestAcceptButton" layoutX="369.0" layoutY="14.0" mnemonicParsing="false" onAction="#screenshotRequestAcceptButtonAction" prefHeight="25.0" prefWidth="56.0" text="Accept" />
-      <Button fx:id="screenshotRequestDeclineButton" layoutX="370.0" layoutY="52.0" mnemonicParsing="false" onAction="#screenshotRequestDeclineButtonAction" text="Decline" />
-      <Button fx:id="screenshotRequestCancelButton" layoutX="372.0" layoutY="224.0" mnemonicParsing="false" onAction="#screenshotRequestCancelButtonAction" prefHeight="25.0" prefWidth="56.0" text="Cancel" />
+      <VBox layoutX="369.0" layoutY="14.0" spacing="10.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0">
+         <children>
+            <Button fx:id="screenshotRequestAcceptButton" layoutX="369.0" layoutY="14.0" mnemonicParsing="false" onAction="#screenshotRequestAcceptButtonAction" prefWidth="100.0" text="Accept" />
+            <Button fx:id="screenshotRequestDeclineButton" layoutX="370.0" layoutY="52.0" mnemonicParsing="false" onAction="#screenshotRequestDeclineButtonAction" prefWidth="100.0" text="Decline" />
+         </children>
+      </VBox>
+      <Button fx:id="screenshotRequestCancelButton" layoutX="372.0" layoutY="224.0" mnemonicParsing="false" onAction="#screenshotRequestCancelButtonAction" prefWidth="100.0" text="Cancel" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="20.0" />
    </children>
 </AnchorPane>
