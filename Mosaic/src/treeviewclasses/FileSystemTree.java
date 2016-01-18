@@ -7,7 +7,6 @@ import java.net.UnknownHostException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.HashMap;
-import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -159,24 +158,22 @@ public class FileSystemTree extends Thread {
                             ImageView iv = new ImageView();
                             iv.setImage(myCompImage);
                             this.setGraphic(iv);
-                        } else if (value.endsWith(".jpg") || value.endsWith(".png") || value.endsWith(".JPG") || value.endsWith(".PNG") || value.endsWith(".bmp") || value.endsWith(".BMP") || value.endsWith(".gif") || value.endsWith(".GIF") || value.endsWith(".jpeg") || value.endsWith(".JPEG")) {
+                        } else if (value.endsWith(".jpg") || value.endsWith(".png")) {
                             Image myCompImage = new Image("icons/explorerTreeViewIcons/imagePlaceholder.png");
                             ImageView iv = new ImageView();
                             iv.setImage(myCompImage);
                             this.setGraphic(iv);
-                        } else {
+                        } else if (this.getTreeItem().isExpanded() == false) {
                             Image myCompImage = new Image("icons/explorerTreeViewIcons/treeFolderClosed.png");
                             ImageView iv = new ImageView();
-                            iv.imageProperty().bind(Bindings.when(this.getTreeItem().expandedProperty()).then(new Image("icons/explorerTreeViewIcons/treeFolderOpen.png")).otherwise(new Image("icons/explorerTreeViewIcons/treeFolderClosed.png")));
-                            //iv.setImage(myCompImage);
+                            iv.setImage(myCompImage);
                             this.setGraphic(iv);
-                        }/* else {
+                        } else {
                             Image myCompImage = new Image("icons/explorerTreeViewIcons/treeFolderOpen.png");
                             ImageView iv = new ImageView();
-                            iv.imageProperty().bind(Bindings.when(this.getTreeItem().expandedProperty()).then(new Image("icons/explorerTreeViewIcons/treeFolderClosed.png")).otherwise(new Image("icons/explorerTreeViewIcons/treeFolderOpen.png")));
-                            //iv.setImage(myCompImage);
+                            iv.setImage(myCompImage);
                             this.setGraphic(iv);
-                        }*/
+                        }
                     }
 
                 }
@@ -213,11 +210,7 @@ public class FileSystemTree extends Thread {
 
                     } else //else predstavlja da nije selektovan rootNode
                     //  U slucaju da se kllikne na bilo koji drugi fajl   //
-                    if (selectedItem.getPathWithoutHost().toLowerCase().endsWith(".jpg")
-                        || selectedItem.getPathWithoutHost().toLowerCase().endsWith(".png")
-                        || selectedItem.getPathWithoutHost().toLowerCase().endsWith(".gif")
-                        || selectedItem.getPathWithoutHost().toLowerCase().endsWith(".bmp")
-                        || selectedItem.getPathWithoutHost().toLowerCase().endsWith(".jpeg")) {
+                    if (selectedItem.getPathWithoutHost().toLowerCase().endsWith(".jpg") || selectedItem.getPathWithoutHost().toLowerCase().endsWith(".png")) {
                         //Ovdje se definise koje akcije ce se izvrsiti ako je selektovani fajl slika
 
                         /* Disabling buttons */
@@ -245,8 +238,8 @@ public class FileSystemTree extends Thread {
                         originalImageHeight = image.getHeight();
                         originalImageWidth = image.getWidth();
 
-                        imageStackPaneWidth = ((StackPane) (imageView.getParent())).getWidth() - 20;
-                        imageStackPaneHeight = ((StackPane) (imageView.getParent())).getHeight() - 20;
+                        imageStackPaneWidth = ((StackPane) (imageView.getParent())).getWidth();
+                        imageStackPaneHeight = ((StackPane) (imageView.getParent())).getHeight();
 
                         //((StackPane)(imageView.getParent())).setStyle("-fx-background-color: red;");
                         if (originalImageWidth / imageStackPaneWidth > originalImageHeight / imageStackPaneHeight) {
@@ -288,7 +281,7 @@ public class FileSystemTree extends Thread {
                         File[] selectedItemFiles = null;    // U ovaj niz ce se upisati svi fajlovi koji budu pronadjeni u sljedecim instrukcijama
                         selectedItemFiles = new File(selectedItem.getPathWithoutHost() + File.separator).listFiles(new FilenameFilter() {
                             public boolean accept(File dir, String name) {
-                                return (name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpeg") || name.toLowerCase().endsWith(".bmp") || name.toLowerCase().endsWith(".gif")
+                                return (name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".png")
                                         || new File(dir.toString() + File.separator + name).isDirectory())
                                         & !(new File(dir.toString() + File.separator + name).isHidden());
                             }
@@ -340,12 +333,6 @@ public class FileSystemTree extends Thread {
                         } else {
                             //Napisati sta ako je fajl prazan
                             System.out.println("Folder je prazan");
-                            /*Image myCompImage = new Image("icons/explorerTreeViewIcons/treeFolderOpen.png");
-                            ImageView iv = new ImageView();
-                            iv.setImage(myCompImage);
-                            selectedItem.getGraphic();
-                            selectedItem.setGraphic(iv);*/
-                            //selectedItem.setExpanded(true);
                         }
                     }
 

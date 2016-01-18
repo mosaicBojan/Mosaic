@@ -11,50 +11,31 @@ public class VirtualAlbum implements Serializable{
     private String name;
     private String description;
     private LocalDate creationTime;
-    private String creationTimeInMillis;
     private ArrayList<AlbumImage> images;
 
     public VirtualAlbum(String name) {
         images = new ArrayList<AlbumImage>();
         this.name = name;
-        this.creationTimeInMillis = Long.toString(System.currentTimeMillis());
     }
 
     public VirtualAlbum(String name, String description) {
         images = new ArrayList<AlbumImage>();
         this.name = name;
         this.description = description;
-        this.creationTimeInMillis = Long.toString(System.currentTimeMillis());
     }
 
     public VirtualAlbum(VirtualAlbum album){
         this.name = album.getName();
         this.description = album.getDescription();
         this.creationTime = album.getCreationTime();
-        this.creationTimeInMillis = album.getCreationTimeInMillis();
-        this.images = new ArrayList<AlbumImage>();
-        for ( AlbumImage img : album.images ){
-            this.images.add(new AlbumImage(img));
-        }
+        this.images = (ArrayList<AlbumImage>) album.getImages().clone();
        
     }
     
-    public boolean isImageNameValid(String imageName){
-        boolean retVal = true;
-        for(AlbumImage im: images){
-            if(im.getName().equals(imageName)){
-                retVal = false;
-                break;
-            }
-        }
-        return retVal;
-    }
     //////////////  RETURN REQUIRED IMAGE FROM ALBUM  ////////////////
     public AlbumImage getImageFromAlbumForString(String imageName){
-        System.out.println("FIND: " + imageName);
         AlbumImage image = null;
         for(AlbumImage i: images){
-            System.out.println("TEMP: " + i.getName());
             if(i.getName().equals(imageName)){
                 image = i;
                 break;
@@ -113,12 +94,6 @@ public class VirtualAlbum implements Serializable{
     public void setImages(ArrayList<AlbumImage> images) {
         this.images = images;
     }
-
-    public String getCreationTimeInMillis() {
-        return creationTimeInMillis;
-    }
-    
-    
    
     ////////// ADD IMAGE TO this ALBUM ////////
     public void addImage(AlbumImage image){

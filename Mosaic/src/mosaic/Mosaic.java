@@ -15,7 +15,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import messages.MessageController;
 
 /**
  *
@@ -35,7 +34,6 @@ public class Mosaic extends Application {
     public static void setDocController(FXMLDocumentController doc){
         docController = doc;
     }
-
     
     @Override
     public void start(Stage stage) throws Exception {
@@ -85,9 +83,8 @@ public class Mosaic extends Application {
         });
 
         // setting min stage dimensions
-        stage.setMinHeight(1100);
+        stage.setMinHeight(700);
         stage.setMinWidth(600);
-        
 
         stage.setScene(scene);
         stage.show();
