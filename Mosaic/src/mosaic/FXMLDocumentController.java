@@ -26,6 +26,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -299,6 +300,8 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private Label createNewFolderFormWarningLabel;
+    
+    @FXML private Label albumsCopyDialogWarningLabel;
     
     public static void setIsLoginEnd() {
         isLoginEnd = true;
@@ -1645,6 +1648,10 @@ public class FXMLDocumentController implements Initializable {
             app_stage.showAndWait();
             
         }
+        albumsImageView.setVisible(false);
+        albumNameLabel.setText("");
+        albumDescriptionLabel.setText("");
+        albumsDateLabel.setText("");
         disableAlbumsButtons();
     }
     
@@ -1810,12 +1817,28 @@ public class FXMLDocumentController implements Initializable {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose images...");
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        ArrayList<String> jpgExtensions = new ArrayList<>();
+        ArrayList<String> pngExtensions = new ArrayList<>();
+        ArrayList<String> bmpExtensions = new ArrayList<>();
+        ArrayList<String> gifExtensions = new ArrayList<>();
+        ArrayList<String> jpegExtensions = new ArrayList<>();
+        jpgExtensions.add("*.jpg");
+        jpgExtensions.add("*.JPG");
+        pngExtensions.add("*.png");
+        pngExtensions.add("*.PNG");
+        bmpExtensions.add("*.bmp");
+        bmpExtensions.add("*.BMP");
+        gifExtensions.add("*.gif");
+        gifExtensions.add("*.GIF");
+        jpegExtensions.add("*.jpeg");
+        jpegExtensions.add("*.JPEG");
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("All Images", "*.jpg", "*.png", "*.JPG", "*.PNG"),
-                new FileChooser.ExtensionFilter("JPG", "*.jpg"),
-                new FileChooser.ExtensionFilter("GIF", "*.gif"),
-                new FileChooser.ExtensionFilter("BMP", "*.bmp"),
-                new FileChooser.ExtensionFilter("PNG", "*.png"));
+                new FileChooser.ExtensionFilter("All Images", "*.jpg", "*.png", "*.JPG", "*.PNG", "*.bmp", "*.BMP", "*.gif", "*.GIF", "*.jpeg", "*.JPEG"),
+                new FileChooser.ExtensionFilter("JPG", jpgExtensions),
+                new FileChooser.ExtensionFilter("GIF", gifExtensions),
+                new FileChooser.ExtensionFilter("BMP", bmpExtensions),
+                new FileChooser.ExtensionFilter("JPEG", jpegExtensions),
+                new FileChooser.ExtensionFilter("PNG", pngExtensions));
         choosenFiles = fileChooser.showOpenMultipleDialog(app_stage);
         if (choosenFiles != null) {
             albumsImportPopUpChoosenNumLabel.setText(choosenFiles.size() + " images to import.");
@@ -1916,6 +1939,7 @@ public class FXMLDocumentController implements Initializable {
             boolean isValidName = virtualAlbumsController.isAlbumNameValid(albumName);
             if (!isValidName) {
                 //Ako ime vec postoji//
+                albumsCopyDialogWarningLabel.setText("Name already taken.");
             } else {
                 VirtualAlbum album = new VirtualAlbum(albumToCopy);
                 album.setName(albumName);
@@ -2013,6 +2037,10 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void albumsFullscreenAction(ActionEvent event) {
         String type = albumNameLabel.getText();
+        VirtualAlbum album = virtualAlbumsController.getAlbumForString(albumsNavigationLabel.getText());
+        AlbumImage img = album.getImageFromAlbumForString(type);
+        type = img.getPath().getPath();
+        System.out.println("type: " + type);
         System.out.println(type);
         //selectedPath = fst.getSelectedPath();
         if (type != null && new File(type).isFile()) {
@@ -2102,6 +2130,7 @@ public class FXMLDocumentController implements Initializable {
     private static String currentAlbumName;
     private static String imageToCopy;
     
+    
     @FXML
     void copyImageCopyButtonAction(ActionEvent event) {
         VirtualAlbum currentAlbum = virtualAlbumsController.getAlbumForString(currentAlbumName);
@@ -2129,6 +2158,8 @@ public class FXMLDocumentController implements Initializable {
             newAlbumImage.setName(newName);
             va.addImage(newAlbumImage);
         }
+        virtualAlbumsController.setImagesToImagesFlowPane(currentAlbum);
+        ((Stage)(copyImageCopyButton.getScene().getWindow())).close();
     }
 
     @FXML

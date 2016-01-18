@@ -5,7 +5,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -192,7 +194,7 @@ public class VirtualAlbumsController {
                         albumsRenameButton.setDisable(false);
                         albumsOpenButton.setDisable(false);
                         albumsCopyButton.setDisable(false);
-                        albumsMoveButton.setDisable(false);
+                        albumsMoveButton.setDisable(true);
                         albumsFullscreenButton.setDisable(true);
                         
                         /* enabling album labels if they were disabled */
@@ -207,7 +209,8 @@ public class VirtualAlbumsController {
                         // setting single click highlight
                         lastClickedButton = button;
                         // end highlight
-
+                        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm:ss");
+                        albumsDateLabel.setText((sdf.format(new Date(Long.parseLong(album.getCreationTimeMillis())))));
                         albumNameLabel.setText(album.getName());
                         albumDescriptionLabel.setText(album.getDescription());
                     }
