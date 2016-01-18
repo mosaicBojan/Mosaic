@@ -142,6 +142,8 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private TextField folderNameTextField;
+    
+    @FXML private Label newMessageWarningLabel;
 
     @FXML
     private Button createButton;
@@ -305,6 +307,16 @@ public class FXMLDocumentController implements Initializable {
     
     public static void setIsLoginEnd() {
         isLoginEnd = true;
+    }
+    
+    public void setNewMessageWarningLabel(String text){
+        Platform.runLater(new Runnable() {
+
+            @Override
+            public void run() {
+                newMessageWarningLabel.setText(text);
+            }
+        });
     }
 
     ////////////////////////  APPLICATION WINDOW BUTTONS  /////////////////////////
@@ -559,6 +571,7 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     void newScreenshotReceivedAction(ActionEvent event) throws IOException {
+        this.newMessageWarningLabel.setText("");
         isRequestPopUpRun = true;
         messageController.setMessagesListView(messagesListView);
         System.out.println("Received Button Clicked!");

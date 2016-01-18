@@ -183,7 +183,14 @@ public class MessageListener extends Thread{
 
                         @Override
                         public void run() {
-                            docController.setEnableButton();
+                            //docController.setEnableButton();
+                            new Thread(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    docController.setNewMessageWarningLabel("New message received.");
+                                }
+                            }).start();
                             messageController.setMessagesListView(list);
                             messageController.addMessagesToListView();
                         }

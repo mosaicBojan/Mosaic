@@ -394,6 +394,10 @@
                   <Insets right="10.0" />
                </padding>
                <children>
+                  <Label fx:id="newMessageWarningLabel">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin></Label>
                   <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../icons/user.png" />

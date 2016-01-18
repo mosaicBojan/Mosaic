@@ -1019,3 +1019,7 @@
     -fx-text-fill: #7b7b7b;
     -fx-font-size: 24px;
 }
+
+#newMessageWarningLabel {
+    -fx-text-fill: #3399ff;
+}
