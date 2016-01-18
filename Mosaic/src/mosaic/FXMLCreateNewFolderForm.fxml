@@ -7,7 +7,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="150.0" prefWidth="440.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mosaic.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="180.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mosaic.FXMLDocumentController">
    <children>
       <HBox alignment="CENTER_LEFT" layoutX="30.0" layoutY="43.0" AnchorPane.rightAnchor="30.0">
          <children>
@@ -29,5 +29,6 @@
             </Button>
          </children>
       </HBox>
+      <Label fx:id="createNewFolderFormWarningLabel" layoutX="335.0" layoutY="90.0" AnchorPane.bottomAnchor="70.0" AnchorPane.rightAnchor="30.0" />
    </children>
 </AnchorPane>

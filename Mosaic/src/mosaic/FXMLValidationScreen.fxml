@@ -16,7 +16,7 @@
          <children>
             <Label fx:id="validationWelcomeLabel" layoutX="25.0" layoutY="454.0" text="Welcome!" AnchorPane.leftAnchor="25.0" />
             <Label fx:id="validationKeyLabel" layoutX="25.0" layoutY="484.0" text="Please enter a valid activation key:" AnchorPane.leftAnchor="25.0" />
-            <TextField fx:id="validationScreenTextField" layoutX="113.0" layoutY="527.0" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" />
+            <TextField fx:id="validationScreenTextField" layoutX="113.0" layoutY="527.0" promptText="Activation key" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" />
             <Label fx:id="validationScreenWarningLabel" textFill="#f50000" />
          </children>
       </VBox>

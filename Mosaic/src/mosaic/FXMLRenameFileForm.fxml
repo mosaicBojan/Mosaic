@@ -7,9 +7,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="150.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mosaic.FXMLDocumentController">
+<AnchorPane id="AnchorPane" prefHeight="180.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mosaic.FXMLDocumentController">
    <children>
-      <HBox AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="60.0">
+      <HBox AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="60.0">
          <children>
             <Button fx:id="explorerRenameBtn" layoutX="257.0" layoutY="83.0" mnemonicParsing="false" onAction="#explorerRenameBtnAction" prefWidth="80.0" text="Rename" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="60.0" />
             <Button fx:id="renameDialogCancelButton" mnemonicParsing="false" onAction="#renameDialogCancelButtonAction" prefWidth="80.0" text="Cancel">
@@ -29,5 +29,6 @@
             <TextField fx:id="explorerRenameTextField" layoutX="147.0" layoutY="43.0" prefHeight="25.0" prefWidth="270.0" />
          </children>
       </HBox>
+      <Label fx:id="renameFileFormWarningLabel" layoutX="405.0" layoutY="90.0" AnchorPane.bottomAnchor="70.0" AnchorPane.rightAnchor="60.0" />
    </children>
 </AnchorPane>

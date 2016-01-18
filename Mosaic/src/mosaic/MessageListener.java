@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Observable;
 import java.util.Random;
@@ -24,6 +25,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import messages.MessageController;
 import screenshots.ScreenshotMessage;
 import screenshots.ScreenshotMessageController;
 
@@ -44,6 +46,7 @@ public class MessageListener extends Thread{
     private ListView list;
     private Label validationScreenWarningLabel;
     private Label loginScreenWarningLabel;
+    private MessageController messageController;
     
     public MessageListener(FXMLDocumentController docController, PrintWriter out, BufferedReader in, ObservableList<String> onlineUsers,
             ScreenshotMessageController screenshotMessageController, String myUsername, Socket mySocket, ScreenshotMessage screenshotListViewSelectedItem){
@@ -58,6 +61,12 @@ public class MessageListener extends Thread{
         this.screenshotListViewSelectedItem = screenshotListViewSelectedItem;
     }
 
+    public void setMessageController(MessageController messageController) {
+        this.messageController = messageController;
+    }
+
+    
+    
     public void setList(ListView list) {
         this.list = list;
     }
@@ -175,6 +184,8 @@ public class MessageListener extends Thread{
                         @Override
                         public void run() {
                             docController.setEnableButton();
+                            messageController.setMessagesListView(list);
+                            messageController.addMessagesToListView();
                         }
                     });
                     
@@ -188,8 +199,8 @@ public class MessageListener extends Thread{
                     String millis = typeOfMsg.split("#")[3];
                     long duzina = Long.parseLong(in.readLine());
                     System.out.println("DUZINA FROM SERVER: " + duzina);
-                    int kontrolnaDuzina = 0, flag = 0;
-                    byte[] buffer = new byte[50 * 1024];
+                    //int kontrolnaDuzina = 0, flag = 0;
+                    //byte[] buffer = new byte[50 * 1024];
                     String fileName = randomGeneratorString() + ".jpg";
                     File folder = new File("ReceivedScreenshotMessages");
                     if(!folder.exists()){
@@ -197,7 +208,7 @@ public class MessageListener extends Thread{
                         folder.mkdir();
                     }
                     
-                    OutputStream fajl = new FileOutputStream("ReceivedScreenshotMessages" + File.separator + fileName);
+                    /*OutputStream fajl = new FileOutputStream("ReceivedScreenshotMessages" + File.separator + fileName);
                     InputStream is = mySocket.getInputStream();
                     System.out.println("RECEIVING SCREENSHOT FROM SERVER...");
                     System.out.println("*******************************************************");
@@ -210,9 +221,41 @@ public class MessageListener extends Thread{
                         if (duzina == flag) {
                             break;
                         }
+                    }*/
+                    
+                    ServerSocket imageServerSocket = new ServerSocket(6066);
+                    Socket imageSocket = imageServerSocket.accept();
+
+                    //int duzina = Integer.parseInt(duz);
+                    int kontrolnaDuzina = 0, flag = 0;
+                    byte[] buffer = new byte[2 * 1024];
+                    OutputStream fajl = new FileOutputStream("ReceivedScreenshotMessages" + File.separator + fileName);
+                    InputStream is = imageSocket.getInputStream();
+                    System.out.println("\nRECEIVING SCREENSHOT FROM SERVER...");
+                    System.out.println("*****************************************************");
+                    while ((kontrolnaDuzina = is.read(buffer)) > 0) {
+                        fajl.write(buffer, 0, kontrolnaDuzina);
+                        flag += kontrolnaDuzina;
+                        System.out.println("Kontrolna duzina: " + kontrolnaDuzina);
+                        System.out.println("Flag: " + flag);
+                        System.out.println("Duzina: " + duzina);
+                        if (duzina == flag) {
+                            break;
+                        }
                     }
-                    System.out.println("Preuzimanje od servera zavrseno...");
+
+                    System.out.println("Preuzimanje zavrseno...");
+                    System.out.println("*****************************************************");
+
+                    System.out.println("Closing sockets and streams.");
                     fajl.close();
+                    is.close();
+                    imageSocket.close();
+                    imageServerSocket.close();
+                    System.out.println("Closing sockets and streams done.");
+                    
+                    System.out.println("Preuzimanje od servera zavrseno...");
+                    //fajl.close();
                     System.out.println("*********************************************************");
                     ObservableList<ScreenshotMessage> msgs = screenshotMessageController.getScreenshotMessageList();
                     ScreenshotMessage msg = null;
@@ -250,6 +293,7 @@ public class MessageListener extends Thread{
                         }
                     }
                     msg.setIsAccepted(-1);
+                    messageController.addMessagesToListView();
                     System.out.println("*************************************************");
                 }
                 else if("screenshotAccepted".equals(typeOfMsg.split("#")[0])){
@@ -266,6 +310,7 @@ public class MessageListener extends Thread{
                         }
                     }
                     msg.setIsAccepted(1);
+                    
                     System.out.println("\nSCREENSHOT MESSAGE ATRIBUTES:");
                     System.out.println("********************************************************");
                     System.out.println("Sender*: " + msg.getSender());
@@ -275,7 +320,7 @@ public class MessageListener extends Thread{
                     System.out.println("Is accepted: " + msg.getIsAccepted());
                     System.out.println("********************************************************\n");
                     System.out.println("SCREENSHOT ACCEPTED END!");
-                    
+                    messageController.addMessagesToListView();
                     
                 }
                 else if("QUIT".equals(typeOfMsg.split("#")[0])){
