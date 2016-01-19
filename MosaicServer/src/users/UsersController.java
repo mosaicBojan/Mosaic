@@ -10,10 +10,21 @@ import javafx.scene.control.ListView;
 public class UsersController {
     private ObservableList<User> onlineUsersList;
     private ListView<User> onlineUsersListView;
+    //boolean flag koji za pozitivnu vrijednost signalizira da se vrsi testiranje, te ne koristi elemente vezane za GUI
+    private boolean testFlag = false;
+    
+    public void setTestFlag(boolean testFlag){
+        this.testFlag = testFlag;
+    }
 
     public UsersController(ListView<User> onlineUsersListView) {
         onlineUsersList = FXCollections.observableArrayList();
         this.onlineUsersListView = onlineUsersListView;
+    }
+    
+    //defaultni konstruktor dodan u svrhe testiranja
+    public UsersController(){
+        this.onlineUsersList = FXCollections.observableArrayList();
     }
 
     public ObservableList<User> getOnlineUsersList() {
@@ -30,29 +41,48 @@ public class UsersController {
         return isAvaiable;
     }
     
-    public void addNewOnlineUser(Socket socket, String username){
-        User user = new User(socket, username);
-        Platform.runLater(new Runnable() {
+    public boolean addNewOnlineUser(Socket socket, String username){
+        if (isUsernameAvailable(username)){
+            User user = new User(socket, username);
+            if (false == testFlag) {
+                Platform.runLater(new Runnable() {
 
-            @Override
-            public void run() {
+                    @Override
+                    public void run() {
+                        onlineUsersList.add(user);
+                    }
+                });
+                //onlineUsersList.add(user);
+                onlineUsersListView.setItems(onlineUsersList);
+            } else if (true == testFlag) {
                 onlineUsersList.add(user);
             }
-        });
-        //onlineUsersList.add(user);
-        onlineUsersListView.setItems(onlineUsersList);
+            return true;
+        }
+        else
+            return false;
     }
     
-    public void removeUser(String username){
-        User user = getUserFromListForString(username);
-        Platform.runLater(new Runnable() {
+    public boolean removeUser(String username){
+        if (!isUsernameAvailable(username)) {
+            User user = getUserFromListForString(username);
+            if (false == testFlag) {
+                Platform.runLater(new Runnable() {
 
-            @Override
-            public void run() {
+                    @Override
+                    public void run() {
+                        onlineUsersList.remove(user);
+                    }
+                });
+
+                onlineUsersListView.setItems(onlineUsersList);
+            } else if (true == testFlag) {
                 onlineUsersList.remove(user);
             }
-        });
-        onlineUsersListView.setItems(onlineUsersList);
+            return true;
+        } else {
+            return false;
+        }
     }
     
     public User getUserFromListForString(String username){

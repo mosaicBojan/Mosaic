@@ -17,7 +17,13 @@ public class ActivationKeyController {
     private ArrayList<ActivationKey> activationKeyList;
     private ObservableList<String> keyListString;
     private ListView<String> keysListView;
+    //boolean flag koji za pozitivnu vrijednost signalizira da se vrsi testiranje, te ne koristi elemente vezane za GUI
+    private boolean testFlag = false;
 
+    public void setTestFlag(boolean testFlag){
+        this.testFlag = testFlag;
+    }
+    
     // constructor
     public ActivationKeyController(ListView<String> keysListView) {
         activationKeyList = new ArrayList<ActivationKey>();
@@ -30,6 +36,14 @@ public class ActivationKeyController {
         } else {
             System.out.println("Nema raspolozivih aktivacionih kljuceva u bazi!");
         }
+    }
+    
+    //defaultni konstruktor dodan u svrhu testiranja
+    public ActivationKeyController(){
+        this.activationKeyList = new ArrayList<ActivationKey>();
+        this.keyListString = FXCollections.observableArrayList();
+        //this.keysListView = new ListView<String>();
+        //keysListView.setItems(keyListString);
     }
 
     public void deserializeKeys() {
@@ -58,12 +72,11 @@ public class ActivationKeyController {
 
     
     public boolean isKeyInList(String key){
-        boolean retValue = false;
         ActivationKey ak = getActivationKeyForString(key);
         if(ak != null){
-            retValue = true;
+            return true;
         }
-        return retValue;
+        return false;
     }
     // checks if handed argument is valid ActivationKey
     // every key is consisted of 16 alphanumeric characters
@@ -71,7 +84,6 @@ public class ActivationKeyController {
         if (16 != key.length()) {
             return false;
         }
-
         for (char ch : key.toCharArray()) {
             if (!Character.isLetterOrDigit(ch)) {
                 return false;
@@ -81,36 +93,48 @@ public class ActivationKeyController {
     }
 
     // add new ActivationKey to the list
-    public void addActivationKey(String key) {
-        ActivationKey ak = new ActivationKey(key);
-        activationKeyList.add(ak);
-        keyListString.add(ak.toString());
-        keysListView.setItems(keyListString);
-        Thread t = new Thread() {
-            public void run() {
-                ak.serializeKey();
-            }
-        };
-        t.start();
+    public boolean addActivationKey(String key) {
+        if (isValidKey(key)) {
+            ActivationKey ak = new ActivationKey(key);
+            activationKeyList.add(ak);
+            keyListString.add(ak.toString());
+            if ( false == testFlag )
+                keysListView.setItems(keyListString);
+            Thread t = new Thread() {
+                public void run() {
+                    ak.serializeKey();
+                }
+            };
+            t.start();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // remove ActivationKey from the list if present
-    public void removeActivationKey(String key) {
+    public boolean removeActivationKey(String key) {
         ActivationKey ak = getActivationKeyForString(key);
-        activationKeyList.remove(ak);
-        String s = getStringValueOfKeyForString(key);
-        System.out.println("Key for remove: " + s);
-        Platform.runLater(new Runnable() {
+        if (null != ak) {
+            activationKeyList.remove(ak);
+            String s = getStringValueOfKeyForString(key);
+            System.out.println("Key for remove: " + s);
+            if (false == testFlag) {
+                Platform.runLater(new Runnable() {
 
-            @Override
-            public void run() {
-                //stage.hide();
-                keyListString.remove(s);
+                    @Override
+                    public void run() {
+                        //stage.hide();
+                        keyListString.remove(s);
+                    }
+                });
+                keysListView.setItems(keyListString);
             }
-        });
-        
-        keysListView.setItems(keyListString);
-        (new File("ListOfKey" + File.separator +  key + ".ser")).delete();
+            (new File("ListOfKey" + File.separator + key + ".ser")).delete();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public ActivationKey getActivationKeyForString(String key){
@@ -120,8 +144,7 @@ public class ActivationKeyController {
                 ak = a;
                 break;
             }
-        }
-        
+        }    
         return ak;
     }
     
@@ -135,6 +158,11 @@ public class ActivationKeyController {
         }
         
         return str;
+    }
+    
+    //metoda dodana u svrhu testiranja
+    public void addActivationKey(ActivationKey key){
+        activationKeyList.add(key);
     }
     
     // return key list

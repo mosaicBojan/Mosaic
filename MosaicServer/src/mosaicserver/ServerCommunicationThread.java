@@ -245,6 +245,7 @@ public class ServerCommunicationThread extends Thread {
                             //outDestination.close();
                                 //inDestination.close();
                             }
+                            System.out.println("Waiting end");
                         }
                     } 
                     else if("screenshotResponseAccept".equals(typeOfMsg.split("#")[0])){
