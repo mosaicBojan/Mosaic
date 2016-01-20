@@ -819,6 +819,20 @@
     -fx-background-color: #2b84c2;
 }
 
+/* statistics button */
+#albumsStatisticsButton {
+    -fx-graphic: url('../icons/statistics.png');
+}
+#albumsStatisticsButton:hover {
+    -fx-graphic: url('../icons/statisticsHover.png');
+}
+#albumsStatisticsButton:pressed {
+    -fx-background-color: #f0f0f0;
+}
+#albumsStatisticsButtonTooltip {
+    -fx-background-color: #2b84c2;
+}
+
 /* back button */
 #albumsBackButton {
     -fx-graphic: url('../icons/backArrow.png');
@@ -1022,4 +1036,46 @@
 
 #newMessageWarningLabel {
     -fx-text-fill: #3399ff;
+}
+
+/* mainSendImageButton */
+#mainSendImageButton {
+    -fx-graphic: url('../icons/sendImage.png');
+}
+#mainSendImageButton:hover {
+    -fx-graphic: url('../icons/sendImageHover.png');
+}
+#mainSendImageButton:pressed {
+    -fx-background-color: #f0f0f0;
+}
+#mainSendImageButtonTooltip {
+    -fx-background-color: #2b84c2;
+}
+
+/* ExplorerSendImageButton */
+#explorerSendPictureButton {
+    -fx-graphic: url('../icons/sendImage.png');
+}
+#explorerSendPictureButton:hover {
+    -fx-graphic: url('../icons/sendImageHover.png');
+}
+#explorerSendPictureButton:pressed {
+    -fx-background-color: #f0f0f0;
+}
+#explorerSendPictureButtonTooltip {
+    -fx-background-color: #2b84c2;
+}
+
+/* ExplorerSendImageButton */
+#albumsSendImageButton {
+    -fx-graphic: url('../icons/sendImage.png');
+}
+#albumsSendImageButton:hover {
+    -fx-graphic: url('../icons/sendImageHover.png');
+}
+#albumsSendImageButton:pressed {
+    -fx-background-color: #f0f0f0;
+}
+#albumsSendImageButtonTooltip {
+    -fx-background-color: #2b84c2;
 }

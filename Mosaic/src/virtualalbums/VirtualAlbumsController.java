@@ -260,6 +260,7 @@ public class VirtualAlbumsController {
                         if (event.getClickCount() == 2) {
                             System.out.println("Double clicked");
                             try {
+                                image.incrementTimesOpened();
                                 Desktop.getDesktop().open(image.getPath());
                                 /* DISABLING BUTTONS */
                                 albumsImportButton.setDisable(false);

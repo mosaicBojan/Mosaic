@@ -128,7 +128,10 @@
                                           <Tooltip text="Fullscreen" />
                                        </tooltip>
                                     </Button>
-                                    <Button fx:id="explorerSendPictureButton" mnemonicParsing="false" onAction="#explorerSendPictureButtonAction" text="S" />
+                                    <Button fx:id="explorerSendPictureButton" mnemonicParsing="false" onAction="#explorerSendPictureButtonAction">
+                                       <tooltip>
+                                          <Tooltip text="Send image" />
+                                       </tooltip></Button>
                                  </children>
                                  <padding>
                                     <Insets left="7.0" top="1.0" />
@@ -230,7 +233,7 @@
                               <Insets bottom="5.0" top="5.0" />
                            </padding>
                            <children>
-                              <HBox alignment="CENTER_LEFT" layoutY="-22.0" prefHeight="42.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <HBox alignment="CENTER_LEFT" layoutY="-22.0" prefHeight="42.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <padding>
                                     <Insets left="7.0" top="1.0" />
                                  </padding>
@@ -303,6 +306,16 @@
                                        <tooltip>
                                           <Tooltip text="Fullscreen" />
                                        </tooltip></Button>
+                                    <Button fx:id="albumsStatisticsButton" layoutX="432.0" layoutY="11.0" mnemonicParsing="false" onAction="#albumsStatisticsButtonAction" prefHeight="32.0" prefWidth="32.0">
+                                       <tooltip>
+                                          <Tooltip text="Statistics" />
+                                       </tooltip>
+                                    </Button>
+                                    <Button fx:id="albumsSendImageButton" layoutX="489.0" layoutY="16.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+                                       <tooltip>
+                                          <Tooltip text="Send image" />
+                                       </tooltip>
+                                    </Button>
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER_RIGHT" layoutX="729.0" layoutY="-29.0" prefHeight="42.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -426,6 +439,11 @@
                      <tooltip>
                         <Tooltip text="Send screenshot" />
                      </tooltip></Button>
+                  <Button fx:id="mainSendImageButton" layoutX="130.0" layoutY="17.0" maxHeight="32.0" maxWidth="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+                     <tooltip>
+                        <Tooltip text="Send image" />
+                     </tooltip>
+                  </Button>
                </children>
             </HBox>
          </children>

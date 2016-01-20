@@ -46,6 +46,10 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.CacheHint;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -1751,6 +1755,8 @@ public class FXMLDocumentController implements Initializable {
             VirtualAlbum va = virtualAlbumsController.getAlbumForString(type);
             AlbumImage image = va.getImageFromAlbumForString(imageName);
             if (!"".equals(imageName)) {
+                image.incrementTimesOpened();
+                System.out.println("image.getTimesOpened(): " + image.getTimesOpened());
                 String parentFolder = albumsNavigationLabel.getText();
                 virtualAlbumsController.openAlbumOrImage(parentFolder, image.getPath().getPath());
             } else {
@@ -2162,7 +2168,78 @@ public class FXMLDocumentController implements Initializable {
         albumNameLabel.setText("");
     }
     
+    @FXML Button albumsStatisticsButton;
     
+    //@FXML LineChart imageStatisticsWindowLineChart;
+    
+    @FXML
+    private void albumsStatisticsButtonAction(ActionEvent event) throws IOException{
+        final CategoryAxis xAxis = new CategoryAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        xAxis.setLabel("Image");
+        yAxis.setLabel("Number of times opened");
+        final LineChart<String,Number> lineChart = 
+                new LineChart<String,Number>(xAxis,yAxis);
+        lineChart.setPrefSize(800, 800);
+        lineChart.setStyle("-fx-padding: 10 10 30 10;");
+        lineChart.setTitle("Album image opening statistics");
+        XYChart.Series series = new XYChart.Series();
+        series.setName("Times opened");
+        //lineChart.
+        
+        //lineChart.minWidth(800);
+        /*
+        //adding items to list
+        series.getData().add(new XYChart.Data("Img1", 23));
+        series.getData().add(new XYChart.Data("ImgTwo", 26));*/
+        
+        //for (virtualAlbumsController.get)
+        
+        
+        final Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(explorerBtn1.getScene().getWindow());
+        HBox dialogHbox = new HBox(20);
+        dialogHbox.setAlignment(Pos.CENTER);
+        
+        ObservableList albumsList = FXCollections.observableArrayList();
+        
+        for ( VirtualAlbum album : virtualAlbumsController.getVirtualAlbumList() ){
+            albumsList.add(album.getName());
+        }
+        
+        ChoiceBox albumsChoiceBox = new ChoiceBox(albumsList);
+        albumsChoiceBox.getSelectionModel().selectFirst();
+        
+        if ( null != virtualAlbumsController.getVirtualAlbumList() ){
+            VirtualAlbum album = virtualAlbumsController.getVirtualAlbumList().get(0);
+            for ( AlbumImage image : album.getImages() ){
+                        series.getData().add(new XYChart.Data(image.getName(), image.getTimesOpened()));
+                    }
+        }
+        
+        lineChart.getData().add(series);
+        
+        albumsChoiceBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>(){
+            public void changed(ObservableValue ov, Number oldValue, Number newValue){
+                series.getData().clear();
+                VirtualAlbum album = virtualAlbumsController.getVirtualAlbumList().get(newValue.intValue());
+                    for ( AlbumImage image : album.getImages() ){
+                        series.getData().add(new XYChart.Data(image.getName(), image.getTimesOpened()));
+                    }
+            }
+        });
+        
+        dialogHbox.getChildren().add(albumsChoiceBox);
+        dialogHbox.getChildren().add(lineChart);
+        Scene dialogScene = new Scene(dialogHbox, 1100, 900);
+        dialog.setMinHeight(800);
+        dialog.setMinWidth(600);
+        dialog.setTitle("Album image opening statistics");
+        dialog.setResizable(true);
+        dialog.setScene(dialogScene);
+        dialog.show();
+    }
     
     ////////////////////////////////////////////////////////////////////////////
     

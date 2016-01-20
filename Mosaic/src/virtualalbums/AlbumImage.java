@@ -6,6 +6,7 @@ import java.io.Serializable;
 public class AlbumImage implements Serializable{
     private String name;
     private File path;
+    private int timesOpened = 0;
 
     public AlbumImage(String name, File path) {
         this.name = name;
@@ -31,6 +32,14 @@ public class AlbumImage implements Serializable{
 
     public void setPath(File path) {
         this.path = path;
+    }
+
+    public int getTimesOpened() {
+        return timesOpened;
+    }
+    
+    public void incrementTimesOpened(){
+        ++this.timesOpened;
     }
     
     public String getNameWithoutExtension(){
