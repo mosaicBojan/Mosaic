@@ -73,6 +73,7 @@ import screenshots.ScreenshotMessage;
 import screenshots.ScreenshotMessageController;
 import screenshots.ScreenshotNumberTest;
 import treeviewclasses.FileSystemTree;
+import treeviewclasses.NodeOfTree;
 import virtualalbums.*;
 
 /**
@@ -304,6 +305,41 @@ public class FXMLDocumentController implements Initializable {
     private Label createNewFolderFormWarningLabel;
     
     @FXML private Label albumsCopyDialogWarningLabel;
+    
+    @FXML private Button explorerSendPictureButton;
+    
+    //////////////////////////////// SEND PICTURE //////////////////////////////
+    @FXML
+    private void explorerSendPictureButtonAction(ActionEvent event) throws IOException{
+        NodeOfTree selectedNode = fst.getSelectedItem();
+     
+        System.out.println("Selected path: " + selectedNode.getPathWithoutHost());
+        screenshotMessage = new ScreenshotMessage(new File(selectedNode.getPathWithoutHost()));
+        screenshotMessage.setSender(myUsername);
+        screenshotMessage.setIsISentThisMessage(true);
+        /*System.out.println("ADD TO SCREENSHOT LIST: " + screenshotMessage);
+         screenshotMessageController.addScreenshotMessage(screenshotMessage);*/
+
+        messageController.setMessagesListView(messagesListView);
+        iconImage = new Image(new File(new File(selectedNode.getPathWithoutHost()).getPath()).toURI().toString(), 250, 200, true, true, true);
+        System.out.println("ICON IMAGE CREATED.");
+
+        System.out.println("SENDING GET LIST REQUEST...");
+        out.println("screenshot#getList#" + myUsername);
+        System.out.println("SENT REQUEST: " + "screenshot#getList#" + myUsername);
+        //String destinationUsername = "";
+
+        Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLScreenshotPopUpForm.fxml"));
+        Scene create_folder_scene = new Scene(home_page_parent);
+        app_stage = new Stage();
+        app_stage.setScene(create_folder_scene);
+        app_stage.initModality(Modality.APPLICATION_MODAL);
+        app_stage.initOwner(explorerBtn1.getScene().getWindow());
+        app_stage.show();
+        
+    }
+    ////////////////////////////////////////////////////////////////////////////
+    
     
     public static void setIsLoginEnd() {
         isLoginEnd = true;

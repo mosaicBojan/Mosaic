@@ -15,7 +15,7 @@
     </stylesheets>
    <children>
       <Button fx:id="loginScreenQuitButton" layoutX="521.0" layoutY="155.0" mnemonicParsing="false" onAction="#loginScreenQuitButtonAction" prefHeight="25.0" prefWidth="60.0" text="Quit" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" />
-      <VBox layoutX="78.0" layoutY="89.0" AnchorPane.bottomAnchor="80.0" AnchorPane.rightAnchor="20.0">
+      <VBox layoutX="78.0" layoutY="89.0" prefHeight="114.0" prefWidth="504.0" AnchorPane.bottomAnchor="80.0" AnchorPane.rightAnchor="20.0">
          <children>
             <Label fx:id="loginScreenHelloLabel" text="Hello there!">
                <VBox.margin>

@@ -128,6 +128,7 @@
                                           <Tooltip text="Fullscreen" />
                                        </tooltip>
                                     </Button>
+                                    <Button fx:id="explorerSendPictureButton" mnemonicParsing="false" onAction="#explorerSendPictureButtonAction" text="S" />
                                  </children>
                                  <padding>
                                     <Insets left="7.0" top="1.0" />

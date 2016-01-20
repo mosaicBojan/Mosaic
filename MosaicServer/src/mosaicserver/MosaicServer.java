@@ -26,6 +26,7 @@ public class MosaicServer extends Application {
         */
         stage.setMinHeight(600);
         stage.setMinWidth(1100);
+        stage.setTitle("Mosaic Server");
         Scene scene = new Scene(root);
         
         stage.setScene(scene);
