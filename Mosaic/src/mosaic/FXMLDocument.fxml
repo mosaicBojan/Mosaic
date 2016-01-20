@@ -311,7 +311,7 @@
                                           <Tooltip text="Statistics" />
                                        </tooltip>
                                     </Button>
-                                    <Button fx:id="albumsSendImageButton" layoutX="489.0" layoutY="16.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+                                    <Button fx:id="albumsSendImageButton" layoutX="489.0" layoutY="16.0" mnemonicParsing="false" onAction="#albumsSendImageButtonAction" prefHeight="32.0" prefWidth="32.0">
                                        <tooltip>
                                           <Tooltip text="Send image" />
                                        </tooltip>
@@ -439,7 +439,7 @@
                      <tooltip>
                         <Tooltip text="Send screenshot" />
                      </tooltip></Button>
-                  <Button fx:id="mainSendImageButton" layoutX="130.0" layoutY="17.0" maxHeight="32.0" maxWidth="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0">
+                  <Button fx:id="mainSendImageButton" layoutX="130.0" layoutY="17.0" maxHeight="32.0" maxWidth="32.0" mnemonicParsing="false" onAction="#mainSendImageButtonAction" prefHeight="32.0" prefWidth="32.0">
                      <tooltip>
                         <Tooltip text="Send image" />
                      </tooltip>

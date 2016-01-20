@@ -58,6 +58,11 @@ public class FileSystemTree extends Thread {
     private Button explorerMoveButton;
     private Button explorerAddImageToAlbumButton;
     private Button explorerFullscreenButton;
+    private Button explorerSendPictureButton;
+
+    public void setExplorerSendPictureButton(Button explorerSendPictureButton) {
+        this.explorerSendPictureButton = explorerSendPictureButton;
+    }
 
     public void setExplorerCreateNewFolderButton(Button explorerCreateNewFolderButton) {
         this.explorerCreateNewFolderButton = explorerCreateNewFolderButton;
@@ -210,6 +215,7 @@ public class FileSystemTree extends Thread {
                         explorerMoveButton.setDisable(true);
                         explorerAddImageToAlbumButton.setDisable(true);
                         explorerFullscreenButton.setDisable(true);
+                        explorerSendPictureButton.setDisable(true);
 
                     } else //else predstavlja da nije selektovan rootNode
                     //  U slucaju da se kllikne na bilo koji drugi fajl   //
@@ -229,6 +235,7 @@ public class FileSystemTree extends Thread {
                         explorerMoveButton.setDisable(false);
                         explorerAddImageToAlbumButton.setDisable(false);
                         explorerFullscreenButton.setDisable(false);
+                        explorerSendPictureButton.setDisable(false);
 
                         imageView.setVisible(true);
 
@@ -277,6 +284,7 @@ public class FileSystemTree extends Thread {
                         explorerMoveButton.setDisable(false);
                         explorerAddImageToAlbumButton.setDisable(true);
                         explorerFullscreenButton.setDisable(true);
+                        explorerSendPictureButton.setDisable(true);
                         
                         Image img = imageView.getImage();
                         if (img != null) {

@@ -82,83 +82,87 @@ public class MessageController {
                     System.out.println("   " + s.getSentTimeString() + " " + s.getIsAccepted());
                 }
                 System.out.println("-----------------------------------------------------");
+                try {
+                    if (messagesListView.getItems() != null) {
+                        messagesListView.getItems().clear();
+                    }
+                    messagesListView.setItems(list);
+                    messagesListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
-                if(messagesListView.getItems() != null){
-                    messagesListView.getItems().clear();
-                }
-                messagesListView.setItems(list);
-                messagesListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            tabScreenshotListViewSelectedItem = (ScreenshotMessage) messagesListView.getSelectionModel().getSelectedItem();
+                            System.out.println("Selected item: " + tabScreenshotListViewSelectedItem);
 
-                    @Override
-                    public void handle(MouseEvent event) {
-                        tabScreenshotListViewSelectedItem = (ScreenshotMessage) messagesListView.getSelectionModel().getSelectedItem();
-                        System.out.println("Selected item: " + tabScreenshotListViewSelectedItem);
+                            messagesOpenButton.setDisable(false);
+                            messagesDeleteButton.setDisable(false);
+                            tabScreenshotListViewSelectedItem = (ScreenshotMessage) messagesListView.getSelectionModel().getSelectedItem();
+                            System.out.println("Selected item: " + tabScreenshotListViewSelectedItem);
+                            imageView.setVisible(true);
 
-                        messagesOpenButton.setDisable(false);
-                        messagesDeleteButton.setDisable(false);
-                        tabScreenshotListViewSelectedItem = (ScreenshotMessage) messagesListView.getSelectionModel().getSelectedItem();
-                        System.out.println("Selected item: " + tabScreenshotListViewSelectedItem);
-                        imageView.setVisible(true);
+                            imageView.setCache(true);
+                            imageView.setCacheHint(CacheHint.SPEED);
 
-                        imageView.setCache(true);
-                        imageView.setCacheHint(CacheHint.SPEED);
-
-                        messagesPreviewLabel.setVisible(false);
-                        Image image = new Image("file:\\" + tabScreenshotListViewSelectedItem.getPath().getAbsoluteFile());
-                        //System.out.println("file:\\" + screenshotListViewSelectedItem.getPath().getAbsoluteFile());
-                        if (image.getHeight() > 1600 || image.getWidth() > 1600) {
-                            image = new Image("file:\\" + tabScreenshotListViewSelectedItem.getPath().getAbsoluteFile(), 1600, 1600, true, true);
-                        }
-                        messagesOriginalImageHeight = image.getHeight();
-                        messagesOriginalImageWidth = image.getWidth();
-
-                        messagesImageStackPaneWidth = ((StackPane) (imageView.getParent())).getWidth() - 20;
-                        messagesImageStackPaneHeight = ((StackPane) (imageView.getParent())).getHeight() - 20;
-
-                        //((StackPane)(imageView.getParent())).setStyle("-fx-background-color: red;");
-                        if (messagesOriginalImageWidth / messagesImageStackPaneWidth > messagesOriginalImageHeight / messagesImageStackPaneHeight) {
-                            if (image.getWidth() < messagesImageStackPaneWidth) {
-                                //System.out.println("FIT PO SIRINI SLIKE: " + image.getWidth());
-                                imageView.setFitWidth(image.getWidth());
-                            } else {
-                                //System.out.println("FIT PO SIRINI PANELA: " + imageStackPaneWidth);
-                                imageView.setFitWidth(messagesImageStackPaneWidth);
+                            messagesPreviewLabel.setVisible(false);
+                            Image image = new Image("file:\\" + tabScreenshotListViewSelectedItem.getPath().getAbsoluteFile());
+                            //System.out.println("file:\\" + screenshotListViewSelectedItem.getPath().getAbsoluteFile());
+                            if (image.getHeight() > 1600 || image.getWidth() > 1600) {
+                                image = new Image("file:\\" + tabScreenshotListViewSelectedItem.getPath().getAbsoluteFile(), 1600, 1600, true, true);
                             }
-                        } else if (image.getHeight() < messagesImageStackPaneHeight) {
-                            //System.out.println("FIT PO DUZINI SLIKE: " + image.getHeight());
-                            imageView.setFitHeight(image.getHeight());
-                        } else {
-                            //System.out.println("FIT PO DUZINI PANELA: " + imageStackPaneHeight);
-                            imageView.setFitHeight(messagesImageStackPaneHeight);
-                        }
-                        imageView.setImage(image);
-                        System.out.println("Setting image to imageView done.");
-                    }
+                            messagesOriginalImageHeight = image.getHeight();
+                            messagesOriginalImageWidth = image.getWidth();
 
-                });
+                            messagesImageStackPaneWidth = ((StackPane) (imageView.getParent())).getWidth() - 20;
+                            messagesImageStackPaneHeight = ((StackPane) (imageView.getParent())).getHeight() - 20;
 
-                ((AnchorPane) (imageView.getParent().getParent())).widthProperty().addListener(new ChangeListener<Number>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Number> observableValue, Number oldStackPaneWidth, Number newStackPaneWidth) {
-                        messagesImageStackPaneWidth = newStackPaneWidth.doubleValue();
-                        if (messagesOriginalImageWidth >= newStackPaneWidth.doubleValue() & messagesResizedImageHeight <= messagesImageStackPaneHeight) {
-                            imageView.setFitWidth(newStackPaneWidth.doubleValue() - 40);
-                            messagesResizedImageWidth = newStackPaneWidth.doubleValue() - 20;
-                            messagesResizedImageHeight = 0 / (messagesOriginalImageWidth / (newStackPaneWidth.doubleValue() - 20));
+                            //((StackPane)(imageView.getParent())).setStyle("-fx-background-color: red;");
+                            if (messagesOriginalImageWidth / messagesImageStackPaneWidth > messagesOriginalImageHeight / messagesImageStackPaneHeight) {
+                                if (image.getWidth() < messagesImageStackPaneWidth) {
+                                    //System.out.println("FIT PO SIRINI SLIKE: " + image.getWidth());
+                                    imageView.setFitWidth(image.getWidth());
+                                } else {
+                                    //System.out.println("FIT PO SIRINI PANELA: " + imageStackPaneWidth);
+                                    imageView.setFitWidth(messagesImageStackPaneWidth);
+                                }
+                            } else if (image.getHeight() < messagesImageStackPaneHeight) {
+                                //System.out.println("FIT PO DUZINI SLIKE: " + image.getHeight());
+                                imageView.setFitHeight(image.getHeight());
+                            } else {
+                                //System.out.println("FIT PO DUZINI PANELA: " + imageStackPaneHeight);
+                                imageView.setFitHeight(messagesImageStackPaneHeight);
+                            }
+                            imageView.setImage(image);
+                            System.out.println("Setting image to imageView done.");
                         }
-                    }
-                });
-                ((AnchorPane) (imageView.getParent().getParent())).heightProperty().addListener(new ChangeListener<Number>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Number> observableValue, Number oldStackPaneHeight, Number newStackPaneHeight) {
-                        messagesImageStackPaneHeight = newStackPaneHeight.doubleValue();
-                        if (messagesOriginalImageHeight >= newStackPaneHeight.doubleValue() & messagesResizedImageWidth <= messagesImageStackPaneWidth) {
-                            imageView.setFitHeight(newStackPaneHeight.doubleValue() - 40);
-                            messagesResizedImageHeight = newStackPaneHeight.doubleValue() - 20;
-                            messagesResizedImageWidth = 0 / (messagesOriginalImageHeight / (newStackPaneHeight.doubleValue() - 20));
+
+                    });
+
+                    ((AnchorPane) (imageView.getParent().getParent())).widthProperty().addListener(new ChangeListener<Number>() {
+                        @Override
+                        public void changed(ObservableValue<? extends Number> observableValue, Number oldStackPaneWidth, Number newStackPaneWidth) {
+                            messagesImageStackPaneWidth = newStackPaneWidth.doubleValue();
+                            if (messagesOriginalImageWidth >= newStackPaneWidth.doubleValue() & messagesResizedImageHeight <= messagesImageStackPaneHeight) {
+                                imageView.setFitWidth(newStackPaneWidth.doubleValue() - 40);
+                                messagesResizedImageWidth = newStackPaneWidth.doubleValue() - 20;
+                                messagesResizedImageHeight = 0 / (messagesOriginalImageWidth / (newStackPaneWidth.doubleValue() - 20));
+                            }
                         }
-                    }
-                });
+                    });
+                    ((AnchorPane) (imageView.getParent().getParent())).heightProperty().addListener(new ChangeListener<Number>() {
+                        @Override
+                        public void changed(ObservableValue<? extends Number> observableValue, Number oldStackPaneHeight, Number newStackPaneHeight) {
+                            messagesImageStackPaneHeight = newStackPaneHeight.doubleValue();
+                            if (messagesOriginalImageHeight >= newStackPaneHeight.doubleValue() & messagesResizedImageWidth <= messagesImageStackPaneWidth) {
+                                imageView.setFitHeight(newStackPaneHeight.doubleValue() - 40);
+                                messagesResizedImageHeight = newStackPaneHeight.doubleValue() - 20;
+                                messagesResizedImageWidth = 0 / (messagesOriginalImageHeight / (newStackPaneHeight.doubleValue() - 20));
+                            }
+                        }
+                    });
+
+                } catch (Exception ex) {
+
+                }
             }
         });
 

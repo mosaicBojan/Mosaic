@@ -37,6 +37,7 @@ import javafx.scene.layout.VBox;
 public class VirtualAlbumsController {
 
     private Button lastClickedButton = null;    //remembers last album clicked
+    private Button selectedAlbumImage = null;
 
     private ArrayList<VirtualAlbum> virtualAlbumList;
     private static int numberOfAlbums = 0;
@@ -71,9 +72,18 @@ public class VirtualAlbumsController {
     private Button albumsMoveButton;
     private Button albumsFullscreenButton;
     private Button albumsBackButton;
+    private Button albumsSendImageButton;
+
+    public void setAlbumsSendImageButton(Button albumsSendImageButton) {
+        this.albumsSendImageButton = albumsSendImageButton;
+    }
 
     public void setAlbumsBackButton(Button albumsBackButton) {
         this.albumsBackButton = albumsBackButton;
+    }
+
+    public Button getSelectedAlbumImage() {
+        return selectedAlbumImage;
     }
     
     
@@ -108,6 +118,15 @@ public class VirtualAlbumsController {
 
     public void setAlbumsFullscreenButton(Button albumsFullscreenButton) {
         this.albumsFullscreenButton = albumsFullscreenButton;
+    }
+    
+    public AlbumImage getSelectedImage(){
+        AlbumImage image = null;
+        String nameOfImage = selectedAlbumImage.getText();
+        System.out.println("Last clicked Button: " + lastClickedButton.getText());
+        VirtualAlbum va = getAlbumForString(lastClickedButton.getText());
+        image = va.getImageFromAlbumForString(nameOfImage);
+        return image;
     }
 
     // KONSTRUKTOR //
@@ -167,6 +186,7 @@ public class VirtualAlbumsController {
                         albumsMoveButton.setDisable(true);
                         albumsFullscreenButton.setDisable(true);
                         albumsBackButton.setDisable(false);
+                        albumsSendImageButton.setDisable(true);
                         
                         /* removing album labels when you enter the album */
                         albumNameLabel.setVisible(false);
@@ -185,6 +205,9 @@ public class VirtualAlbumsController {
                         imagesFlowPane.setVisible(true);
                         albumsScrollPane.setVisible(false);
                         imagesScrollPane.setVisible(true);
+                        
+                        lastClickedButton = button;
+                        
                         setImagesToImagesFlowPane(album);
                     } else if (event.getClickCount() == 1) {
                         /* DISABLING BUTTONS */
@@ -196,6 +219,7 @@ public class VirtualAlbumsController {
                         albumsCopyButton.setDisable(false);
                         albumsMoveButton.setDisable(true);
                         albumsFullscreenButton.setDisable(true);
+                        albumsSendImageButton.setDisable(true);
                         
                         /* enabling album labels if they were disabled */
                         albumNameLabel.setVisible(true);
@@ -278,6 +302,7 @@ public class VirtualAlbumsController {
                             }
 
                         } else if (event.getClickCount() == 1) {
+                            selectedAlbumImage = button;
                              /* DISABLING BUTTONS */
                             albumsImportButton.setDisable(false);
                             albumsCreateAlbumButton.setDisable(false);
@@ -287,6 +312,7 @@ public class VirtualAlbumsController {
                             albumsCopyButton.setDisable(false);
                             albumsMoveButton.setDisable(false);
                             albumsFullscreenButton.setDisable(false);
+                            albumsSendImageButton.setDisable(false);
                             
                             /* disabling album description labels */
                             /* enabling album labels if they were disabled */

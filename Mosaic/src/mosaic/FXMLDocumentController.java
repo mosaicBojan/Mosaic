@@ -312,11 +312,105 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML private Button explorerSendPictureButton;
     
+    @FXML private Button albumsSendImageButton;
+    
+    
+    @FXML
+    private void mainSendImageButtonAction(ActionEvent event) throws IOException{
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose images...");
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        ArrayList<String> jpgExtensions = new ArrayList<>();
+        ArrayList<String> pngExtensions = new ArrayList<>();
+        ArrayList<String> bmpExtensions = new ArrayList<>();
+        ArrayList<String> gifExtensions = new ArrayList<>();
+        ArrayList<String> jpegExtensions = new ArrayList<>();
+        jpgExtensions.add("*.jpg");
+        jpgExtensions.add("*.JPG");
+        pngExtensions.add("*.png");
+        pngExtensions.add("*.PNG");
+        bmpExtensions.add("*.bmp");
+        bmpExtensions.add("*.BMP");
+        gifExtensions.add("*.gif");
+        gifExtensions.add("*.GIF");
+        jpegExtensions.add("*.jpeg");
+        jpegExtensions.add("*.JPEG");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("All Images", "*.jpg", "*.png", "*.JPG", "*.PNG", "*.bmp", "*.BMP", "*.gif", "*.GIF", "*.jpeg", "*.JPEG"),
+                new FileChooser.ExtensionFilter("JPG", jpgExtensions),
+                new FileChooser.ExtensionFilter("GIF", gifExtensions),
+                new FileChooser.ExtensionFilter("BMP", bmpExtensions),
+                new FileChooser.ExtensionFilter("JPEG", jpegExtensions),
+                new FileChooser.ExtensionFilter("PNG", pngExtensions));
+        File choosenFile = fileChooser.showOpenDialog(app_stage);
+        System.out.println("File choosen:  " + choosenFile);
+        if (choosenFile != null) {
+            System.out.println("NOT NULL");
+            //AlbumImage im = virtualAlbumsController.getSelectedImage();
+
+            //System.out.println("Selected path: " + im.getPath());
+            screenshotMessage = new ScreenshotMessage(choosenFile);
+            screenshotMessage.setSender(myUsername);
+            screenshotMessage.setIsISentThisMessage(true);
+            /*System.out.println("ADD TO SCREENSHOT LIST: " + screenshotMessage);
+             screenshotMessageController.addScreenshotMessage(screenshotMessage);*/
+
+            messageController.setMessagesListView(messagesListView);
+            iconImage = new Image(choosenFile.toURI().toString(), 250, 200, true, true, true);
+            System.out.println("ICON IMAGE CREATED.");
+
+            System.out.println("SENDING GET LIST REQUEST...");
+            out.println("screenshot#getList#" + myUsername);
+            System.out.println("SENT REQUEST: " + "screenshot#getList#" + myUsername);
+            //String destinationUsername = "";
+
+            Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLScreenshotPopUpForm.fxml"));
+            Scene create_folder_scene = new Scene(home_page_parent);
+            app_stage = new Stage();
+            app_stage.setScene(create_folder_scene);
+            app_stage.initModality(Modality.APPLICATION_MODAL);
+            app_stage.initOwner(explorerBtn1.getScene().getWindow());
+            app_stage.show();
+        } else {
+            
+        }
+    }
+    
+    
+    @FXML
+    private void albumsSendImageButtonAction(ActionEvent event) throws IOException{
+        AlbumImage im = virtualAlbumsController.getSelectedImage();
+        
+        System.out.println("Selected path: " + im.getPath());
+        screenshotMessage = new ScreenshotMessage(im.getPath());
+        screenshotMessage.setSender(myUsername);
+        screenshotMessage.setIsISentThisMessage(true);
+        /*System.out.println("ADD TO SCREENSHOT LIST: " + screenshotMessage);
+         screenshotMessageController.addScreenshotMessage(screenshotMessage);*/
+
+        messageController.setMessagesListView(messagesListView);
+        iconImage = new Image(new File(im.getPath().getPath()).toURI().toString(), 250, 200, true, true, true);
+        System.out.println("ICON IMAGE CREATED.");
+
+        System.out.println("SENDING GET LIST REQUEST...");
+        out.println("screenshot#getList#" + myUsername);
+        System.out.println("SENT REQUEST: " + "screenshot#getList#" + myUsername);
+        //String destinationUsername = "";
+
+        Parent home_page_parent = FXMLLoader.load(getClass().getResource("FXMLScreenshotPopUpForm.fxml"));
+        Scene create_folder_scene = new Scene(home_page_parent);
+        app_stage = new Stage();
+        app_stage.setScene(create_folder_scene);
+        app_stage.initModality(Modality.APPLICATION_MODAL);
+        app_stage.initOwner(explorerBtn1.getScene().getWindow());
+        app_stage.show();
+    }
+    
     //////////////////////////////// SEND PICTURE //////////////////////////////
     @FXML
     private void explorerSendPictureButtonAction(ActionEvent event) throws IOException{
         NodeOfTree selectedNode = fst.getSelectedItem();
-     
+        
         System.out.println("Selected path: " + selectedNode.getPathWithoutHost());
         screenshotMessage = new ScreenshotMessage(new File(selectedNode.getPathWithoutHost()));
         screenshotMessage.setSender(myUsername);
@@ -1077,6 +1171,7 @@ public class FXMLDocumentController implements Initializable {
     void explorerRenameBtnAction(ActionEvent event) throws IOException {
         String newName = explorerRenameTextField.getText();
         boolean isOK = true;
+        System.out.println("Putanja: " + (new File(selectedPath).getParent()));
         File[] files = new File((new File(selectedPath).getParent())).listFiles();
         File selFile = new File(selectedPath);
         if (selFile.isDirectory()) {
@@ -1088,11 +1183,16 @@ public class FXMLDocumentController implements Initializable {
             }
         } else {
             for (File f : files) {
-                int ind =f.getName().lastIndexOf(".");
-                String sub = f.getName().substring(0, ind);
-                if (sub.equals(newName)) {
-                    isOK = false;
-                    break;
+                System.out.println("GET NAME: " + f.getName());
+                if (f.isDirectory()) {
+
+                } else {
+                    int ind = f.getName().lastIndexOf(".");
+                    String sub = f.getName().substring(0, ind);
+                    if (sub.equals(newName)) {
+                        isOK = false;
+                        break;
+                    }
                 }
             }
         }
@@ -1651,6 +1751,7 @@ public class FXMLDocumentController implements Initializable {
         albumsFullscreen.setDisable(true);
         albumsBackButton.setDisable(true);
         albumsImageView.setVisible(false);
+        albumsSendImageButton.setDisable(true);
         
         albumsNavigationLabel.setText("Albums");
         albumOrImageNameLabel.setText("Album name:");
@@ -2514,6 +2615,7 @@ public class FXMLDocumentController implements Initializable {
             fst.setExplorerMoveButton(explorerBtn6);
             fst.setExplorerAddImageToAlbumButton(explorerBtn7);
             fst.setExplorerFullscreenButton(explorerBtn8);
+            fst.setExplorerSendPictureButton(explorerSendPictureButton);
             virtualAlbumsController = new VirtualAlbumsController(albumsNavigationLabel, albumNameLabel, albumDescriptionLabel,
                     albumOrImageNameLabel, descriptionTempLabel, albumsFlowPane, imagesFlowPane, albumsScrollPane, imagesScrollPane, 
                     albumsDateCreatedLabel, albumsDateLabel, albumsImageView);
@@ -2526,6 +2628,7 @@ public class FXMLDocumentController implements Initializable {
             virtualAlbumsController.setAlbumsMoveButton(albumsMove);
             virtualAlbumsController.setAlbumsFullscreenButton(albumsFullscreen);
             virtualAlbumsController.setAlbumsBackButton(albumsBackButton);
+            virtualAlbumsController.setAlbumsSendImageButton(albumsSendImageButton);
             virtualAlbumsController.deserializeAllAlbums();
             virtualAlbumsController.addAllAlbumsToAlbumsFlowPane();
             
@@ -2710,6 +2813,7 @@ public class FXMLDocumentController implements Initializable {
             explorerBtn6.setDisable(true);
             explorerBtn7.setDisable(true);
             explorerBtn8.setDisable(true);
+            explorerSendPictureButton.setDisable(true);
             
             albumsImport.setDisable(false);
             albumsNewAlbum.setDisable(false);
@@ -2720,6 +2824,7 @@ public class FXMLDocumentController implements Initializable {
             albumsMove.setDisable(true);
             albumsFullscreen.setDisable(true);
             albumsBackButton.setDisable(true);
+            albumsSendImageButton.setDisable(true);
             
             /* removing album labels when you enter the album */
             albumNameLabel.setVisible(false);
